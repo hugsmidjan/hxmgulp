@@ -138,7 +138,7 @@ module.exports = function (gulp, skin) {
             return gulp.src([ paths.scripts+'*.js'], basePathCfg )
                 .pipe( commonjsScripts )
                     .pipe( browserify() )
-                    .pipe( rename(function(path){ path.basename = path.basename.replace(/-CommonJS$/, '');  }) )
+                    .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                     .pipe( commonjsScripts.restore() )
                 .pipe( rename({ suffix:'-source' }) )
                 .pipe( gulp.dest( paths.dist ) )
