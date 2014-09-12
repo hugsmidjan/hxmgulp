@@ -1,17 +1,17 @@
-# EplicaGulp
+# HxmGulp
 
 Default gulp tasks for Hugsmiðjan's projects.
 
 ## Install:
 
-    npm install git+ssh://git@stash.hugsmidjan.is:7999/~mar/eplicagulp.git
+    npm install git+ssh://git@stash.hugsmidjan.is:7999/~mar/hxmgulp.git
 
 ## Usage:
 
 In your project's skin folder create a `gulpfile.js` containing this command:
 
     var gulp = require('gulp');
-    require('eplicagulp')(gulp, options);
+    require('hxmgulp')(gulp, options);
 
 That's it.
 

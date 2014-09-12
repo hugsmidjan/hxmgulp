@@ -1,5 +1,5 @@
 {
-  "name": "eplicagulp",
+  "name": "hxmgulp",
   "version": "1.0.0",
   "description": "Default gulp tasks for Hugsmiðjan's projects.",
   "main": "index.js",
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@stash.hugsmidjan.is:7999/~mar/eplicagulp.git"
+    "url": "ssh://git@stash.hugsmidjan.is:7999/~mar/hxmgulp.git"
   },
   "author": "Hugsmiðjan ehf. (www.hugsmidjan.is)",
   "contributors": ["Már Örlygsson <mar@hugsmidjan.is>"],
