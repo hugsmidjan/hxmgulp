@@ -134,7 +134,7 @@ module.exports = function (gulp, skin) {
 
         buildTasks.push( ns+'scripts' );
         gulp.task(ns+'scripts', function() {
-            var commonjsScripts = filter('**/*-CommonJS.js');
+            var commonjsScripts = filter('**/*-common.js');
             return gulp.src([ paths.scripts+'*.js'], basePathCfg )
                 .pipe( commonjsScripts )
                     .pipe( browserify() )
