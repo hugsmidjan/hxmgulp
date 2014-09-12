@@ -110,7 +110,7 @@ module.exports = function (gulp, skin) {
                                 (isSCSS && '$iconData:\n    ' + iconData.join(',\n    ') + ';\n\n');
                     fs.writeFileSync( paths.css + paths.css_incl + '_iconVars.'+skin.cssProc, code );
                   })
-                .pipe( gulp.dist( paths.dist + path.relative(paths.src,paths.images) ) );
+                .pipe( gulp.dest( paths.dist + path.relative(paths.src,paths.images) ) );
           });
 
 
@@ -126,7 +126,7 @@ module.exports = function (gulp, skin) {
                 .pipe( imgFilter )
                     .pipe( imagemin() )
                     .pipe( imgFilter.restore() )
-                .pipe( gulp.dist( paths.dist ) );
+                .pipe( gulp.dest( paths.dist ) );
           });
 
 
@@ -139,12 +139,12 @@ module.exports = function (gulp, skin) {
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-CommonJS$/, '');  }) )
                     .pipe( commonjsScripts.restore() )
                 .pipe( rename({ suffix:'-source' }) )
-                .pipe( gulp.dist( paths.dist ) )
+                .pipe( gulp.dest( paths.dist ) )
 
                 .pipe( uglify() )
                 .pipe( header('// '+copyrightBanner) )
                 .pipe( rename(function(path){ path.basename = path.basename.replace(/-source$/, '');  }) )
-                .pipe( gulp.dist( paths.dist ) );
+                .pipe( gulp.dest( paths.dist ) );
           });
 
 
@@ -174,7 +174,7 @@ module.exports = function (gulp, skin) {
                     // maxImageSize: bytes,
                     // debug: true,
                   }) )
-                .pipe( gulp.dist( paths.dist ) );
+                .pipe( gulp.dest( paths.dist ) );
           });
 
 
@@ -191,7 +191,7 @@ module.exports = function (gulp, skin) {
                 .pipe( nonHTMLFiles )
                     .pipe( rename({ extname:'', dirname:nonHTMLFileDir  }) )
                     .pipe( nonHTMLFiles.restore() )
-                .pipe( gulp.dist( paths.dist ) );
+                .pipe( gulp.dest( paths.dist ) );
           });
         htmltestTasks.push( ns+'htmltests-images' );
         gulp.task(ns+'htmltests-images', function() {
@@ -199,13 +199,13 @@ module.exports = function (gulp, skin) {
                 .pipe( plumber() )
                 .pipe( changed( paths.dist ) )
                     .pipe( imagemin() )
-                    .pipe( gulp.dist( paths.dist ) );
+                    .pipe( gulp.dest( paths.dist ) );
           });
         buildTasks.push( ns+'htmltests-scripts' );
         gulp.task(ns+'htmltests-scripts', function() {
             return gulp.src([ paths.htmltests+'*.js'], basePathCfg )
                 .pipe( browserify() )
-                .pipe( gulp.dist( paths.dist ) );
+                .pipe( gulp.dest( paths.dist ) );
           });
 
 
