@@ -1,8 +1,6 @@
-module.exports = function (skin) {
+module.exports = function (gulp, skin) {
     skin = skin || {};
     var pkg = require('./package.json');
-
-    var gulp = require('gulp');
 
     var fs = require('fs');
     var path = require('path');
@@ -264,6 +262,5 @@ module.exports = function (skin) {
     gulp.task('watch', watchTasks);
 
     gulp.task('default', ['build', 'watch']);
-
 
   };

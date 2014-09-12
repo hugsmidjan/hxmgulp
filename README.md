@@ -10,7 +10,8 @@ Default gulp tasks for Hugsmiðjan's projects.
 
 In your project's skin folder create a `gulpfile.js` containing this command:
 
-    require('eplicagulp')(options);
+    var gulp = require('gulp');
+    require('eplicagulp')(gulp, options);
 
 That's it.
 
