@@ -1,3 +1,7 @@
+# EplicaGulp
+
+Default gulp tasks for Hugsmiðjan's projects.
+
 ## Install:
 
     npm install git+ssh://git@stash.hugsmidjan.is:7999/~mar/eplicagulp.git
