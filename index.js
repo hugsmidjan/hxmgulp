@@ -1,4 +1,5 @@
 module.exports = function (skin) {
+    skin = skin || {};
     var pkg = require('./package.json');
 
     var gulp = require('gulp');
