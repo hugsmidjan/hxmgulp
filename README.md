@@ -56,7 +56,7 @@ All rendering/compilation/minification results are saved under `options.dist` - 
 
 ### CSS files
 
-(**NOTE:** if `options.cssProc` is set to `'less'` then replace all instances of "scss" with "less" below:)
+(NOTE: if `options.cssProc` is set to `'less'` then replace all instances of "scss" with "less" below:)
 
 Any `.scss` file placed _directly_ inside the source folder gets rendered to a (lightly) minified CSS file with the same name inside the `dist` folder.
 
@@ -93,7 +93,7 @@ Any files inside `_tests/media/` are copied over (and lightly minified).
 
 Any JavaScripts is browserified and copied over (unless it's in a folder called `_js`).
 
-**NOTE:** there's a special case for page-templates with filenames with double-extensions. Those files become rooted in the `options.dist` folder itself, and have their ".htm" extension chopped off. Example:
+NOTE: there's a special case for page-templates with filenames with double-extensions. Those files become rooted in the `options.dist` folder itself, and have their ".htm" extension chopped off. Example:
 
     _src/_tests/homepage.htm
     _src/_tests/foobar.jsp.htm  <-- note double extension
@@ -114,12 +114,12 @@ Any SVG icons placed in `svg-font-icons`  automatically converted into a web-fon
 
 The generated SASS file is saved at `src/_scss/_iconVars.scss`. (or `src/_less/_iconVars.less`)
 
-**NOTE:** SVG files inside the folder `src/iconfonts/_raw/` are ignored as alternative designs and raw-materials for properly normalized icons.
+NOTE: SVG files inside the folder `src/iconfonts/_raw/` are ignored as alternative designs and raw-materials for properly normalized icons.
 
 ### Images
 
 Files placed inside `i/` are automatically copied to the corresponding dist folder. JPG, GIF, SVG and PNG files are passed through a *lossless* minimizer to remove comments, color-profiles, thumbnails and other unwanted meta-data.
 
-**NOTE:** Any images placed in the folder `i/_raw/` are ignored as raw-materials.
+NOTE: Any images placed in the folder `i/_raw/` are ignored as raw-materials.
 
 
