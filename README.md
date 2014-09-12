@@ -9,6 +9,8 @@ Default gulp tasks for Hugsmiðjan's projects.
 You can do this with the `--save-dep` option in your project's root folder - or in your home folder, or wherever you store your shared node modules.
 
 
+--------------------------------------
+
 ## Usage:
 
 In your project's skin folder create a `gulpfile.js` containing this command:
@@ -23,26 +25,27 @@ then isolate all your HTML-demo, JavaScript and LESS/SCSS and image/icon source 
 That's it!
 
 
-## Skin Options (and their defaults):
+### Skin Options (and their defaults):
 
 The `options` support the following properties (and defaults):
 
-* `modules: ['/']` - array of (sub)folder names.
-* `src: '_src'` - path to the root source folder.
-* `dist: '.'` - path to the root distribution folder where the compiled/minified CSS and JS files are saved.
-* `cssProc: 'scss'` - type of CSS preporcessor being used. Currently valid options are `'scss'` and `'less'`
-* `task: null` - optional function which then gets run once for each item in the modules array.  
-  Example:  
-      tasks: function (data) {
-           // data.module ===  current module (i.e. (sub)folder)
-           // data.paths  ===  paths config for the current module
-           // data.basePathCfg === A good default options object for `gulp.task`
-           require('gulp').task('mytask', function(){ ... });
-           return ['mytask'];
-        }
-* `copyrightYear: (new Date()).getFullYear()` - Starting year for the copyright clauses at the top of minified files.
-* `copyrightInfo: 'Hugsmiðjan evhf. (www.hugsmidjan.is)'` - text that appears after "Copyright 20XX-20YY ..." in the copyright clause.
+* **`modules: ['/']`**   - array of (sub)folder names.
+* **`src: '_src'`** - path to the root source folder.
+* **`dist: '.'`** - path to the root distribution folder where the compiled/minified CSS and JS files are saved.
+* **`cssProc: 'scss'`** - type of CSS preporcessor being used. Currently valid options are `'scss'` and `'less'`
+* **`task: null`** - optional function which then gets run once for each item in the modules array.
+    * Example: <pre><code>tasks: function (data) {  
+&nbsp; &nbsp; // data.module ===  current module (i.e. (sub)folder)  
+&nbsp; &nbsp; // data.paths  ===  paths config for the current module  
+&nbsp; &nbsp; // data.basePathCfg === A good default options object for gulp.task  
+&nbsp; &nbsp; require('gulp').task('mytask', function(){ ... });  
+&nbsp; &nbsp; return ['mytask'];  
+&nbsp; }</code></pre>
+* **`copyrightYear: (new Date()).getFullYear()`** - Starting year for the copyright clauses at the top of minified files.
+* **`copyrightInfo: 'Hugsmiðjan evhf. (www.hugsmidjan.is)'`** - text that appears after "Copyright 20XX-20YY ..." in the copyright clause.
 
+
+--------------------------------------
 
 ## Features
 
@@ -62,7 +65,7 @@ Any `.scss` file placed _directly_ inside the source folder gets rendered to a (
 
 `.scss` files within the `_scss/` folder are watched for changes and trigger rerendering of SCSS files both within this "module" and all "submodules"
 
-### CSS data URIs
+#### CSS data URIs
 
 any CSS `url()` that ends with `#datauri` is automatically resolved and base64 encoded as an inline data URI in the rendered CSS file. Example:
 
