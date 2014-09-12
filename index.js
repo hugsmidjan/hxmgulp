@@ -1,5 +1,7 @@
 module.exports = function (gulp, skin) {
     skin = skin || {};
+    skin.cssProc = skin.cssProc || 'scss';
+
     var pkg = require('./package.json');
 
     var fs = require('fs');
