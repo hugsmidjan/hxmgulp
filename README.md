@@ -23,7 +23,7 @@ then isolate all your HTML-demo, JavaScript and LESS/SCSS and image/icon source 
 That's it!
 
 
-### Skin Options (and their defaults):
+## Skin Options (and their defaults):
 
 The `options` support the following properties (and defaults):
 
