@@ -184,7 +184,10 @@ module.exports = function (gulp, skin) {
         gulp.task(ns+'htmltests-html', function() {
             var nonHTMLFiles = filter('*.*.html'); // <-- because nunjucksRender renames all files to .html
             var nonHTMLFileDir = path.relative(paths.htmltests, paths.src);
-            return gulp.src( paths.htmltests+'*.htm', basePathCfg )
+            return gulp.src([
+                paths.htmltests+'**/*.htm',
+                '!'+paths.htmltests+'incl/**'
+              ], basePathCfg )
                 .pipe( plumber() )
                 .pipe( nunjucksRender() )
                 .pipe( replace(/^[\s*\n]+/, '') ) // remove macro/config induced whitespace at start of file.
@@ -203,7 +206,10 @@ module.exports = function (gulp, skin) {
           });
         buildTasks.push( ns+'htmltests-scripts' );
         gulp.task(ns+'htmltests-scripts', function() {
-            return gulp.src([ paths.htmltests+'*.js'], basePathCfg )
+            return gulp.src([
+                paths.htmltests+'**/*.js',
+                '!'+paths.htmltests+'_js/**'
+              ], basePathCfg )
                 .pipe( browserify() )
                 .pipe( gulp.dest( paths.dist ) );
           });
