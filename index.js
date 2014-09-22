@@ -38,7 +38,9 @@ module.exports = function (gulp, skin) {
 
 
     var nowYear = new Date().getFullYear();
-    var copyrightBanner = 'Copyright '+(skin.copyrightYear||nowYear)+ (2014<nowYear?'-'+nowYear:'') +' '+(skin.copyrightInfo||pkg.author)+'\n';
+    var copyrightBanner = 'Copyright ' +
+                          (skin.copyrightYear||nowYear) + (2014<nowYear?'-'+nowYear:'') + ' ' +
+                          (skin.copyrightInfo||(pkg.author.name+' ('+pkg.author.url+')')) + '\n';
 
     var buildTasks =    [];
     var watchTasks =    [];
@@ -195,8 +197,8 @@ module.exports = function (gulp, skin) {
                 .pipe( replace(/^[\s*\n]+/, '') ) // remove macro/config induced whitespace at start of file.
                 .pipe( nonHTMLFiles )
                     .pipe( rename(function(path){
-                            path.extname = '';
-                            path.dirname = path.dirname.substr(testsFolder.length);
+                        path.extname = '';
+                        path.dirname = path.dirname.substr(testsFolder.length);
                       }) )
                     .pipe( nonHTMLFiles.restore() )
                 .pipe( gulp.dest( paths.dist ) );
@@ -215,7 +217,7 @@ module.exports = function (gulp, skin) {
                 paths.htmltests+'**/*.js',
                 '!'+paths.htmltests+'_js/**'
               ], basePathCfg )
-                .pipe( browserify() )
+                    .pipe( browserify() )
                 .pipe( gulp.dest( paths.dist ) );
           });
 

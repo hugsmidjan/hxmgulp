@@ -42,7 +42,7 @@ The `options` support the following properties (and defaults):
 &nbsp; &nbsp; return ['mytask'];  
 &nbsp; }</code></pre>
 * **`copyrightYear: (new Date()).getFullYear()`** - Starting year for the copyright clauses at the top of minified files.
-* **`copyrightInfo: 'Hugsmiðjan evhf. (www.hugsmidjan.is)'`** - text that appears after "Copyright 20XX-20YY ..." in the copyright clause.
+* **`copyrightInfo: 'Hugsmiðjan ehf. (www.hugsmidjan.is)'`** - text that appears after "Copyright 20XX-20YY ..." in the copyright clause.
 
 
 --------------------------------------
