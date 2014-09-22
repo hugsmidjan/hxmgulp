@@ -88,7 +88,7 @@ Any JavaScript file with the suffix `-common.js` is passed through browserify. T
 
 ### HTML test pages
 
-The `_tests/`  folder contains static `.htm` page templates using [nunjucks][1] syntax.
+The `_tests/`  folder contains static `.htm` page templates using [nunjucks][1] syntax. Any subfolder structure is retained during rendering.
 
 `*.htm` partials inside `_tests/incl/` are also watched and trigger rerendering of the page templates in the base `_tests/` folder.
 
@@ -99,12 +99,14 @@ All JavaScripts are copied over (unless they're in a folder called `_js`) and br
 NOTE: there's a special case for page-templates with filenames with double-extensions. Those files become rooted in the `options.dist` folder itself, and have their ".htm" extension chopped off. Example:
 
     _src/_tests/homepage.htm
+    _src/_tests/section/page.htm     <-- note subfolder
     _src/_tests/foobar.jsp.htm       <-- note double extension
     _src/_tests/subfoo/baz.json.htm  <-- note subfolder
 
 ...get rendered as:
 
     ./_tests/homepage.html      <-- HTML demo/tests folder
+    ./_tests/section/page.html  <-- note subfolder
     ./foobar.jsp                <-- options.dist root folder
     ./subfoo/baz.json           <-- subfolder preserved
 
