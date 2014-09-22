@@ -213,11 +213,15 @@ module.exports = function (gulp, skin) {
           });
         buildTasks.push( ns+'htmltests-scripts' );
         gulp.task(ns+'htmltests-scripts', function() {
+            var commonjsScripts = filter('**/*-common.js');
             return gulp.src([
                 paths.htmltests+'**/*.js',
                 '!'+paths.htmltests+'_js/**'
               ], basePathCfg )
+                .pipe( commonjsScripts )
                     .pipe( browserify() )
+                    .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
+                    .pipe( commonjsScripts.restore() )
                 .pipe( gulp.dest( paths.dist ) );
           });
 
