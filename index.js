@@ -190,7 +190,7 @@ module.exports = function (gulp, skin) {
             var testsFolder = paths.htmltests.substr(paths.src.length);
             return gulp.src([
                 paths.htmltests+'**/*.htm',
-                '!'+paths.htmltests+'incl/**'
+                '!'+paths.htmltests+'{incl,media}/**'
               ], basePathCfg )
                 .pipe( plumber() )
                 .pipe( nunjucksRender() )
