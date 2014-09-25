@@ -4,9 +4,10 @@ Default gulp tasks for Hugsmiðjan's projects.
 
 ## Install:
 
-    npm install git+ssh://git@stash.hugsmidjan.is:7999/~mar/hxmgulp.git
+    npm install gulp
+    npm install git+https://stash.hugsmidjan.is/scm/~mar/hxmgulp.git
 
-You can do this with the `--save-dep` option in your project's root folder - or in your home folder, or wherever you store your shared node modules.
+You can do this with the `--save-dev` option in your project's root folder - or in your home folder, or wherever you store your shared node modules.
 
 
 --------------------------------------
