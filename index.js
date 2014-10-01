@@ -167,6 +167,7 @@ module.exports = function (gulp, skin) {
                  )
                 .pipe( autoprefixer('> 0.5%', 'last 2 versions', 'Firefox ESR', 'Opera 12.1'/*, { cascade: true }*/) )
                 .pipe( minifycss({
+                    // roundingPrecision: 2, // precision for px values
                     noAdvanced:true, // turn off advanced/aggressive merging. It's too buggy still. Ack!
                     keepBreaks:true,
                     compatibility:'ie8'
