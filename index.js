@@ -75,7 +75,7 @@ module.exports = function (gulp, skin) {
                 dist:         skinDist + module,
 
                 css:         srcPath + '',
-                css_incl:    isSCSS ? '_scss/' : '_less',
+                css_incl:    isSCSS ? '_scss/' : '_less/',
                 scripts:      srcPath + '',
                 scripts_incl: '_js/',
                 images:       srcPath + 'i/',
@@ -111,7 +111,7 @@ module.exports = function (gulp, skin) {
                       });
                     var code = '// This file is auto-generated. DO NOT EDIT! \n\n' +
                                 iconVars.join('') + '\n' +
-                                (isSCSS && '$iconData:\n    ' + iconData.join(',\n    ') + ';\n\n');
+                                (isSCSS ? '$iconData:\n    '+iconData.join(',\n    ')+';\n\n' : '');
                     fs.writeFileSync( paths.css + paths.css_incl + '_iconVars.'+skin.cssProc, code );
                   })
                 .pipe( gulp.dest( paths.dist + path.relative(paths.src,paths.images) ) );
