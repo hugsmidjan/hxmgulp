@@ -11,13 +11,16 @@
     "url": "ssh://git@stash.hugsmidjan.is:7999/~mar/hxmgulp.git"
   },
   "author": "Hugsmiðjan ehf. (www.hugsmidjan.is)",
-  "contributors": ["Már Örlygsson <mar@hugsmidjan.is>"],
+  "contributors": [
+    "Már Örlygsson <mar@hugsmidjan.is>"
+  ],
   "license": "ISC",
   "dependencies": {
     "gulp-autoprefixer": "^1.0.0",
     "gulp-base64": "^0.1",
     "gulp-browserify": "^0.5",
     "gulp-changed": "^1.0.0",
+    "gulp-es6-transpiler": "^1.0.0",
     "gulp-filter": "^1.0.2",
     "gulp-header": "^1.0.5",
     "gulp-iconfont": "^0.1",

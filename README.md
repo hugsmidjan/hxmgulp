@@ -85,7 +85,12 @@ Any `.js` file placed _directly_ inside the source folder gets rendered to a min
 
 `.js` files within the `_js/` folder are watched for changes and trigger rerendering of JavaScript files both within this "module" and all "submodules".
 
-Any JavaScript file with the suffix `-common.js` is passed through browserify. The `-common` suffix is then stripped off.
+All scripts are run through the [es6-transpiler][es6t] so using its subset of supported es6 features is allowed.
+
+Additionally: Any JavaScript file with the suffix `-common.js` is passed through browserify. The `-common` suffix is then stripped off.
+_(NOTE: this feature will become unneccessary when es6-transpiler starts supporting es6 modules.)_
+
+[es6t]: https://github.com/termi/es6-transpiler
 
 ### HTML test pages
 

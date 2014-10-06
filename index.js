@@ -27,12 +27,17 @@ module.exports = function (gulp, skin) {
     var imagemin = require('gulp-imagemin');
     var iconfont = require('gulp-iconfont');
 
+    var es6transpiler = require('gulp-es6-transpiler');
     var browserify = require('gulp-browserify');
     var uglify = require('gulp-uglify');
 
     var nunjucksRender = require('gulp-nunjucks-render');
 
-
+    var es6transpilerOpts = {
+            environments: ['node','browser','devel'], // 'devel' includes alert(), confirm(), etc. etc.
+            // globals: { 'my':false, 'hat':true },
+            // includePolyfills: true, // (defaults to false) insert polyfills in the output file. true - insert only the necessary polyfills. "full" - insert all available polyfills.
+          };
 
     // =========================================================================
 
@@ -138,10 +143,12 @@ module.exports = function (gulp, skin) {
         gulp.task(ns+'scripts', function() {
             var commonjsScripts = filter('**/*-common.js');
             return gulp.src([ paths.scripts+'*.js'], basePathCfg )
+                .pipe( plumber() )
                 .pipe( commonjsScripts )
                     .pipe( browserify() )
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                     .pipe( commonjsScripts.restore() )
+                .pipe( es6transpiler(es6transpilerOpts) )
                 .pipe( rename({ suffix:'-source' }) )
                 .pipe( gulp.dest( paths.dist ) )
 
@@ -219,10 +226,12 @@ module.exports = function (gulp, skin) {
                 paths.htmltests+'**/*.js',
                 '!'+paths.htmltests+'_js/**'
               ], basePathCfg )
+                .pipe( plumber() )
                 .pipe( commonjsScripts )
                     .pipe( browserify() )
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                     .pipe( commonjsScripts.restore() )
+                .pipe( es6transpiler(es6transpilerOpts) )
                 .pipe( gulp.dest( paths.dist ) );
           });
 
