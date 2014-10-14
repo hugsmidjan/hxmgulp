@@ -34,8 +34,10 @@ module.exports = function (gulp, skin) {
     var nunjucksRender = require('gulp-nunjucks-render');
 
     var es6transpilerOpts = {
-            environments: ['browser', 'devel'/*, 'node'*/], // 'devel' includes alert(), confirm(), etc. etc.
-            globals: { 'require':true, 'module':true },
+            //environments: ['browser', 'devel', 'node'], // 'devel' includes alert(), confirm(), etc. etc.
+            // BAH, strict linting should happen elsewhere, if needed.
+            disallowDuplicated: false,
+            disallowUnknownReferences: false,
             // includePolyfills: true, // (defaults to false) insert polyfills in the output file. true - insert only the necessary polyfills. "full" - insert all available polyfills.
           };
 
