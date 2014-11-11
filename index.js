@@ -54,7 +54,7 @@ module.exports = function (gulp, skin) {
     var htmltestTasks = [];
     var nunjucksWorkingDirs = [];
 
-    if ( isSCSS )
+    if ( isSCSS  &&  fs.existsSync('_src/_scss/') )
     {
       // curl codecentre files...
       var ccFolder = '_src/_scss/_codecentre/';
@@ -219,7 +219,7 @@ module.exports = function (gulp, skin) {
                 .pipe( plumber() )
                 .pipe( changed( paths.dist ) )
                     .pipe( imagemin() )
-                    .pipe( gulp.dest( paths.dist ) );
+                .pipe( gulp.dest( paths.dist ) );
           });
         buildTasks.push( ns+'htmltests-scripts' );
         gulp.task(ns+'htmltests-scripts', function() {
