@@ -33,7 +33,7 @@ The `options` support the following properties (and defaults):
 * **`modules: ['/']`**   - array of (sub)folder names.
 * **`src: '_src'`** - path to the root source folder.
 * **`dist: '.'`** - path to the root distribution folder where the compiled/minified CSS and JS files are saved.
-* **`cssProc: 'scss'`** - type of CSS preporcessor being used. Currently valid options are `'scss'` and `'less'`
+* **`cssProc: 'styl'`** - type of CSS preporcessor being used. Currently valid options are `'styl'`, `'scss'` and `'less'`
 * **`task: null`** - optional function which then gets run once for each item in the modules array.
     * Example: <pre><code>tasks: function (data) {  
 &nbsp; &nbsp; // data.module ===  current module (i.e. (sub)folder)  
@@ -60,11 +60,11 @@ All rendering/compilation/minification results are saved under `options.dist` - 
 
 ### CSS files
 
-(NOTE: if `options.cssProc` is set to `'less'` then replace all instances of "scss" with "less" below:)
+Any `.styl` file placed _directly_ inside the source folder gets rendered to a (lightly) minified CSS file with the same name inside the `dist` folder.
 
-Any `.scss` file placed _directly_ inside the source folder gets rendered to a (lightly) minified CSS file with the same name inside the `dist` folder.
+`.styl` files within the `_styl/` folder are watched for changes and trigger rerendering of SCSS files both within this "module" and all "submodules"
 
-`.scss` files within the `_scss/` folder are watched for changes and trigger rerendering of SCSS files both within this "module" and all "submodules"
+(NOTE: if `options.cssProc` is set to `'less'` or `'scss'` then replace all the above instances of "styl" with "less" or "scss" respectively.)
 
 #### CSS data URIs
 
@@ -121,9 +121,9 @@ NOTE: there's a special case for page-templates with filenames with double-exten
 
 ### Icon fonts
 
-Any SVG icons placed in `svg-font-icons`  automatically converted into a web-font (eot, ttf, woff, svg) with human-friendly filename-based SASS/LESS variables to use when writing CSS.
+Any SVG icons placed in `svg-font-icons`  automatically converted into a web-font (eot, ttf, woff, svg) with human-friendly filename-based Stylus (or SASS/LESS) variables to use when writing CSS.
 
-The generated SASS file is saved at `src/_scss/_iconVars.scss`. (or `src/_less/_iconVars.less`)
+The generated Stylus file is saved at `src/_styl/_iconVars.styl`. (or `src/_(scss|less)/_iconVars.(scss|less)`)
 
 NOTE: SVG files inside the folder `src/iconfonts/_raw/` are ignored as alternative designs and raw-materials for properly normalized icons.
 

@@ -1,6 +1,6 @@
 module.exports = function (gulp, skin) {
     skin = skin || {};
-    skin.cssProc = skin.cssProc || 'scss';
+    skin.cssProc = /^(?:less|scss)$/.test(skin.cssProc) ? skin.cssProc : 'styl';
 
     var pkg = require('./package.json');
 
@@ -15,10 +15,12 @@ module.exports = function (gulp, skin) {
     var header = require('gulp-header');
     var rename = require('gulp-rename');
 
-    var isLESS = skin.cssProc==='less';
-    var isSCSS = !isLESS;
-    var less = isLESS && require('gulp-less');
-    var scss = isSCSS && require('gulp-ruby-sass');
+    var isLESS =   skin.cssProc==='less';
+    var isSCSS =   skin.cssProc==='scss';
+    var isStylus = !isLESS && !isSCSS;
+    var less =   isLESS && require('gulp-less');
+    var scss =   isSCSS && require('gulp-ruby-sass');
+    var stylus = isStylus && require('gulp-stylus');
 
     var autoprefixer = require('gulp-autoprefixer');
     var datauri = require('gulp-base64');
@@ -54,18 +56,33 @@ module.exports = function (gulp, skin) {
     var htmltestTasks = [];
     var nunjucksWorkingDirs = [];
 
-    if ( isSCSS  &&  fs.existsSync('_src/_scss/') )
+    var cssFolder = '_src/_'+ skin.cssProc +'/';
+    if ( (isStylus || isSCSS) &&  fs.existsSync(cssFolder) )
     {
-      // curl codecentre files...
-      var ccFolder = '_src/_scss/_codecentre/';
-      if ( !fs.existsSync(ccFolder) ){  fs.mkdirSync( ccFolder );  }
-      ['utils.scss','eplica-utils.scss','normalize.scss']
-          .forEach(function (fileName) {
-              https.get('https://codecentre.eplica.is/themes/scss/'+fileName, function (res) {
-                  res.pipe( fs.createWriteStream( ccFolder+fileName ) );
-                });
-            });
+        // curl codecentre files...
+        var ccFolder = cssFolder + '_codecentre/';
+        var ccUrl = 'https://codecentre.eplica.is/themes/'+skin.cssProc+'/';
+        var files = isStylus?
+                [
+                   ccUrl+'utils.styl',
+                   ccUrl+'eplica-utils.styl',
+                   ccUrl+'normalize.styl',
+                ]:
+                [
+                   ccUrl+'utils.scss',
+                   ccUrl+'eplica-utils.scss',
+                   ccUrl+'normalize.scss',
+                ];
+
+        if ( !fs.existsSync(ccFolder) ){  fs.mkdirSync( ccFolder );  }
+        files.forEach(function (url) {
+            https.get(url, function (res) {
+                var fileName = url.split('/').slice(-1)[0];
+                res.pipe( fs.createWriteStream( ccFolder+fileName ) );
+              });
+          });
     }
+
 
     var cssGlob = '*.'+skin.cssProc;
     var skinModules = skin.modules || ['/'];
@@ -82,7 +99,7 @@ module.exports = function (gulp, skin) {
                 dist:         skinDist + module,
 
                 css:         srcPath + '',
-                css_incl:    isSCSS ? '_scss/' : '_less/',
+                css_incl:    isSCSS ? '_scss/' : isLESS ? '_less/' : '_styl/',
                 scripts:      srcPath + '',
                 scripts_incl: '_js/',
                 images:       srcPath + 'i/',
@@ -107,18 +124,21 @@ module.exports = function (gulp, skin) {
                     normalize:  true
                   }) )
                 .on('codepoints', function (codepoints/*, options*/) {
-                    var iconData = [];
+                    var iconData = isSCSS ? [] : {};
                     var iconVars = [];
                     codepoints.forEach(function (cp) {
                         var name = cp.name;
                         var chr = '"\\' + cp.codepoint.toString(16) + '"';
                         var padding = new Array(Math.max(20 - name.length,2)).join(' ');
-                        iconVars.push( (isSCSS?'$':'@')+'icon-' + name + ':' + padding + chr + ';\n' );
-                        isSCSS && iconData.push( '(' + name + ', ' + chr + ')' );
+                        iconVars.push( (isLESS?'@':'$')+'icon-' + name + (isStylus?' = ':':') + padding + chr + ';\n' );
+                        isSCSS ?
+                            iconData.push( '(' + name + ', ' + chr + ')' ):
+                            (iconData[name] = chr); // Stylus
                       });
                     var code = '// This file is auto-generated. DO NOT EDIT! \n\n' +
                                 iconVars.join('') + '\n' +
-                                (isSCSS ? '$iconData:\n    '+iconData.join(',\n    ')+';\n\n' : '');
+                                (isSCSS ? '$iconData:\n    '+iconData.join(',\n    ')+';\n\n' : ''); +
+                                (isStylus ? '$iconData = ' + JSON.stringify(iconData) + ';\n\n' : '');
                     fs.writeFileSync( paths.css + paths.css_incl + '_iconVars.'+skin.cssProc, code );
                   })
                 .pipe( gulp.dest( paths.dist + path.relative(paths.src,paths.images) ) );
@@ -165,14 +185,20 @@ module.exports = function (gulp, skin) {
         gulp.task(ns+'css', function() {
             return gulp.src( paths.css+cssGlob, basePathCfg )
                 .pipe( plumber() )
-                .pipe( isSCSS ?
-                    scss({
-                        precision:7,
-                        'sourcemap=none':true, // dodgy temporary workaround
-                        // sourcemap:'none',
-                        container:'gulp-ruby-sass-'+folderIndex, // Workaround for https://github.com/sindresorhus/gulp-ruby-sass/issues/124#issuecomment-54682317
-                      }):
-                    less(/*{ strictMath: true }*/)
+                .pipe(
+                    isSCSS ?
+                        scss({
+                            precision:7,
+                            'sourcemap=none':true, // dodgy temporary workaround
+                            // sourcemap:'none',
+                            container:'gulp-ruby-sass-'+folderIndex, // Workaround for https://github.com/sindresorhus/gulp-ruby-sass/issues/124#issuecomment-54682317
+                          }):
+                    isLESS ?
+                        less(/*{ strictMath: true }*/):
+                        stylus({
+                            // linenos: true,
+                            // use: [require(nib)],
+                          })
                  )
                 .pipe( autoprefixer({ browsers:['> 0.5%', 'last 2 versions', 'Firefox ESR', 'Opera 12.1'] }) )
                 .pipe( minifycss({
