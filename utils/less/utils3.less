@@ -1,0 +1,274 @@
+// dump @cssString into the output stream. Warning! use carefully
+#__plainText (@cssString) {
+    x: ~`"x;\n" + @{cssString}.replace(/; */g, ";\n").replace(/;\n *$/,"")`;
+}
+
+
+#__tuck () {
+    position:absolute; right:9999px; left:auto;
+}
+
+#__afterClear () {
+    *zoom:1;
+    &:after { content:" "; clear:both; display:block; height:0; }
+}
+
+
+#__boxSizing ( @type: border-box ) {
+    -webkit-box-sizing: @type;
+    -moz-box-sizing:    @type;
+    box-sizing:         @type;
+}
+
+
+#__boxShadows ( @a ) {
+    -webkit-box-shadow: @a;
+    box-shadow:         @a;
+}
+
+
+
+// Generic/flexible gradients -- use {X}deg directionals only
+#__grad ( @dir, @stops ) {
+    background-image: -webkit-linear-gradient( 90deg - @dir, @stops ); // Chrome10+,Safari5.1+
+    background-image:      -o-linear-gradient( 90deg - @dir, @stops ); // Opera11.10+
+    background-image:         linear-gradient( @dir, @stops ); // W3C
+}
+#__gradImg ( @dir, @stops, @img ) {
+    background-image: @img, -webkit-linear-gradient( 90deg - @dir, @stops ); // Chrome10+,Safari5.1+
+    background-image: @img,      -o-linear-gradient( 90deg - @dir, @stops ); // Opera11.10+
+    background-image: @img,         linear-gradient( @dir, @stops ); // W3C
+}
+#__gradImgUnder ( @dir, @stops, @img ) {
+    background-image: -webkit-linear-gradient( 90deg - @dir, @stops ),  @img; // Chrome10+,Safari5.1+
+    background-image:      -o-linear-gradient( 90deg - @dir, @stops ),  @img; // Opera11.10+
+    background-image:         linear-gradient( @dir, @stops ),  @img; // W3C
+}
+
+
+#__borderImage ( @image, @offsets, @repeats:round ) {
+    -webkit-border-image: @image @offsets @repeats;
+    -o-border-image:      @image @offsets @repeats;
+    border-image:         @image @offsets @repeats;
+}
+
+
+
+#__imageRendering ( crisp-edges ) {
+   image-rendering: -webkit-optimize-contrast; // Webkit (non-standard naming)
+   image-rendering:   -o-crisp-edges;
+   image-rendering: -moz-crisp-edges;
+   image-rendering:      crisp-edges;
+   -ms-interpolation-mode: nearest-neighbor;
+}
+#__imageRendering ( auto ) {
+   image-rendering: auto;
+   -ms-interpolation-mode: bicubic;
+}
+
+
+#__ir () { // Image replacement
+    overflow: hidden;
+    white-space: nowrap;
+    letter-spacing: -.4em;
+    text-shadow: none !important;
+    color: transparent !important;
+    text-indent: 150%;
+    *text-indent: -999px;
+    text-align: left;
+}
+
+#__inlineBlock () {
+    display:inline-block;
+    *display: inline;
+    *zoom:1;
+}
+
+
+#__inlineIcon ( @w:16px, @h:16px, @mr:5px, @ml:0, @mv:-10px ) {
+    content: "\00a0";
+    display: inline-block;
+    width: @w;
+    min-height: @h;
+    margin: @mv @mr @mv @ml;
+    vertical-align: middle;
+}
+
+
+
+#__transition ( @a ) {
+    -webkit-transition: @a;
+            transition: @a;
+}
+
+#__transition-property ( @a ) {
+    -webkit-transition-property: @a;
+            transition-property: @a;
+}
+
+#__transition-duration ( @a ) {
+    -webkit-transition-duration: @a;
+            transition-duration: @a;
+}
+
+#__transition-timing-function ( @a ) {
+    -webkit-transition-timing-function: @a;
+            transition-timing-function: @a;
+}
+
+#__transition-delay ( @a ) {
+    -webkit-transition-delay: @a;
+            transition-delay: @a;
+}
+
+
+#__animation ( @a ) {
+    -webkit-animation: @a;
+       -moz-animation: @a;
+            animation: @a;
+}
+#__animation-name ( @a ) {
+    -webkit-animation-name: @a;
+       -moz-animation-name: @a;
+            animation-name: @a;
+}
+#__animation-duration ( @a ) {
+    -webkit-animation-duration: @a;
+       -moz-animation-duration: @a;
+            animation-duration: @a;
+}
+
+
+#__transform ( @a ) {
+    -webkit-transform: @a;
+        -ms-transform: @a;
+            transform: @a;
+}
+#__transform-origin ( @a ) {
+    -webkit-transform-origin: @a;
+        -ms-transform-origin: @a;
+            transform-origin: @a;
+}
+
+
+
+#__column-count ( @i:auto ) {
+    -webkit-column-count: @i;
+       -moz-column-count: @i;
+            column-count: @i;
+}
+#__column-width ( @i:auto ) {
+    -webkit-column-width: @i;
+       -moz-column-width: @i;
+            column-width: @i;
+}
+#__column-gap ( @i:normal ) {
+    -webkit-column-gap: @i;
+       -moz-column-gap: @i;
+            column-gap: @i;
+}
+#__column-rule ( @i:0 ) {
+    -webkit-column-rule: @i;
+       -moz-column-rule: @i;
+            column-rule: @i;
+}
+
+
+
+
+
+
+#__textSelectionStyling( @cssText:"" ) {
+    &::-moz-selection { #__plainText(@cssText); }
+    &::selection { #__plainText(@cssText); }
+}
+
+#__placeholderStyling( @cssText:"", @className:labelized ) {
+    //placeholders must be styled separately - otherwise browsers fail
+    &.@{className} { #__plainText(@cssText); }
+    &::-webkit-input-placeholder { #__plainText(@cssText); }
+    &:-moz-placeholder { opacity:1; #__plainText(@cssText); } // FF -18
+    &::-moz-placeholder { opacity:1; #__plainText(@cssText); } // FF 19+
+    // NOTE: IE10 is the only browser to require either !important for all the rules (or a proper selector to increase specificity);
+    &:-ms-input-placeholder { #__plainText(~`'"' + @{cssText}.replace(/ !important *;/g, ";").replace(/;/," !important;")+'"'`); } // IE10
+}
+
+
+
+
+
+
+// Usage:
+//     .box:after {
+//         #__triangle(
+//               up,           // <-- up, down, left, right.
+//               @bgColor,
+//               @height,      // i.e. "Length" of the arrow.
+//               @width,       // total width of the arrow. (Defaults to twice the @height)
+//               @wOffset,     // placement along the edge of the container. (Defaults to 50%.)
+//               @offsetEdge,  // Edge from which the offset is calculated. (Defaults to left or top respectively.)
+//             );
+//     }
+#__triangle ( ... ) {
+    content: "";
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 0 solid transparent;
+}
+#__triangle ( @dir, @color, @h, @w:@h*2, @wOffs:50%, @wEdge:left ) when (@dir=up),(@dir=down) {
+    border-width: @h @w/2;
+    margin-@{wEdge}: -(@w/2);
+    @{wEdge}: @wOffs;
+}
+#__triangle ( @dir, @color, @h, @w:@h*2, @wOffs:50%, @wEdge:top ) when (@dir=left),(@dir=right) {
+    border-width: @w/2 @h;
+    margin-@{wEdge}: -(@w/2);
+    @{wEdge}: @wOffs;
+}
+#__triangle ( up, @color, @h, ... ) {
+    top: -@h;
+    border-bottom-color: @color;
+    border-top-width: 0;
+}
+#__triangle ( down, @color, @h, ... ) {
+    bottom: -@h;
+    border-top-color: @color;
+    border-bottom-width: 0;
+}
+#__triangle ( left, @color, @h, ... ) {
+    right: -@h;
+    border-right-color: @color;
+    border-left-width: 0;
+}
+#__triangle ( right, @color, @h, ... ) {
+    right: -@h;
+    border-left-color: @color;
+    border-right-width: 0;
+}
+
+
+
+
+
+// DEPRICATED: =============================================
+
+// use #__boxShadows() instead
+#__boxShadow ( @x:0, @y:0, @blur:8px, @color:rgba(0,0,0, .333), @spread:0 ) {
+    -webkit-box-shadow: @x @y @blur @spread @color;
+    box-shadow:         @x @y @blur @spread @color;
+}
+#__boxShadowInset ( @x:0, @y:0, @blur:8px, @color:rgba(0,0,0, .333), @spread:0 ) {
+    -webkit-box-shadow: inset @x @y @blur @spread @color;
+    box-shadow:         inset @x @y @blur @spread @color;
+}
+#__boxShadowNone () {
+    -webkit-box-shadow: none;
+    box-shadow:         none;
+}
+#__boxGlow ( @color:#fff, @blur:10px, @spread:0 ) {
+    #__boxShadow( 0, 0, @blur, @color, @spread  );
+}
+#__boxInnerGlow ( @color:#fff, @blur:0, @spread:1px ) {
+    #__boxShadowInset( 0, 0, @blur, @color, @spread  );
+}

@@ -1,0 +1,210 @@
+﻿// @media query based wrappers
+@mixin media ($query:'screen', $allowFlatten:false) {
+    @if ($media-queries-support == true) {
+        @if ( $query != 'screen' ) {
+            @media screen and #{$query} { @content; }
+        }
+        @else {
+            @media screen { @content; }
+        }
+    }
+    @else if ( $allowFlatten == true  or  index($media-queries-flatten, $query) != null ) {
+        @media screen { @content; }
+    }
+}
+$media-queries-support: true  !default;
+$media-queries-flatten: "" !default;
+
+
+
+// ===============================================================================
+// Icons!
+$iconfont_name:  'icons' !default;
+$iconfont_font-family: $iconfont_name, Arial, Helvetica, sans-serif !default;
+
+@mixin _icon ($icon:'') {
+    @if ($icon != '') {
+        content: $icon;
+    }
+    display: inline-block;
+    text-indent: 0;
+    text-align: center;
+    vertical-align: top;
+    @include _iconFontStyling();
+}
+@mixin _iconFontStyling () {
+    font-family: $iconfont_font-family;
+    speak: none;
+    font-weight: normal;
+    font-style: normal;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased; // fix for light text on dark background from beeing smudgy in webkit/mac
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: 0;
+}
+
+
+$icon-bullet-disc:   "\2022";
+$icon-bullet-square: "\25aa";
+
+$icon-space-normal:  "\00a0"; // (NO-BREAK space) (0.28em)
+
+$icon-space-half:    "\2002"; // 1/2em  (EN space
+$icon-space-em:      "\2003"; // 1em    (EM space)
+$icon-space-third:   "\2004"; // 1/3em  (THREE-PER-EM space)
+$icon-space-fourth:  "\2005"; // 1/4em  (FOUR-PER-EM space)
+$icon-space-sixth:   "\2006"; // 1/6em  (SIX-PER-EM space)
+// $icon-space-figure:        "\2007";
+// $icon-space-punctuation:   "\2008";
+$icon-space-fifth:   "\2009"; // 1/5em  (THIN space)
+$icon-space-hair:    "\200A"; // 1/12em (HAIR space)
+
+
+
+// quote marks for use with blockquote
+$quote_upper6:   "\2018";
+$quote_upper9:   "\2019";
+$quote_lower9:   "\201a";
+$quote_upper66:  "\201c";
+$quote_upper99:  "\201d";
+$quote_lower99:  "\201e";
+// icelandic
+$quote_open_is:        $quote_lower99;
+$quote_close_is:       $quote_upper66;
+$quote_openSingle_is:  $quote_lower9;
+$quote_closeSingle_is: $quote_upper6;
+// english
+$quote_open_en:        $quote_upper66;
+$quote_close_en:       $quote_upper99;
+$quote_openSingle_en:  $quote_upper6;
+$quote_closeSingle_en: $quote_upper9;
+
+
+
+
+
+// ===============================================================================
+// Triangles
+
+// Usage:
+//     .box:after {
+//         @include _triangle(
+//               $dir,         // <-- up, down, left, right.
+//               $color,       // arrow color
+//               $height,      // i.e. "Length" of the arrow.
+//               $width,       // total width of the arrow. (Defaults to twice the @height)
+//               $wOffset,     // placement along the edge of the container. (Defaults to 50%.)
+//               $offsetEdge,  // Edge from which the offset is calculated. (Defaults to left or top respectively.)
+//             );
+//     }
+@mixin _triangle ($args...) {
+    @include _triangleBasic();
+    @include _triangleShape($args...);
+}
+@mixin _triangleBasic () {
+    content: "";
+    width: 0;
+    height: 0;
+    min-width: 0;
+    min-height: 0;
+    position: absolute;
+    border: 0 solid transparent;
+}
+@mixin _triangleShape ($dir, $color, $h, $w:0, $wOffs:50%, $wEdge:left, $shift:'') {
+    @if ($w==0) { $w: $h*2; }
+    @if (($dir==left) or ($dir==right)) and ($wEdge==left) { $wEdge:top }
+    @if ($shift=='') { $shift: ($w/2); }
+
+    #{$wEdge}: $wOffs;
+    margin: -$shift;
+    @if ($dir==up) or ($dir==down) {
+        border-width: $h $w/2;
+    }
+    @else { //
+        border-width: $w/2 $h;
+    }
+    @if ($dir==up) {
+        top: -$h;
+        margin-top: 0;
+        border-bottom-color: $color;
+        border-top-width: 0;
+    }
+    @elseif ($dir==down) {
+        bottom: -$h;
+        margin-bottom: 0;
+        border-top-color: $color;
+        border-bottom-width: 0;
+    }
+    @elseif ($dir==left) {
+        left: -$h;
+        margin-left: 0;
+        border-right-color: $color;
+        border-left-width: 0;
+    }
+    @elseif ($dir==right) {
+        right: -$h;
+        margin-right: 0;
+        border-left-color: $color;
+        border-right-width: 0;
+    }
+}
+
+
+
+
+// ===============================================================================
+// Misc
+
+// screen-reader friendly off-screen hiding
+@mixin _tuck () {
+    position:absolute;
+    right:9999px;
+    left:auto;
+}
+@mixin _afterClear () {
+    &:after {
+        content:" ";
+        clear:both;
+        display:block;
+        height:0;
+    }
+}
+
+// generic image replacement
+@mixin _hideText ( $mode:normal ) {
+    overflow: hidden;
+    white-space: nowrap;
+    @if ($mode != soft) {
+        letter-spacing: -0.4em;
+        text-indent: 150%;
+        text-align: left;
+    }
+    @if ($mode == hard) {
+        text-shadow: none !important;
+        color: transparent !important;
+    }
+}
+
+
+
+@function fade($color, $opacity) {
+    @return scale-color( $color, $alpha:($opacity - 100%) );
+}
+
+@function strip-unit($number) {
+    @return $number / ($number * 0 + 1);
+}
+@function set-unit($value, $unit) {
+    @return #{ strip-unit( $value ) + $unit};
+}
+@function percent( $value ) {
+    @return percentage( strip-unit( $value ) );
+}
+
+
+
+
+@function pxem($px, $fs:12px) {
+    @return (1em*$px/strip-unit($fs));
+}
+

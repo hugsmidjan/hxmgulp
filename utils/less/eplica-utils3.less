@@ -1,0 +1,96 @@
+@import "eplica-print-mixin.less";
+
+#_eplica_a11ytricks ( @link:#c00, @border:#029 ) {
+
+    .stream,
+    .focustarget {
+        #__tuck;
+        white-space:nowrap;
+    }
+
+    .print-only {
+        display: none;
+    }
+
+    /* Accessibility tr1ck50r */
+    a.stream:focus,
+    a.stream:active,
+    .stream a:focus,
+    .stream a:active {
+        background: #fff;
+        border: 1px solid @border;
+        margin: 0;
+        padding: 3px 5px;
+        color: @link;
+        right: 0;
+        z-index:9999;
+        font-size: 1em;
+        white-space: nowrap;
+    }
+    .stream {
+        a:focus,
+        a:active {
+            position: absolute;
+            right: -9999px;
+        }
+    }
+    hr.stream {
+        display: none;
+    }
+
+}
+
+
+#_eplica_skiplink-full ( @link:#c00, @border:#029 ) {
+
+    .pghead .skiplink {
+        #__tuck;
+        white-space:nowrap;
+        top: 10px;
+        font-size: 1em;
+
+        a:focus,
+        a:active {
+            position: absolute;
+            right: -9999px;
+            background: #fff;
+            border: 1px solid @border;
+            margin: 0;
+            padding: 3px 5px;
+            color: @link;
+            z-index:9999;
+            font-size: 1em;
+            white-space: nowrap;
+        }
+    }
+
+}
+
+
+
+
+#_eplica_byggiraeplica_image ( @img, @url:"//codecentre.eplica.is" ) {
+    background-image: url("@{url}/f/e2-@{img}.png");
+    html[lang="is"] & {
+        background-image: url("@{url}/f/ba_e2-@{img}.png");
+    }
+}
+
+#_eplica_byggiraeplica ( @img:"b33", @pad:20 0 0 0, @url:"//codecentre.eplica.is" ) {
+    // @img values:  "b15", "b25", "b33", "b50", "b75", "b",
+    //               "w15", "w25", "w33", "w50", "w75", "w"
+    .byggiraeplica {
+        padding: @pad;
+        text-align: right;
+        line-height: 0;
+        *zoom:1;
+        a {
+            #__ir();
+            background: none 0 0 no-repeat;
+            display: inline-block;
+            width:  135px;
+            height: 20px;
+            #_eplica_byggiraeplica_image( @img, @url );
+        }
+    }
+}

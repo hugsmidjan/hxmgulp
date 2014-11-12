@@ -1,0 +1,107 @@
+@import "utils.less";
+
+
+#_eplica_a11ytricks ( @linkColor:#c00, @borderColor:#029 ) {
+
+    .stream,
+    .focustarget { #__tuck;white-space:nowrap; }
+
+    .print-only { display: none; }
+
+    /* Accessibility tr1ck50r */
+    a.stream:focus,
+    a.stream:active,
+    .stream a:focus,
+    .stream a:active {
+        background: #fff;
+        border: 1px solid @borderColor;
+        margin: 0;
+        padding: 3px 5px;
+        color: @linkColor;
+        right: 0;
+        z-index:9999;
+        font-size: 1em;
+        white-space: nowrap;
+    }
+    .stream {
+        a:focus,
+        a:active {
+            position: absolute;
+            right: -9999px;
+        }
+    }
+
+}
+
+
+#_eplica_skiplink-full ( @linkColor:#c00, @borderColor:#029 ) {
+
+    .pghead .skiplink {
+        #__tuck;
+        white-space:nowrap;
+        top: 10px;
+        font-size: 1em;
+
+        a:focus,
+        a:active {
+            position: absolute;
+            right: -9999px;
+            background: #fff;
+            border: 1px solid @borderColor;
+            margin: 0;
+            padding: 3px 5px;
+            color: @linkColor;
+            z-index:9999;
+            font-size: 1em;
+            white-space: nowrap;
+        }
+    }
+
+}
+
+
+
+
+
+#_eplica_byggiraeplica ( @img:"b33", @padT:20px, @padB:0 ) {
+    // @img values:  "b15", "b25", "b33", "b50", "b75", "b",
+    //               "w15", "w25", "w33", "w50", "w75", "w"
+
+    .byggiraeplica {
+        padding-top: @padT;
+        padding-bottom: @padB;
+        text-align: right;
+        line-height: 0;
+        *zoom:1;
+        a {
+            background: url("//codecentre.eplica.is/f/e2-@{img}.png") 0 0 no-repeat;
+            #__hideText ();
+            display: inline-block;
+            width:  135px;
+            height: 20px;
+        }
+    }
+    html[lang="is"] .byggiraeplica a {
+        background-image: url("//codecentre.eplica.is/f/ba_e2-@{img}.png");
+    }
+}
+
+
+
+
+
+
+
+
+// ============================================================================
+// DEPRICATED MIXINS
+// ============================================================================
+
+
+
+#_eplica_byggira ( @img:"b33", @padT:20px, @padB:0 ) {
+    #_eplica_byggiraeplica( @img, @padT, @padB );
+}
+
+
+

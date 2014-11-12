@@ -1,0 +1,352 @@
+// dump @cssString into the output stream. Warning! use carefully
+#__plainText (@cssString) {
+    x: ~`"x;\n" + @{cssString}.replace(/; */g, ";\n").replace(/;\n *$/,"")`;
+}
+
+
+#__tuck () {
+    position:absolute; right:9999px; left:auto;
+}
+
+#__afterClear () {
+    *zoom:1;
+    &:after { content:" "; clear:both; display:block; height:0; }
+}
+
+
+#__boxSizing ( @type: border-box ) {
+    -webkit-box-sizing: @type;
+    -moz-box-sizing:    @type;
+    box-sizing:         @type;
+}
+
+
+#__boxGlow ( @color:#fff, @blur:10px, @spread:0 ) {
+    #__boxShadow( 0, 0, @blur, @color, @spread  );
+}
+#__boxInnerGlow ( @color:#fff, @blur:0, @spread:1px ) {
+    #__boxShadowInset( 0, 0, @blur, @color, @spread  );
+}
+#__boxShadowInset ( @x:0, @y:0, @blur:8px, @color:rgba(0,0,0, .333), @spread:0 ) {
+    -webkit-box-shadow: inset @x @y @blur @spread @color;
+    box-shadow:         inset @x @y @blur @spread @color;
+}
+#__boxShadow ( @x:0, @y:0, @blur:8px, @color:rgba(0,0,0, .333), @spread:0 ) {
+    -webkit-box-shadow: @x @y @blur @spread @color;
+    box-shadow:         @x @y @blur @spread @color;
+}
+#__boxShadows ( @a, @a2:0 0, @a3:0 0, @a4:0 0 ) {
+    -webkit-box-shadow: @a, @a2, @a3, @a4;
+    box-shadow:         @a, @a2, @a3, @a4;
+}
+#__boxShadowNone () {
+    -webkit-box-shadow: none;
+    box-shadow:         none;
+}
+
+
+
+
+// Generic/flexible gradients -- use {X}deg directionals only
+#__grad ( @dir, @s1, @s2 ) {
+    background-image: -webkit-linear-gradient( 90deg - @dir, @s1, @s2 ); // Chrome10+,Safari5.1+
+    background-image:      -o-linear-gradient( 90deg - @dir, @s1, @s2 ); // Opera11.10+
+    background-image:         linear-gradient( @dir, @s1, @s2 ); // W3C
+}
+#__grad3 ( @dir, @s1, @s2, @s3 ) {
+    background-image: -webkit-linear-gradient( 90deg - @dir, @s1, @s2, @s3 ); // Chrome10+,Safari5.1+
+    background-image:      -o-linear-gradient( 90deg - @dir, @s1, @s2, @s3 ); // Opera11.10+
+    background-image:         linear-gradient( @dir, @s1, @s2, @s3 ); // W3C
+}
+#__grad4 ( @dir, @s1, @s2, @s3, @s4 ) {
+    background-image: -webkit-linear-gradient( 90deg - @dir, @s1, @s2, @s3, @s4 ); // Chrome10+,Safari5.1+
+    background-image:      -o-linear-gradient( 90deg - @dir, @s1, @s2, @s3, @s4 ); // Opera11.10+
+    background-image:         linear-gradient( @dir, @s1, @s2, @s3, @s4 ); // W3C
+}
+#__gradImg ( @dir, @s1, @s2, @img ) {
+    background-image: @img, -webkit-linear-gradient( 90deg - @dir, @s1, @s2 ); // Chrome10+,Safari5.1+
+    background-image: @img,      -o-linear-gradient( 90deg - @dir, @s1, @s2 ); // Opera11.10+
+    background-image: @img,         linear-gradient( @dir, @s1, @s2 ); // W3C
+}
+#__gradImgUnder ( @dir, @s1, @s2, @img ) {
+    background-image: -webkit-linear-gradient( 90deg - @dir, @s1, @s2 ),  @img; // Chrome10+,Safari5.1+
+    background-image:      -o-linear-gradient( 90deg - @dir, @s1, @s2 ),  @img; // Opera11.10+
+    background-image:         linear-gradient( @dir, @s1, @s2 ),  @img; // W3C
+}
+#__grad3Img ( @dir, @s1, @s2, @s3, @img ) {
+    background-image: @img, -webkit-linear-gradient( 90deg - @dir, @s1, @s2, @s3 ); // Chrome10+,Safari5.1+
+    background-image: @img,      -o-linear-gradient( 90deg - @dir, @s1, @s2, @s3 ); // Opera11.10+
+    background-image: @img,         linear-gradient( @dir, @s1, @s2, @s3 ); // W3C
+}
+#__grad3ImgUnder ( @dir, @s1, @s2, @s3, @img ) {
+    background-image: -webkit-linear-gradient( 90deg - @dir, @s1, @s2, @s3 ),  @img; // Chrome10+,Safari5.1+
+    background-image:      -o-linear-gradient( 90deg - @dir, @s1, @s2, @s3 ),  @img; // Opera11.10+
+    background-image:         linear-gradient( @dir, @s1, @s2, @s3 ),  @img; // W3C
+}
+#__grad4Img ( @dir, @s1, @s2, @s3, @s4, @img ) {
+    background-image: @img -webkit-linear-gradient( 90deg - @dir, @s1, @s2, @s3 ); // Chrome10+,Safari5.1+
+    background-image: @img      -o-linear-gradient( 90deg - @dir, @s1, @s2, @s3 ); // Opera11.10+
+    background-image: @img         linear-gradient( @dir, @s1, @s2, @s3 ); // W3C
+}
+#__grad4ImgUnder ( @dir, @s1, @s2, @s3, @s4, @img ) {
+    background-image: -webkit-linear-gradient( 90deg - @dir, @s1, @s2, @s3, @s4 ),  @img; // Chrome10+,Safari5.1+
+    background-image:      -o-linear-gradient( 90deg - @dir, @s1, @s2, @s3, @s4 ),  @img; // Opera11.10+
+    background-image:         linear-gradient( @dir, @s1, @s2, @s3, @s4 ),  @img; // W3C
+}
+
+
+#__borderImage( @image, @offsets, @repeats:round ) {
+    -webkit-border-image: @image @offsets @repeats;
+    -o-border-image:      @image @offsets @repeats;
+    border-image:         @image @offsets @repeats;
+}
+
+
+
+
+#__ir () { // Image replacement (hides images and nested elements, but works poorly for inline-blocks in IE7)
+    overflow: hidden;
+    white-space: nowrap;
+    letter-spacing: -.4em;
+    text-shadow: none !important;
+    color: transparent !important;
+    text-indent: 150%;
+    *text-indent: -999px;
+    text-align: left;
+}
+#__hideText () { // Image replacement for text only... (works great for inline-blocks in IE7)
+    #__ir();
+}
+
+#__inlineBlock () {
+    display:inline-block;
+    *display: inline;
+    *zoom:1;
+}
+
+
+#__inlineIcon ( @w:16px, @h:16px, @mr:5px, @ml:0, @mv:-10px ) {
+    content: "\00a0";
+    display: inline-block;
+    width: @w;
+    min-height: @h;
+    margin: @mv @mr @mv @ml;
+    vertical-align: middle;
+}
+
+
+
+#__transition ( @a ) {
+    -webkit-transition: @a;
+            transition: @a;
+}
+
+#__transition-property ( @a, @a2:x, @a3:x, @a4:x, @a5:x ) {
+    @props: ~`"@{arguments}".replace(/[\[\]]|\,\sx/g, '')`;
+    -webkit-transition-property: @props;
+            transition-property: @props;
+}
+
+#__transition-duration ( @a, @a2:x, @a3:x, @a4:x, @a5:x ) {
+    @props: ~`"@{arguments}".replace(/[\[\]]|\,\sx/g, '')`;
+    -webkit-transition-duration: @props;
+            transition-duration: @props;
+}
+
+#__transition-timing-function ( @a, @a2:x, @a3:x, @a4:x, @a5:x ) {
+    @props: ~`"@{arguments}".replace(/[\[\]]|\,\sx/g, '')`;
+    -webkit-transition-timing-function: @props;
+            transition-timing-function: @props;
+}
+
+#__transition-delay ( @a, @a2:x, @a3:x, @a4:x, @a5:x ) {
+    @props: ~`"@{arguments}".replace(/[\[\]]|\,\sx/g, '')`;
+    -webkit-transition-delay: @props;
+            transition-delay: @props;
+}
+
+
+#__animation-name ( @a ) {
+    -webkit-animation-name: @a;
+       -moz-animation-name: @a;
+            animation-name: @a;
+}
+#__animation-duration ( @a ) {
+    -webkit-animation-duration: @a;
+       -moz-animation-duration: @a;
+            animation-duration: @a;
+}
+
+
+#__transform ( @a ) {
+    -webkit-transform: @a;
+        -ms-transform: @a;
+            transform: @a;
+}
+#__transform-origin ( @a ) {
+    -webkit-transform-origin: @a;
+        -ms-transform-origin: @a;
+            transform-origin: @a;
+}
+
+
+
+#__column-count ( @i:auto ) {
+    -webkit-column-count: @i;
+       -moz-column-count: @i;
+            column-count: @i;
+}
+#__column-width ( @i:auto ) {
+    -webkit-column-width: @i;
+       -moz-column-width: @i;
+            column-width: @i;
+}
+#__column-gap ( @i:normal ) {
+    -webkit-column-gap: @i;
+       -moz-column-gap: @i;
+            column-gap: @i;
+}
+#__column-rule ( @i:0 ) {
+    -webkit-column-rule: @i;
+       -moz-column-rule: @i;
+            column-rule: @i;
+}
+
+
+
+
+
+#__textSelectionStyling( @cssText:"" ) {
+    &::-moz-selection { #__plainText(@cssText); }
+    &::selection { #__plainText(@cssText); }
+
+    // backwards compatibility - remove after 2013-09-01
+    ::-moz-selection { #__plainText(@cssText); }
+    ::selection { #__plainText(@cssText); }
+}
+
+#__placeholderStyling( @cssText:"" ){ //, @className:labelized ) {
+    //.@{className} { #__plainText(@cssText); } // will work in LESS 1.3.2+
+    &.labelized { #__plainText(@cssText); }
+    //placeholders must be styled separately - otherwise browsers fail
+    &::-webkit-input-placeholder { #__plainText(@cssText); }
+    &:-moz-placeholder { #__plainText(@cssText); } // FF -18
+    &::-moz-placeholder { #__plainText(@cssText); } // FF 19+
+    // NOTE: IE10 is the only browser to require either !important for all the rules (or a proper selector to increase specificity);
+    &:-ms-input-placeholder { // IE10
+        @css: ~`'"' + @{cssText}.replace(/ !important *;/g, ";").replace(/;/," !important;")+'"'`;
+        #__plainText(@css);
+    }
+
+    // backwards compatibility - remove after 2013-09-01
+    .labelized { #__plainText(@cssText); }
+    ::-webkit-input-placeholder { #__plainText(@cssText); }
+    :-moz-placeholder { #__plainText(@cssText); } // FF -18
+    ::-moz-placeholder { #__plainText(@cssText); } // FF 19+
+    :-ms-input-placeholder { // IE10
+        @css: ~`'"' + @{cssText}.replace(/ !important *;/g, ";").replace(/;/," !important;")+'"'`;
+        #__plainText(@css);
+    }
+}
+
+
+
+
+
+
+// ------------------------------------------------------------------------------------------------
+//
+// DEPRICATED Mixins
+//
+// ------------------------------------------------------------------------------------------------
+
+
+
+
+// Depricated. Instead use: #__transition( trans1, trans2, trans3 ;);
+#__transitions ( @a, @a2:x, @a3:x, @a4:x, @a5:x ) {
+    @props: ~`"@{arguments}".replace(/[\[\]]|\,\sx/g, '')`;
+    -webkit-transition: @props;
+       -moz-transition: @props;
+         -o-transition: @props;
+            transition: @props;
+}
+
+#__borderBox ( @type: border-box ) {
+    #__boxSizing( @type );
+}
+
+// DEPRICATED -- redundant now
+#__backgroundClip ( @boxType: padding-box ) {
+    background-clip: @boxType;
+}
+
+// DEPRICATED -- Do Not Use!!
+#__borderRadius(@radius){border-radius:@radius;}
+#__borderRadiusTL(@radius){border-top-left-radius:@radius;}
+#__borderRadiusTR(@radius){border-top-right-radius:@radius;}
+#__borderRadiusBL(@radius){border-bottom-left-radius:@radius;}
+#__borderRadiusBR(@radius){border-bottom-right-radius:@radius;}
+
+// DEPRICATED -- do not use!!  Use the anglular #__grad*() mixins instead
+#__gradient ( @dir, @s1, @s2 ) {
+    background-image: -webkit-linear-gradient( @dir, @s1, @s2 ); // Chrome10+,Safari5.1+
+    background-image:    -moz-linear-gradient( @dir, @s1, @s2 ); // FF3.6+
+    background-image:      -o-linear-gradient( @dir, @s1, @s2 ); // Opera11.10+
+    background-image:         linear-gradient( @dir, @s1, @s2 ); // W3C
+}
+#__gradient3 ( @dir, @s1, @s2, @s3 ) {
+    background-image: -webkit-linear-gradient( @dir, @s1, @s2, @s3 ); // Chrome10+,Safari5.1+
+    background-image:    -moz-linear-gradient( @dir, @s1, @s2, @s3 ); // FF3.6+
+    background-image:      -o-linear-gradient( @dir, @s1, @s2, @s3 ); // Opera11.10+
+    background-image:         linear-gradient( @dir, @s1, @s2, @s3 ); // W3C
+}
+#__gradient4 ( @dir, @s1, @s2, @s3, @s4 ) {
+    background-image: -webkit-linear-gradient( @dir, @s1, @s2, @s3, @s4 ); // Chrome10+,Safari5.1+
+    background-image:    -moz-linear-gradient( @dir, @s1, @s2, @s3, @s4 ); // FF3.6+
+    background-image:      -o-linear-gradient( @dir, @s1, @s2, @s3, @s4 ); // Opera11.10+
+    background-image:         linear-gradient( @dir, @s1, @s2, @s3, @s4 ); // W3C
+}
+#__gradientImg ( @dir, @s1, @s2, @img ) {
+    background-image: @img, -webkit-linear-gradient( @dir, @s1, @s2 ); // Chrome10+,Safari5.1+
+    background-image: @img,    -moz-linear-gradient( @dir, @s1, @s2 ); // FF3.6+
+    background-image: @img,      -o-linear-gradient( @dir, @s1, @s2 ); // Opera11.10+
+    background-image: @img,         linear-gradient( @dir, @s1, @s2 ); // W3C
+}
+#__gradientImgUnder ( @dir, @s1, @s2, @img ) {
+    background-image: -webkit-linear-gradient( @dir, @s1, @s2 ),  @img; // Chrome10+,Safari5.1+
+    background-image:    -moz-linear-gradient( @dir, @s1, @s2 ),  @img; // FF3.6+
+    background-image:      -o-linear-gradient( @dir, @s1, @s2 ),  @img; // Opera11.10+
+    background-image:         linear-gradient( @dir, @s1, @s2 ),  @img; // W3C
+}
+#__gradient3Img ( @dir, @s1, @s2, @s3, @img ) {
+    background-image: @img, -webkit-linear-gradient( @dir, @s1, @s2, @s3 ); // Chrome10+,Safari5.1+
+    background-image: @img,    -moz-linear-gradient( @dir, @s1, @s2, @s3 ); // FF3.6+
+    background-image: @img,      -o-linear-gradient( @dir, @s1, @s2, @s3 ); // Opera11.10+
+    background-image: @img,         linear-gradient( @dir, @s1, @s2, @s3 ); // W3C
+}
+#__gradient3ImgUnder ( @dir, @s1, @s2, @s3, @img ) {
+    background-image: -webkit-linear-gradient( @dir, @s1, @s2, @s3 ),  @img; // Chrome10+,Safari5.1+
+    background-image:    -moz-linear-gradient( @dir, @s1, @s2, @s3 ),  @img; // FF3.6+
+    background-image:      -o-linear-gradient( @dir, @s1, @s2, @s3 ),  @img; // Opera11.10+
+    background-image:         linear-gradient( @dir, @s1, @s2, @s3 ),  @img; // W3C
+}
+// DEPRICATED  -- just use #__ir();
+#__buttonIR ( @w, @h:auto, @border:none ) {
+    // input-button image replacement
+    #__ir();
+    padding: 0;
+    border: @border;
+    width:  @w;
+    height: @h;
+}
+// DEPRICATED  -- just use #__ir();
+#__inlineIR ( @w, @h, @img:f ) {
+    #__ir();
+    #__inlineBlock();
+    vertical-align:-2px;
+    width:  @w;
+    height: @h;
+    background: url("@{img}") 0 0 no-repeat;
+}
+

@@ -6,7 +6,6 @@ module.exports = function (gulp, skin) {
 
     var fs = require('fs');
     var path = require('path');
-    var https = require('https');
 
     var plumber = require('gulp-plumber');
     var filter = require('gulp-filter');
@@ -55,34 +54,6 @@ module.exports = function (gulp, skin) {
     var watchTasks =    [];
     var htmltestTasks = [];
     var nunjucksWorkingDirs = [];
-
-    var cssFolder = '_src/_'+ skin.cssProc +'/';
-    if ( (isStylus || isSCSS) &&  fs.existsSync(cssFolder) )
-    {
-        // curl codecentre files...
-        var ccFolder = cssFolder + '_codecentre/';
-        var ccUrl = 'https://codecentre.eplica.is/themes/'+skin.cssProc+'/';
-        var files = isStylus?
-                [
-                   ccUrl+'utils.styl',
-                   ccUrl+'eplica-utils.styl',
-                   ccUrl+'normalize.styl',
-                ]:
-                [
-                   ccUrl+'utils.scss',
-                   ccUrl+'eplica-utils.scss',
-                   ccUrl+'normalize.scss',
-                ];
-
-        if ( !fs.existsSync(ccFolder) ){  fs.mkdirSync( ccFolder );  }
-        files.forEach(function (url) {
-            https.get(url, function (res) {
-                var fileName = url.split('/').slice(-1)[0];
-                res.pipe( fs.createWriteStream( ccFolder+fileName ) );
-              });
-          });
-    }
-
 
     var cssGlob = '*.'+skin.cssProc;
     var skinModules = skin.modules || ['/'];
