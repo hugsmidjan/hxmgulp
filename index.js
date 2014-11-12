@@ -128,16 +128,16 @@ module.exports = function (gulp, skin) {
                     var iconVars = [];
                     codepoints.forEach(function (cp) {
                         var name = cp.name;
-                        var chr = '"\\' + cp.codepoint.toString(16) + '"';
+                        var chr = '\\' + cp.codepoint.toString(16);
                         var padding = new Array(Math.max(20 - name.length,2)).join(' ');
-                        iconVars.push( (isLESS?'@':'$')+'icon-' + name + (isStylus?' = ':':') + padding + chr + ';\n' );
+                        iconVars.push( (isLESS?'@':'$')+'icon-' + name + (isStylus?' = ':':') + padding + '"'+ chr + '";\n' );
                         isSCSS ?
-                            iconData.push( '(' + name + ', ' + chr + ')' ):
+                            iconData.push( '(' + name + ', "' + chr + '")' ):
                             (iconData[name] = chr); // Stylus
                       });
                     var code = '// This file is auto-generated. DO NOT EDIT! \n\n' +
                                 iconVars.join('') + '\n' +
-                                (isSCSS ? '$iconData:\n    '+iconData.join(',\n    ')+';\n\n' : ''); +
+                                (isSCSS ? '$iconData:\n    '+iconData.join(',\n    ')+';\n\n' : '') +
                                 (isStylus ? '$iconData = ' + JSON.stringify(iconData) + ';\n\n' : '');
                     fs.writeFileSync( paths.css + paths.css_incl + '_iconVars.'+skin.cssProc, code );
                   })
