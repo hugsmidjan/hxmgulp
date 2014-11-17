@@ -35,12 +35,12 @@ The `options` support the following properties (and defaults):
 * **`dist: '.'`** - path to the root distribution folder where the compiled/minified CSS and JS files are saved.
 * **`cssProc: 'styl'`** - type of CSS preporcessor being used. Currently valid options are `'styl'`, `'scss'` and `'less'`
 * **`task: null`** - optional function which then gets run once for each item in the modules array.
-    * Example: <pre><code>tasks: function (data) {  
-&nbsp; &nbsp; // data.module ===  current module (i.e. (sub)folder)  
-&nbsp; &nbsp; // data.paths  ===  paths config for the current module  
-&nbsp; &nbsp; // data.basePathCfg === A good default options object for gulp.task  
-&nbsp; &nbsp; require('gulp').task('mytask', function(){ ... });  
-&nbsp; &nbsp; return ['mytask'];  
+    * Example: <pre><code>tasks: function (data) {
+&nbsp; &nbsp; // data.module ===  current module (i.e. (sub)folder)
+&nbsp; &nbsp; // data.paths  ===  paths config for the current module
+&nbsp; &nbsp; // data.basePathCfg === A good default options object for gulp.task
+&nbsp; &nbsp; require('gulp').task('mytask', function(){ ... });
+&nbsp; &nbsp; return ['mytask'];
 &nbsp; }</code></pre>
 * **`copyrightYear: (new Date()).getFullYear()`** - Starting year for the copyright clauses at the top of minified files.
 * **`copyrightInfo: 'Hugsmiðjan ehf. (www.hugsmidjan.is)'`** - text that appears after "Copyright 20XX-20YY ..." in the copyright clause.
@@ -70,14 +70,17 @@ Any `.styl` file placed _directly_ inside the source folder gets rendered to a (
 
 any CSS `url()` that ends with `#datauri` is automatically resolved and base64 encoded as an inline data URI in the rendered CSS file. Example:
 
-    .box {
-        background-image: url(i/stripes.png#datauri);
-    }
+```css
+.box {
+    background-image: url(i/stripes.png#datauri);
+}
+```
 
-becomes: 
+becomes:
 
-    .box { background-image: url(data:image/png;base64,iVBORw...); }
-
+```css
+.box { background-image: url(data:image/png;base64,iVBORw...); }
+```
 
 ### JavaScripts
 
