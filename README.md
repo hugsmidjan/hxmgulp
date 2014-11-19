@@ -71,9 +71,7 @@ Any `.styl` file placed _directly_ inside the source folder gets rendered to a (
 any CSS `url()` that ends with `#datauri` is automatically resolved and base64 encoded as an inline data URI in the rendered CSS file. Example:
 
 ```css
-.box {
-    background-image: url(i/stripes.png#datauri);
-}
+.box { background-image: url(i/stripes.png#datauri); }
 ```
 
 becomes:
