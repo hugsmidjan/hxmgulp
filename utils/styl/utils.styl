@@ -119,10 +119,10 @@ _triangleShape($dir, $color, $h, $w, $wOffs=50%, $wEdge=left, $shift) {
 
     {$wEdge}: $wOffs;
     margin: -$shift;
-    border-width = ($dir==top) or ($dir==bottom) ? $h ($w/2) : ($w/2) $h;
+    border-width: isVertical($dir) ? $h ($w/2) : ($w/2) $h;
     {$dir}: -$h;
     margin-{$dir}: 0;
-    $dirInv = opposite-position( $dir );
+    $dirInv = opposite-position($dir);
     border-{$dirInv}-color: $color;
     border-{$dir}-width: 0;
 }
@@ -176,4 +176,5 @@ percent( $value )
 pxem($px, $fs=12px)
     return ($px/$fs)em;
 
-
+isVertical($dir)
+    return $dir==top or $dir==bottom;
