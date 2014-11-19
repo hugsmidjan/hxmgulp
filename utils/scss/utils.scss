@@ -110,7 +110,7 @@ $quote_closeSingle_en: $quote_upper9;
     position: absolute;
     border: 0 solid transparent;
 }
-@mixin _triangleShape ($dir, $color, $h, $w:0, $wOffs:50%, $wEdge:left, $shift:'') {
+@mixin _triangleShape ($dir:top, $color:#fff, $h:10px, $w:0, $wOffs:50%, $wEdge:left, $shift:'') {
     @if ($w==0) { $w: $h*2; }
     @if (($dir==left) or ($dir==right)) and ($wEdge==left) { $wEdge:top }
     @if ($shift=='') { $shift: ($w/2); }

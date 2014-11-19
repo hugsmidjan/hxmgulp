@@ -112,7 +112,7 @@ _triangleBasic() {
     position: absolute;
     border: 0 solid transparent;
 }
-_triangleShape($dir, $color, $h, $w, $wOffs=50%, $wEdge=left, $shift) {
+_triangleShape($dir=top, $color=#fff, $h=10px, $w=null, $wOffs=50%, $wEdge=left, $shift='') {
     if !$w { $w = (2*$h); }
     if ($dir==left or $dir==right) and ($wEdge==left) { $wEdge = top };
     if !$shift { $shift = ($w/2); }
