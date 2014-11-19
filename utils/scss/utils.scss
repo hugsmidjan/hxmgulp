@@ -117,36 +117,11 @@ $quote_closeSingle_en: $quote_upper9;
 
     #{$wEdge}: $wOffs;
     margin: -$shift;
-    @if ($dir==up) or ($dir==down) {
-        border-width: $h $w/2;
-    }
-    @else { //
-        border-width: $w/2 $h;
-    }
-    @if ($dir==up) {
-        top: -$h;
-        margin-top: 0;
-        border-bottom-color: $color;
-        border-top-width: 0;
-    }
-    @elseif ($dir==down) {
-        bottom: -$h;
-        margin-bottom: 0;
-        border-top-color: $color;
-        border-bottom-width: 0;
-    }
-    @elseif ($dir==left) {
-        left: -$h;
-        margin-left: 0;
-        border-right-color: $color;
-        border-left-width: 0;
-    }
-    @elseif ($dir==right) {
-        right: -$h;
-        margin-right: 0;
-        border-left-color: $color;
-        border-right-width: 0;
-    }
+    border-width: if(isVertical($dir), $h $w/2, $w/2 $h);
+    #{$dir}: -$h;
+    margin-#{$dir}: 0;
+    border-#{opposite($dir)}-color: $color;
+    border-#{$dir}-width: 0;
 }
 
 
@@ -185,6 +160,19 @@ $quote_closeSingle_en: $quote_upper9;
     }
 }
 
+
+
+@function opposite ($dir) {
+    @return map-get((
+                top: bottom,
+                bottom: top,
+                left: right,
+                right: left
+              ), $dir);
+};
+@function isVertical ($dir) {
+    @return $dir==top or $dir==bottom;
+};
 
 
 @function fade($color, $opacity) {
