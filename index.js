@@ -155,7 +155,7 @@ module.exports = function (gulp, skin) {
         buildTasks.push( ns+'css' );
         gulp.task(ns+'css', function() {
             return gulp.src( paths.css+cssGlob, basePathCfg )
-                .pipe( plumber() )
+                .pipe( plumber( isStylus ? function(err){ console.log(err.message); } : undefined ) )
                 .pipe(
                     isSCSS ?
                         scss({
