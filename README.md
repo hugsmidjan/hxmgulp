@@ -107,6 +107,7 @@ NOTE: there's a special case for page-templates with filenames with double-exten
 
     _src/_tests/homepage.htm
     _src/_tests/section/page.htm     <-- note subfolder
+    
     _src/_tests/foobar.jsp.htm       <-- note double extension
     _src/_tests/subfoo/baz.json.htm  <-- note subfolder
 
@@ -114,6 +115,7 @@ NOTE: there's a special case for page-templates with filenames with double-exten
 
     ./_tests/homepage.html      <-- HTML demo/tests folder
     ./_tests/section/page.html  <-- note subfolder
+    
     ./foobar.jsp                <-- options.dist root folder
     ./subfoo/baz.json           <-- subfolder preserved
 
