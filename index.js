@@ -85,6 +85,9 @@ module.exports = function (gulp, skin) {
 
         buildTasks.push( ns+'iconfont' );
         gulp.task(ns+'iconfont', function() {
+            var iconFileOutPath = paths.dist + path.relative(paths.src,paths.images);
+            var assgn = isStylus ? ' = ' : ':';
+            var varPrefix = (isLESS?'@':'$') + 'icon-';
             return gulp.src([
                 paths.iconfont + '**/*.svg',
                 '!' + paths.iconfont + '_raw/**'
@@ -99,20 +102,22 @@ module.exports = function (gulp, skin) {
                     var iconVars = [];
                     codepoints.forEach(function (cp) {
                         var name = cp.name;
-                        var chr = '\\' + cp.codepoint.toString(16);
+                        var chr = cp.codepoint.charAt ? cp.codepoint : String.fromCharCode(cp.codepoint);
+                        var chrCSS = '"' + chr + '"';
                         var padding = new Array(Math.max(20 - name.length,2)).join(' ');
-                        iconVars.push( (isLESS?'@':'$')+'icon-' + name + (isStylus?' = ':':') + padding + '"'+ chr + '";\n' );
+                        iconVars.push( varPrefix + name + assgn + padding + chrCSS + ';\n' );
                         isSCSS ?
-                            iconData.push( '(' + name + ', "' + chr + '")' ):
+                            iconData.push( '(' + name + ', ' + chrCSS + ')' ):
                             (iconData[name] = chr); // Stylus
                       });
                     var code = '// This file is auto-generated. DO NOT EDIT! \n\n' +
                                 iconVars.join('') + '\n' +
                                 (isSCSS ? '$iconData:\n    '+iconData.join(',\n    ')+';\n\n' : '') +
-                                (isStylus ? '$iconData = ' + JSON.stringify(iconData) + ';\n\n' : '');
+                                (isStylus ? '$iconData = ' + JSON.stringify(iconData,null,4) + ';\n\n' : '');
                     fs.writeFileSync( paths.css + paths.css_incl + '_iconVars.'+skin.cssProc, code );
+                    fs.writeFileSync( iconFileOutPath+'/icons.json', JSON.stringify(iconData,null,'\t') );
                   })
-                .pipe( gulp.dest( paths.dist + path.relative(paths.src,paths.images) ) );
+                .pipe( gulp.dest( iconFileOutPath ) );
           });
 
 
