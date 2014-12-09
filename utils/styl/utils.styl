@@ -1,11 +1,11 @@
 ﻿// @media query based wrappers
 media($query='screen', $allowFlatten=false) {
-    if $media-queries-support {
+    if ($media-queries-support) {
         @media $query {
             {block}
         }
     }
-    else if ( $query in $media-queries-flatten  ||  $allowFlatten ) {
+    else if ($query in $media-queries-flatten  ||  $allowFlatten) {
         @media screen {
             {block}
         }
@@ -24,7 +24,7 @@ $iconfont_name ?=  'icons';
 $iconfont_font-family ?= $iconfont_name, Arial, Helvetica, sans-serif;
 
 _icon($icon) {
-    if $icon {
+    if ($icon) {
         content: $icon;
     }
     display: inline-block;
@@ -113,9 +113,9 @@ _triangleBasic() {
     border: 0 solid transparent;
 }
 _triangleShape($dir=top, $color=#fff, $h=10px, $w=null, $wOffs=50%, $wEdge=left, $shift='') {
-    if !$w { $w = (2*$h); }
-    if ($dir==left or $dir==right) and ($wEdge==left) { $wEdge = top };
-    if !$shift { $shift = ($w/2); }
+    if (!$w) { $w = (2*$h); }
+    if (($dir==left or $dir==right) and ($wEdge==left)) { $wEdge = top };
+    if (!$shift) { $shift = ($w/2); }
 
     {$wEdge}: $wOffs;
     margin: -$shift;
@@ -135,9 +135,9 @@ _triangleShape($dir=top, $color=#fff, $h=10px, $w=null, $wOffs=50%, $wEdge=left,
 
 // screen-reader friendly off-screen hiding
 _tuck() {
-    position: absolute
-    right: 9999px
-    left: auto
+    position: absolute;
+    right: 9999px;
+    left: auto;
 }
 
 _afterClear() {
@@ -154,12 +154,12 @@ _afterClear() {
 _hideText( $mode=normal ) {
     overflow: hidden;
     white-space: nowrap;
-    if $mode != soft {
+    if ($mode != soft) {
         letter-spacing: -0.4em;
         text-indent: 150%;
         text-align: left;
     }
-    if $mode == hard {
+    if ($mode == hard) {
         text-shadow: none !important;
         color: transparent !important;
     }
