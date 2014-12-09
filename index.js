@@ -272,8 +272,8 @@ module.exports = function (gulp, skin) {
                 var folder = paths.src;
                 while ( folder )
                 {
-                    globs.push( folder + inclGlob );
-                    folder = folder.replace(/[^\/]+\/$/,'');
+                  globs.push( folder + inclGlob );
+                  folder = folder.replace(/[^\/]+\/$/,'');
                 }
                 return globs;
               };
@@ -293,11 +293,16 @@ module.exports = function (gulp, skin) {
         // allow skinfile.js to define its own tasks
         if ( typeof skin.tasks === 'function' )
         {
-            var taskNames = skin.tasks(moduleData);
-            if ( taskNames )
+          var tasks = skin.tasks(moduleData);
+          if ( tasks )
+          {
+            if ( tasks instanceof Array )
             {
-                buildTasks.push.apply(buildTasks, taskNames);
+              tasks = { build:tasks };
             }
+            buildTasks.push.apply(buildTasks, tasks.build||[]);
+            watchTasks.push.apply(watchTasks, tasks.watch||[]);
+          }
         }
 
       });
