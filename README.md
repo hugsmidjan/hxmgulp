@@ -43,7 +43,7 @@ The `options` support the following properties (and defaults):
 &nbsp; &nbsp; // moduleData.module ===  current module (i.e. (sub)folder)<br/>
 &nbsp; &nbsp; // moduleData.paths  ===  paths config for the current module<br/>
 &nbsp; &nbsp; // moduleData.basePathCfg === A good default options object for gulp.task()<br/>
-&nbsp; &nbsp; require('gulp').task('mytask', function(){ ... });<br/>
+&nbsp; &nbsp; gulp.task('mytask', function(){ ... });<br/>
 &nbsp; &nbsp; return { build:['mytask'], watch:null };<br/>
 &nbsp; }</code></pre>
 
