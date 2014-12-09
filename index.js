@@ -29,7 +29,6 @@ module.exports = function (gulp, skin) {
     var iconfont = require('gulp-iconfont');
 
     var es6transpiler = require('gulp-es6-transpiler');
-    var browserify = require('gulp-browserify');
     var uglify = require('gulp-uglify');
 
     var nunjucksRender = require('gulp-nunjucks-render');
@@ -40,6 +39,16 @@ module.exports = function (gulp, skin) {
             disallowDuplicated: false,
             disallowUnknownReferences: false,
             // includePolyfills: true, // (defaults to false) insert polyfills in the output file. true - insert only the necessary polyfills. "full" - insert all available polyfills.
+          };
+
+    var browserifyfy = function () {
+            // About this: https://medium.com/@sogko/gulp-browserify-the-gulp-y-way-bb359b3f9623
+            var browserify = require('browserify');
+            var transform = require('vinyl-transform');
+            return transform(function(filename) {
+                var b = browserify(filename);
+                return b.bundle();
+              });
           };
 
     // =========================================================================
@@ -143,7 +152,7 @@ module.exports = function (gulp, skin) {
             return gulp.src([ paths.scripts+'*.js'], basePathCfg )
                 .pipe( plumber() )
                 .pipe( commonjsScripts )
-                    .pipe( browserify() )
+                    .pipe( browserifyfy() )
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                     .pipe( commonjsScripts.restore() )
                 .pipe( es6transpiler(es6transpilerOpts) )
@@ -232,7 +241,7 @@ module.exports = function (gulp, skin) {
               ], basePathCfg )
                 .pipe( plumber() )
                 .pipe( commonjsScripts )
-                    .pipe( browserify() )
+                    .pipe( browserifyfy() )
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                     .pipe( commonjsScripts.restore() )
                 .pipe( es6transpiler(es6transpilerOpts) )
