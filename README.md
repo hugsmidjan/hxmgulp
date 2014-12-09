@@ -30,20 +30,26 @@ That's it!
 
 The `options` support the following properties (and defaults):
 
-* **`modules: ['/']`**   - array of (sub)folder names.
-* **`src: '_src'`** - path to the root source folder.
-* **`dist: '.'`** - path to the root distribution folder where the compiled/minified CSS and JS files are saved.
-* **`cssProc: 'styl'`** - type of CSS preporcessor being used. Currently valid options are `'styl'`, `'scss'` and `'less'`
-* **`task: null`** - optional function which then gets run once for each item in the modules array.
-    * Example: <pre><code>tasks: function (data) {
-&nbsp; &nbsp; // data.module ===  current module (i.e. (sub)folder)
-&nbsp; &nbsp; // data.paths  ===  paths config for the current module
-&nbsp; &nbsp; // data.basePathCfg === A good default options object for gulp.task
-&nbsp; &nbsp; require('gulp').task('mytask', function(){ ... });
-&nbsp; &nbsp; return ['mytask'];
+  * **`modules: ['/']`**   - array of (sub)folder names.
+
+  * **`src: '_src'`** - path to the root source folder.
+
+  * **`dist: '.'`** - path to the root distribution folder where the compiled/minified CSS and JS files are saved.
+
+  * **`cssProc: 'styl'`** - type of CSS preporcessor being used. Currently valid options are `'styl'`, `'scss'` and `'less'`
+
+  * **`task: null`** - optional function which then gets run once for each item in the modules array. Example:
+<pre><code>tasks: function (moduleData) {<br/>
+&nbsp; &nbsp; // moduleData.module ===  current module (i.e. (sub)folder)<br/>
+&nbsp; &nbsp; // moduleData.paths  ===  paths config for the current module<br/>
+&nbsp; &nbsp; // moduleData.basePathCfg === A good default options object for gulp.task()<br/>
+&nbsp; &nbsp; require('gulp').task('mytask', function(){ ... });<br/>
+&nbsp; &nbsp; return ['mytask'];<br/>
 &nbsp; }</code></pre>
-* **`copyrightYear: (new Date()).getFullYear()`** - Starting year for the copyright clauses at the top of minified files.
-* **`copyrightInfo: 'Hugsmiðjan ehf. (www.hugsmidjan.is)'`** - text that appears after "Copyright 20XX-20YY ..." in the copyright clause.
+
+  * **`copyrightYear: (new Date()).getFullYear()`** - Starting year for the copyright clauses at the top of minified files.
+ 
+  * **`copyrightInfo: 'Hugsmiðjan ehf. (www.hugsmidjan.is)'`** - text that appears after "Copyright 20XX-20YY ..." in the copyright clause.
 
 
 --------------------------------------
