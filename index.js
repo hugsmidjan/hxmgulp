@@ -41,14 +41,14 @@ module.exports = function (gulp, skin) {
             // includePolyfills: true, // (defaults to false) insert polyfills in the output file. true - insert only the necessary polyfills. "full" - insert all available polyfills.
           };
 
-    var browserifyfy = function (moduleData) {
+    var browserifyfy = function (module) {
             // About this: https://medium.com/@sogko/gulp-browserify-the-gulp-y-way-bb359b3f9623
             var browserify = require('browserify');
             var transform = require('vinyl-transform');
             return transform(function(filename) {
                 var b;
                 if ( skin.browserify ) {
-                  b = skin.browserify( filename, moduleData, browserify );
+                  b = skin.browserify( filename, module, browserify );
                 }
                 else {
                   var opts = Object.create(skin.browserifyOpts||{}, { entries:filename });
@@ -77,13 +77,14 @@ module.exports = function (gulp, skin) {
     var skinDist = (skin.dist || '.').replace(/\/+$/,'');
 
 
-    skinModules.forEach(function (module, folderIndex) {
+    skinModules.forEach(function (moduleName, folderIndex) {
 
-        module = ('/'+module+'/').replace(/\/\/+/g, '/'); // normalize
-        var srcPath = skinSrc + module;
+        moduleName = ('/'+moduleName+'/').replace(/\/\/+/g, '/'); // normalize
+        var ns = moduleName;
+        var srcPath = skinSrc + moduleName;
         var paths = {
                 src:          srcPath,
-                dist:         skinDist + module,
+                dist:         skinDist + moduleName,
 
                 css:         srcPath + '',
                 css_incl:    isSCSS ? '_scss/' : isLESS ? '_less/' : '_styl/',
@@ -93,12 +94,9 @@ module.exports = function (gulp, skin) {
                 iconfont:     srcPath + 'iconfont/',
                 htmltests:    srcPath + '_tests/',
               };
-
         var basePathCfg = { base:paths.src };
-        var ns = module;
-
-        var moduleData = {
-                module: module,
+        var module = {
+                name:   moduleName,
                 paths:  paths,
                 basePathCfg: Object.create(basePathCfg),
               };
@@ -166,7 +164,7 @@ module.exports = function (gulp, skin) {
                 .pipe( plumber() )
                 .pipe( commonjsScripts )
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
-                    .pipe( browserifyfy(moduleData) )
+                    .pipe( browserifyfy(module) )
                     .pipe( commonjsScripts.restore() )
                 .pipe( es6transpiler(es6transpilerOpts) )
                 .pipe( rename({ suffix:'-source' }) )
@@ -255,7 +253,7 @@ module.exports = function (gulp, skin) {
                 .pipe( plumber() )
                 .pipe( commonjsScripts )
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
-                    .pipe( browserifyfy(moduleData) )
+                    .pipe( browserifyfy(module) )
                     .pipe( commonjsScripts.restore() )
                 .pipe( es6transpiler(es6transpilerOpts) )
                 .pipe( gulp.dest( paths.dist ) );
@@ -293,7 +291,7 @@ module.exports = function (gulp, skin) {
         // allow skinfile.js to define its own tasks
         if ( typeof skin.tasks === 'function' )
         {
-          var tasks = skin.tasks(moduleData);
+          var tasks = skin.tasks(module);
           if ( tasks )
           {
             if ( tasks instanceof Array )

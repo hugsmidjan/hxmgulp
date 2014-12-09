@@ -39,20 +39,20 @@ The `options` support the following properties (and defaults):
   * **`cssProc: 'styl'`** - type of CSS preporcessor being used. Currently valid options are `'styl'`, `'scss'` and `'less'`
 
   * **`task: null`** - optional function which then gets run once for each item in the modules array. Example:
-<pre><code>tasks: function (moduleData) {<br/>
-&nbsp; &nbsp; // moduleData.module ===  current module (i.e. (sub)folder)<br/>
-&nbsp; &nbsp; // moduleData.paths  ===  paths config for the current module<br/>
-&nbsp; &nbsp; // moduleData.basePathCfg === A good default options object for gulp.task()<br/>
+<pre><code>tasks: function (module) {<br/>
+&nbsp; &nbsp; // module.name === the current module (i.e. (sub)folder)<br/>
+&nbsp; &nbsp; // module.paths === paths config for the current module<br/>
+&nbsp; &nbsp; // module.basePathCfg === A good default options object for gulp.task()<br/>
 &nbsp; &nbsp; gulp.task('mytask', function(){ ... });<br/>
 &nbsp; &nbsp; return { build:['mytask'], watch:null };<br/>
 &nbsp; }</code></pre>
 
   * **`browserifyOpts: null`** - object with options for browserify
 
-  * **`browserify: null`** - optional function to run (and configure) browserify.  Example: <pre><code data-language="js">browserify: function (filename, moduleData, browserify) {<br />
-&nbsp; &nbsp; // moduleData.module ===  current module (i.e. (sub)folder)<br />
-&nbsp; &nbsp; // moduleData.paths  ===  paths config for the current module<br />
-&nbsp; &nbsp; // moduleData.basePathCfg === A good default options object for gulp.task()<br />
+  * **`browserify: null`** - optional function to run (and configure) browserify.  Example: <pre><code data-language="js">browserify: function (filename, module, browserify) {<br />
+&nbsp; &nbsp; // module.name === the current module (i.e. (sub)folder)<br />
+&nbsp; &nbsp; // module.paths === paths config for the current module<br />
+&nbsp; &nbsp; // module.basePathCfg === A good default options object for gulp.task()<br />
 &nbsp; &nbsp; var b = browserify();<br />
 &nbsp; &nbsp; b.require([{ file:'foobar.js', expose:'foobar' }]);<br />
 &nbsp; &nbsp; b.external(['react']);<br />
