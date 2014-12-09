@@ -41,12 +41,19 @@ module.exports = function (gulp, skin) {
             // includePolyfills: true, // (defaults to false) insert polyfills in the output file. true - insert only the necessary polyfills. "full" - insert all available polyfills.
           };
 
-    var browserifyfy = function () {
+    var browserifyfy = function (moduleData) {
             // About this: https://medium.com/@sogko/gulp-browserify-the-gulp-y-way-bb359b3f9623
             var browserify = require('browserify');
             var transform = require('vinyl-transform');
             return transform(function(filename) {
-                var b = browserify(filename);
+                var b;
+                if ( skin.browserify ) {
+                  b = skin.browserify( filename, moduleData, browserify );
+                }
+                else {
+                  var opts = Object.create(skin.browserifyOpts||{}, { entries:filename });
+                  b = browserify( opts );
+                }
                 return b.bundle();
               });
           };
@@ -89,6 +96,12 @@ module.exports = function (gulp, skin) {
 
         var basePathCfg = { base:paths.src };
         var ns = module;
+
+        var moduleData = {
+                module: module,
+                paths:  paths,
+                basePathCfg: Object.create(basePathCfg),
+              };
 
         // ==============================================
 
@@ -152,8 +165,8 @@ module.exports = function (gulp, skin) {
             return gulp.src([ paths.scripts+'*.js'], basePathCfg )
                 .pipe( plumber() )
                 .pipe( commonjsScripts )
-                    .pipe( browserifyfy() )
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
+                    .pipe( browserifyfy(moduleData) )
                     .pipe( commonjsScripts.restore() )
                 .pipe( es6transpiler(es6transpilerOpts) )
                 .pipe( rename({ suffix:'-source' }) )
@@ -241,8 +254,8 @@ module.exports = function (gulp, skin) {
               ], basePathCfg )
                 .pipe( plumber() )
                 .pipe( commonjsScripts )
-                    .pipe( browserifyfy() )
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
+                    .pipe( browserifyfy(moduleData) )
                     .pipe( commonjsScripts.restore() )
                 .pipe( es6transpiler(es6transpilerOpts) )
                 .pipe( gulp.dest( paths.dist ) );
@@ -280,11 +293,7 @@ module.exports = function (gulp, skin) {
         // allow skinfile.js to define its own tasks
         if ( typeof skin.tasks === 'function' )
         {
-            var taskNames = skin.tasks({
-                                module: module,
-                                paths:  paths,
-                                basePathCfg: Object.create(basePathCfg),
-                              });
+            var taskNames = skin.tasks(moduleData);
             if ( taskNames )
             {
                 buildTasks.push.apply(buildTasks, taskNames);

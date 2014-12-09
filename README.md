@@ -47,6 +47,18 @@ The `options` support the following properties (and defaults):
 &nbsp; &nbsp; return ['mytask'];<br/>
 &nbsp; }</code></pre>
 
+  * **`browserifyOpts: null`** - object with options for browserify
+
+  * **`browserify: null`** - optional function to run (and configure) browserify.  Example: <pre><code data-language="js">browserify: function (filename, moduleData, browserify) {<br />
+&nbsp; &nbsp; // moduleData.module ===  current module (i.e. (sub)folder)<br />
+&nbsp; &nbsp; // moduleData.paths  ===  paths config for the current module<br />
+&nbsp; &nbsp; // moduleData.basePathCfg === A good default options object for gulp.task()<br />
+&nbsp; &nbsp; var b = browserify();<br />
+&nbsp; &nbsp; b.require([{ file:'foobar.js', expose:'foobar' }]);<br />
+&nbsp; &nbsp; b.external(['react']);<br />
+&nbsp; &nbsp; return b;<br />
+&nbsp; }</code></pre>
+
   * **`copyrightYear: (new Date()).getFullYear()`** - Starting year for the copyright clauses at the top of minified files.
  
   * **`copyrightInfo: 'Hugsmiðjan ehf. (www.hugsmidjan.is)'`** - text that appears after "Copyright 20XX-20YY ..." in the copyright clause.
