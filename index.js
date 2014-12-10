@@ -2,39 +2,43 @@ module.exports = function (gulp, skin) {
     skin = skin || {};
     skin.cssProc = /^(?:less|scss)$/.test(skin.cssProc) ? skin.cssProc : 'styl';
 
+    var plugins = gulp._plugins = {};
+
     var pkg = require('./package.json');
 
     var fs = require('fs');
     var path = require('path');
 
-    var plumber = require('gulp-plumber');
-    var filter = require('gulp-filter');
-    var changed = require('gulp-changed');
-    var replace = require('gulp-replace');
-    var header = require('gulp-header');
-    var rename = require('gulp-rename');
+    var plumber = plugins.plumber = require('gulp-plumber');
+    var filter = plugins.filter = require('gulp-filter');
+    var changed = plugins.changed = require('gulp-changed');
+    var replace = plugins.replace = require('gulp-replace');
+    var header = plugins.header = require('gulp-header');
+    var rename = plugins.rename = require('gulp-rename');
 
     var isLESS =   skin.cssProc==='less';
     var isSCSS =   skin.cssProc==='scss';
     var isStylus = !isLESS && !isSCSS;
-    var less =   isLESS && require('gulp-less');
-    var scss =   isSCSS && require('gulp-ruby-sass');
-    var stylus = isStylus && require('gulp-stylus');
+    var less =   isLESS   &&  (plugins.less = require('gulp-less'));
+    var scss =   isSCSS   &&  (plugins.scss = require('gulp-ruby-sass'));
+    var stylus = isStylus &&  (plugins.stylus = require('gulp-stylus'));
 
-    var autoprefixer = require('gulp-autoprefixer');
-    var datauri = require('gulp-base64');
-    var minifycss = require('gulp-minify-css');
+    var autoprefixer = plugins.autoprefixer = require('gulp-autoprefixer');
+    var datauri = plugins.datauri = require('gulp-base64');
+    var minifycss = plugins.minifycss = require('gulp-minify-css');
 
-    var imagemin = require('gulp-imagemin');
-    var iconfont = require('gulp-iconfont');
+    var imagemin = plugins.imagemin = require('gulp-imagemin');
+    var iconfont = plugins.iconfont = require('gulp-iconfont');
+
+    var es6transpiler = plugins.es6transpiler = require('gulp-es6-transpiler');
+    var uglify = plugins.uglify = require('gulp-uglify');
 
     var clone = plugins.clone = require('gulp-clone');
     var es = plugins.es = require('event-stream');
 
-    var es6transpiler = require('gulp-es6-transpiler');
-    var uglify = require('gulp-uglify');
+    var nunjucksRender = plugins.nunjucksRender = require('gulp-nunjucks-render');
 
-    var nunjucksRender = require('gulp-nunjucks-render');
+
 
     var es6transpilerOpts = {
             //environments: ['browser', 'devel', 'node'], // 'devel' includes alert(), confirm(), etc. etc.
@@ -46,9 +50,9 @@ module.exports = function (gulp, skin) {
 
     var browserifyfy = function (module) {
             // About this: https://medium.com/@sogko/gulp-browserify-the-gulp-y-way-bb359b3f9623
-            var browserify = require('browserify');
-            var transform = require('vinyl-transform');
-            return transform(function(filename) {
+            var browserify = plugins.browserify = require('browserify');
+            var vinyltransform = plugins.vinyltransform = require('vinyl-transform');
+            return vinyltransform(function(filename) {
                 var b;
                 if ( skin.browserify ) {
                   b = skin.browserify( filename, module, browserify );
