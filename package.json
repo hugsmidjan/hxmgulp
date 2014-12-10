@@ -17,9 +17,11 @@
   "license": "ISC",
   "dependencies": {
     "browserify": "^7.0",
+    "event-stream": "^3.1.7",
     "gulp-autoprefixer": "^1.0",
     "gulp-base64": "^0.1",
     "gulp-changed": "^1.0",
+    "gulp-clone": "^1.0.0",
     "gulp-es6-transpiler": "^1.0",
     "gulp-filter": "^1.0",
     "gulp-header": "^1.0",

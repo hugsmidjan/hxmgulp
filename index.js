@@ -28,6 +28,9 @@ module.exports = function (gulp, skin) {
     var imagemin = require('gulp-imagemin');
     var iconfont = require('gulp-iconfont');
 
+    var clone = plugins.clone = require('gulp-clone');
+    var es = plugins.es = require('event-stream');
+
     var es6transpiler = require('gulp-es6-transpiler');
     var uglify = require('gulp-uglify');
 
@@ -161,20 +164,25 @@ module.exports = function (gulp, skin) {
         buildTasks.push( ns+'scripts' );
         gulp.task(ns+'scripts', function() {
             var commonjsScripts = filter('**/*-common.js');
-            return gulp.src([ paths.scripts+'*.js'], basePathCfg )
+            var s1 = gulp.src([ paths.scripts+'*.js'], basePathCfg )
                 .pipe( plumber() )
                 .pipe( commonjsScripts )
                     .pipe( browserifyfy(module) )
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
-                    .pipe( commonjsScripts.restore() )
+                .pipe( commonjsScripts.restore() );
+            var s2 = s1.pipe( clone() );
+
+            s1
                 .pipe( es6transpiler(es6transpilerOpts) )
                 .pipe( rename({ suffix:'-source' }) )
-                .pipe( gulp.dest( paths.dist ) )
+            s2
+                .pipe( uglify({ preserveComments:'some' }) )
+                .pipe( es6transpiler(es6transpilerOpts) )
+                .pipe( header('// '+copyrightBanner) );
 
-                .pipe( uglify() )
-                .pipe( header('// '+copyrightBanner) )
-                .pipe( rename(function(path){ path.basename = path.basename.replace(/-source$/, '');  }) )
+            return es.merge(s1, s2)
                 .pipe( gulp.dest( paths.dist ) );
+
           });
 
 
