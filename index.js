@@ -51,7 +51,8 @@ module.exports = function (gulp, skin) {
                   b = skin.browserify( filename, module, browserify );
                 }
                 else {
-                  var opts = Object.create(skin.browserifyOpts||{}, { entries:filename });
+                  var opts = Object.create(skin.browserifyOpts||{});
+                  opts.entries = filename;
                   b = browserify( opts );
                 }
                 return b.bundle();
@@ -163,8 +164,8 @@ module.exports = function (gulp, skin) {
             return gulp.src([ paths.scripts+'*.js'], basePathCfg )
                 .pipe( plumber() )
                 .pipe( commonjsScripts )
-                    .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                     .pipe( browserifyfy(module) )
+                    .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                     .pipe( commonjsScripts.restore() )
                 .pipe( es6transpiler(es6transpilerOpts) )
                 .pipe( rename({ suffix:'-source' }) )
@@ -252,8 +253,8 @@ module.exports = function (gulp, skin) {
               ], basePathCfg )
                 .pipe( plumber() )
                 .pipe( commonjsScripts )
-                    .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                     .pipe( browserifyfy(module) )
+                    .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                     .pipe( commonjsScripts.restore() )
                 .pipe( es6transpiler(es6transpilerOpts) )
                 .pipe( gulp.dest( paths.dist ) );
