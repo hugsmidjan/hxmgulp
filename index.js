@@ -173,15 +173,14 @@ module.exports = function (gulp, skin) {
                 .pipe( commonjsScripts )
                     .pipe( browserifyfy(module) )
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
-                .pipe( commonjsScripts.restore() );
+                .pipe( commonjsScripts.restore() )
+                .pipe( es6transpiler(es6transpilerOpts) );
             var s2 = s1.pipe( clone() );
 
             s1
-                .pipe( es6transpiler(es6transpilerOpts) )
                 .pipe( rename({ suffix:'-source' }) )
             s2
                 .pipe( uglify({ preserveComments:'some' }) )
-                .pipe( es6transpiler(es6transpilerOpts) )
                 .pipe( header('// '+copyrightBanner) );
 
             return es.merge(s1, s2)
