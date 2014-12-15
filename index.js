@@ -31,6 +31,8 @@ module.exports = function (gulp, skin) {
     var iconfont = plugins.iconfont = require('gulp-iconfont');
 
     var es6transpiler = plugins.es6transpiler = require('gulp-es6-transpiler');
+    var browserify = plugins.browserify = require('browserify');
+    var vinyltransform = plugins.vinyltransform = require('vinyl-transform');
     var uglify = plugins.uglify = require('gulp-uglify');
 
     var clone = plugins.clone = require('gulp-clone');
@@ -50,8 +52,6 @@ module.exports = function (gulp, skin) {
 
     var browserifyfy = function (module) {
             // About this: https://medium.com/@sogko/gulp-browserify-the-gulp-y-way-bb359b3f9623
-            var browserify = plugins.browserify = require('browserify');
-            var vinyltransform = plugins.vinyltransform = require('vinyl-transform');
             return vinyltransform(function(filename) {
                 var b;
                 if ( skin.browserify ) {
