@@ -3,6 +3,7 @@ module.exports = function (gulp, skin) {
     skin.cssProc = /^(?:less|scss)$/.test(skin.cssProc) ? skin.cssProc : 'styl';
 
     var plugins = gulp._plugins = {};
+    var tasks = gulp._tasks = {};
 
     var pkg = require('./package.json');
 
@@ -111,8 +112,7 @@ module.exports = function (gulp, skin) {
 
         // ==============================================
 
-        buildTasks.push( ns+'iconfont' );
-        gulp.task(ns+'iconfont', function() {
+        tasks[ns+'iconfont'] = function() {
             var iconFileOutPath = paths.dist + path.relative(paths.src,paths.images);
             var assgn = isStylus ? ' = ' : ':';
             var varPrefix = (isLESS?'@':'$') + 'icon-';
@@ -146,11 +146,12 @@ module.exports = function (gulp, skin) {
                     fs.writeFileSync( iconFileOutPath+'/icons.json', JSON.stringify(iconData,null,'\t') );
                   })
                 .pipe( gulp.dest( iconFileOutPath ) );
-          });
+          };
+        gulp.task(ns+'iconfont', tasks[ns+'iconfont']);
+        buildTasks.push( ns+'iconfont' );
 
 
-        buildTasks.push( ns+'images' );
-        gulp.task(ns+'images', function() {
+        tasks[ns+'images'] = function() {
             var imgFilter = filter('**/*.{png,gif,jpg,jpeg}');
             return gulp.src([
                 paths.images + '**/*.*',
@@ -162,11 +163,12 @@ module.exports = function (gulp, skin) {
                     .pipe( imagemin() )
                     .pipe( imgFilter.restore() )
                 .pipe( gulp.dest( paths.dist ) );
-          });
+          };
+        gulp.task(ns+'images', tasks[ns+'images']);
+        buildTasks.push( ns+'images' );
 
 
-        buildTasks.push( ns+'scripts' );
-        gulp.task(ns+'scripts', function() {
+        tasks[ns+'scripts'] = function() {
             var commonjsScripts = filter('**/*-common.js');
             var s1 = gulp.src([ paths.scripts+'*.js'], basePathCfg )
                 .pipe( plumber() )
@@ -178,7 +180,7 @@ module.exports = function (gulp, skin) {
             var s2 = s1.pipe( clone() );
 
             s1
-                .pipe( rename({ suffix:'-source' }) )
+                .pipe( rename({ suffix:'-source' }) );
             s2
                 .pipe( uglify({ preserveComments:'some' }) )
                 .pipe( header('// '+copyrightBanner) );
@@ -186,11 +188,13 @@ module.exports = function (gulp, skin) {
             return es.merge(s1, s2)
                 .pipe( gulp.dest( paths.dist ) );
 
-          });
+          };
+        gulp.task(ns+'scripts', tasks[ns+'scripts']);
+        gulp.task(ns+'scripts--initial', [ns+'iconfont'], tasks[ns+'scripts']);
+        buildTasks.push( ns+'scripts--initial' );
 
 
-        buildTasks.push( ns+'css' );
-        gulp.task(ns+'css', function() {
+        tasks[ns+'css'] = function() {
             return gulp.src( paths.css+cssGlob, basePathCfg )
                 .pipe( plumber( isStylus ? function(err){ console.log(err.message); } : undefined ) )
                 .pipe(
@@ -223,13 +227,14 @@ module.exports = function (gulp, skin) {
                     // debug: true,
                   }) )
                 .pipe( gulp.dest( paths.dist ) );
-          });
+          };
+        gulp.task(ns+'css', tasks[ns+'css']);
+        gulp.task(ns+'css--initial', [ns+'iconfont'], tasks[ns+'css']);
+        buildTasks.push( ns+'css--initial' );
 
 
-
-        htmltestTasks.push( ns+'htmltests-html' );
         nunjucksWorkingDirs.push( paths.htmltests );
-        gulp.task(ns+'htmltests-html', function() {
+        tasks[ns+'htmltests-html'] = function() {
             var nonHTMLFiles = filter('**/*.*.html'); // <-- because nunjucksRender renames all files to .html
             var testsFolder = paths.htmltests.substr(paths.src.length);
             return gulp.src([
@@ -246,17 +251,21 @@ module.exports = function (gulp, skin) {
                       }) )
                     .pipe( nonHTMLFiles.restore() )
                 .pipe( gulp.dest( paths.dist ) );
-          });
-        htmltestTasks.push( ns+'htmltests-images' );
-        gulp.task(ns+'htmltests-images', function() {
+          };
+        gulp.task(ns+'htmltests-html', tasks[ns+'htmltests-html']);
+        htmltestTasks.push( ns+'htmltests-html' );
+
+        tasks[ns+'htmltests-images'] = function() {
             return gulp.src( paths.htmltests+'media/**/*.*', basePathCfg )
                 .pipe( plumber() )
                 .pipe( changed( paths.dist ) )
                     .pipe( imagemin() )
                 .pipe( gulp.dest( paths.dist ) );
-          });
-        buildTasks.push( ns+'htmltests-scripts' );
-        gulp.task(ns+'htmltests-scripts', function() {
+          };
+        gulp.task(ns+'htmltests-images', tasks[ns+'htmltests-images']);
+        htmltestTasks.push( ns+'htmltests-images' );
+
+        tasks[ns+'htmltests-scripts'] = function() {
             var commonjsScripts = filter('**/*-common.js');
             return gulp.src([
                 paths.htmltests+'**/*.js',
@@ -269,7 +278,10 @@ module.exports = function (gulp, skin) {
                     .pipe( commonjsScripts.restore() )
                 .pipe( es6transpiler(es6transpilerOpts) )
                 .pipe( gulp.dest( paths.dist ) );
-          });
+          };
+        gulp.task(ns+'htmltests-scripts', tasks[ns+'htmltests-scripts']);
+        gulp.task(ns+'htmltests-scripts--initial', [ns+'iconfont'], tasks[ns+'htmltests-scripts']);
+        buildTasks.push( ns+'htmltests-scripts--initial');
 
 
 
@@ -288,7 +300,6 @@ module.exports = function (gulp, skin) {
                 return globs;
               };
 
-        watchTasks.push(ns+'watch');
         gulp.task(ns+'watch', function() {
             gulp.watch(buildGlobs(paths.css, cssGlob, paths.css_incl+'**/'+cssGlob),   [ns+'css']);
             gulp.watch(buildGlobs(paths.scripts,'*.js', paths.scripts_incl+'**/*.js'), [ns+'scripts']);
@@ -298,20 +309,21 @@ module.exports = function (gulp, skin) {
             gulp.watch([ paths.htmltests+'media/**/*'],                           [ns+'htmltests-images']);
             gulp.watch([ paths.htmltests+'**/*.js'],                              [ns+'htmltests-scripts']);
           });
+        watchTasks.push(ns+'watch');
 
 
         // allow skinfile.js to define its own tasks
         if ( typeof skin.tasks === 'function' )
         {
-          var tasks = skin.tasks(module);
-          if ( tasks )
+          var customTasks = skin.tasks(module);
+          if ( customTasks )
           {
-            if ( tasks instanceof Array )
+            if ( customTasks instanceof Array )
             {
-              tasks = { build:tasks };
+              customTasks = { build:customTasks };
             }
-            buildTasks.push.apply(buildTasks, tasks.build||[]);
-            watchTasks.push.apply(watchTasks, tasks.watch||[]);
+            buildTasks.push.apply(buildTasks, customTasks.build||[]);
+            watchTasks.push.apply(watchTasks, customTasks.watch||[]);
           }
         }
 
