@@ -23,7 +23,7 @@ $media-queries-flatten ?= '';
 $iconfont_name ?=  'icons';
 $iconfont_font-family ?= $iconfont_name, Arial, Helvetica, sans-serif;
 
-_icon($icon) {
+_icon( $icon=null ) {
     if ($icon) {
         content: $icon;
     }
