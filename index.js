@@ -72,7 +72,10 @@ module.exports = function (gulp, skin) {
 
     var nowYear = new Date().getFullYear();
     var copyrightBanner = 'Copyright ' +
-                          (skin.copyrightYear||nowYear) + (2014<nowYear?'-'+nowYear:'') + ' ' +
+                          (skin.copyrightYear ?
+                              skin.copyrightYear + (nowYear>skin.copyrightYear?'-'+nowYear:''):
+                              nowYear) +
+                          ' ' +
                           (skin.copyrightInfo||(pkg.author.name ?
                               pkg.author.name + (pkg.author.url ? ' ('+pkg.author.url+')':'') + (pkg.author.email ? ' <'+pkg.author.email+'>':''):
                               pkg.author)) +
