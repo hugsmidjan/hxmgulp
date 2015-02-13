@@ -5,7 +5,7 @@ module.exports = function (gulp, skin) {
     var plugins = gulp._plugins = {};
     var tasks = gulp._tasks = {};
 
-    var pkg = require('./package.json');
+    var pkg = require( process.cwd() + '/package.json');
 
     var fs = require('fs');
     var path = require('path');
