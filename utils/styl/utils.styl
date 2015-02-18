@@ -99,9 +99,9 @@ $quote_closeSingle_en = $quote_upper9;
 //               $offsetEdge,  // Edge from which the offset is calculated. (Defaults to left or top respectively.)
 //             );
 //     }
-_triangle($args...) {
+_triangle($dir=top, $color=#fff, $h=10px, $w=null, $wOffs=50%, $wEdge=left, $shift='') {
     _triangleBasic();
-    _triangleShape($args...);
+    _triangleShape($dir, $color, $h, $w, $wOffs, $wEdge, $shift);
 }
 _triangleBasic() {
     content: "";
