@@ -90,6 +90,7 @@ module.exports = function (gulp, skin) {
     var skinModules = skin.modules || ['/'];
     var skinSrc = (skin.src || '_src').replace(/\/+$/,'');
     var skinDist = (skin.dist || '.').replace(/\/+$/,'');
+    var imgFolder = 'i/';
 
 
     skinModules.forEach(function (moduleName, folderIndex) {
@@ -105,7 +106,7 @@ module.exports = function (gulp, skin) {
                 css_incl:    isSCSS ? '_scss/' : isLESS ? '_less/' : '_styl/',
                 scripts:      srcPath + '',
                 scripts_incl: '_js/',
-                images:       srcPath + 'i/',
+                images:       srcPath + imgFolder,
                 iconfont:     srcPath + 'iconfont/',
                 htmltests:    srcPath + '_tests/',
               };
@@ -116,10 +117,10 @@ module.exports = function (gulp, skin) {
                 basePathCfg: Object.create(basePathCfg),
               };
 
+
         // ==============================================
 
         tasks[ns+'iconfont'] = function() {
-            var iconFileOutPath = paths.dist + path.relative(paths.src,paths.images);
             var assgn = isStylus ? ' = ' : ':';
             var varPrefix = (isLESS?'@':'$') + 'icon-';
             return gulp.src([
@@ -149,9 +150,9 @@ module.exports = function (gulp, skin) {
                                 (isSCSS ? '$iconData:\n    '+iconData.join(',\n    ')+';\n\n' : '') +
                                 (isStylus ? '$iconData = ' + JSON.stringify(iconData,null,4) + ';\n\n' : '');
                     fs.writeFileSync( paths.css + paths.css_incl + '_iconVars.'+skin.cssProc, code );
-                    fs.writeFileSync( iconFileOutPath+'/icons.json', JSON.stringify(iconData,null,'\t') );
+                    fs.writeFileSync( paths.dist + imgFolder + 'icons.json', JSON.stringify(iconData,null,'\t') );
                   })
-                .pipe( gulp.dest( iconFileOutPath ) );
+                .pipe( gulp.dest( paths.dist + imgFolder ) );
           };
         gulp.task(ns+'iconfont', tasks[ns+'iconfont']);
         buildTasks.push( ns+'iconfont' );
