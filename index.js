@@ -237,19 +237,22 @@ module.exports = function (gulp, skin) {
           };
         gulp.task(ns+'css', tasks[ns+'css']);
         gulp.task(ns+'css--initial', [ns+'iconfont'], tasks[ns+'css']);
-        buildTasks.push( ns+'css--initial' );
+        // buildTasks.push( ns+'css--initial' );
 
 
         nunjucksWorkingDirs.push( paths.htmltests );
         tasks[ns+'htmltests-html'] = function() {
             var nonHTMLFiles = filter('**/*.*.html'); // <-- because nunjucksRender renames all files to .html
             var testsFolder = paths.htmltests.substr(paths.src.length);
+            var file;
+            try { file = fs.readFileSync( paths.dist + imgFolder + 'icons.json' ); }catch(e){}
+            var icons = JSON.parse( file || '{}' );
             return gulp.src([
                 paths.htmltests+'**/*.htm',
                 '!'+paths.htmltests+'{incl,media}/**'
               ], basePathCfg )
                 .pipe( plumber() )
-                .pipe( nunjucksRender() )
+                .pipe( nunjucksRender({ icons:icons }) )
                 .pipe( replace(/^[\s*\n]+/, '') ) // remove macro/config induced whitespace at start of file.
                 .pipe( nonHTMLFiles )
                     .pipe( rename(function(path){
@@ -260,7 +263,8 @@ module.exports = function (gulp, skin) {
                 .pipe( gulp.dest( paths.dist ) );
           };
         gulp.task(ns+'htmltests-html', tasks[ns+'htmltests-html']);
-        htmltestTasks.push( ns+'htmltests-html' );
+        gulp.task(ns+'htmltests-html--initial', [ns+'css--initial'], tasks[ns+'htmltests-html']);
+        htmltestTasks.push( ns+'htmltests-html--initial' );
 
         tasks[ns+'htmltests-images'] = function() {
             return gulp.src( paths.htmltests+'media/**/*.*', basePathCfg )
