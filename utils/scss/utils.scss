@@ -150,11 +150,11 @@ $quote_closeSingle_en: $quote_upper9;
     overflow: hidden;
     white-space: nowrap;
     @if ($mode != soft) {
-        letter-spacing: -0.4em;
         text-indent: 150%;
         text-align: left;
     }
     @if ($mode == hard) {
+        letter-spacing: -0.4em;
         text-shadow: none !important;
         color: transparent !important;
     }
