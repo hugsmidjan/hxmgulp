@@ -118,9 +118,9 @@ _triangleShape($dir=top, $color=#fff, $h=10px, $w=null, $wOffs=50%, $wEdge=left,
     if (!$shift) { $shift = ($w/2); }
 
     {$wEdge}: $wOffs;
-    margin: -$shift;
+    margin: - $shift;
     border-width: isVertical($dir) ? $h ($w/2) : ($w/2) $h;
-    {$dir}: -$h;
+    {$dir}: - $h;
     margin-{$dir}: 0;
     $dirInv = opposite-position($dir);
     border-{$dirInv}-color: $color;
