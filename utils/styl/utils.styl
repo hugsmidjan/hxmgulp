@@ -91,17 +91,18 @@ $quote_closeSingle_en = $quote_upper9;
 // Usage:
 //     .box:after {
 //         _triangle(
-//               $dir,         // <-- top, bottom, left, right.
-//               $color,       // arrow color
-//               $height,      // i.e. "Length" of the arrow.
-//               $width,       // total width of the arrow. (Defaults to twice the @height)
-//               $wOffset,     // placement along the edge of the container. (Defaults to 50%.)
-//               $offsetEdge,  // Edge from which the offset is calculated. (Defaults to left or top respectively.)
+//               $dir,       // <-- top, bottom, left, right.
+//               $color,     // arrow color
+//               $h,         // the "Length" of the arrow.
+//               $w,         // total width of the arrow. (Defaults to twice the @height)
+//               $pos,       // sideways placement along the edge of the container. (Defaults to 50%.)
+//               $posFrom,   // edge from which the side-offset is calculated. (Defaults to left or top respectively.)
+//               $shift      // shift along the "height" axis, away or towards the container. (Defaults to 0)
 //             );
 //     }
-_triangle($dir=top, $color=#fff, $h=10px, $w=null, $wOffs=50%, $wEdge=left, $shift='') {
+_triangle($dir=top, $color=#fff, $h=10px, $w=null, $pos=50%, $posFrom=left, $shift=null) {
     _triangleBasic();
-    _triangleShape($dir, $color, $h, $w, $wOffs, $wEdge, $shift);
+    _triangleShape($dir, $color, $h, $w, $pos, $posFrom, $shift);
 }
 _triangleBasic() {
     content: "";
@@ -112,17 +113,16 @@ _triangleBasic() {
     position: absolute;
     border: 0 solid transparent;
 }
-_triangleShape($dir=top, $color=#fff, $h=10px, $w=null, $wOffs=50%, $wEdge=left, $shift='') {
-    if (!$w) { $w = (2*$h); }
-    if (($dir==left or $dir==right) and ($wEdge==left)) { $wEdge = top };
-    if (!$shift) { $shift = ($w/2); }
-
-    {$wEdge}: $wOffs;
-    margin: - $shift;
-    border-width: isVertical($dir) ? $h ($w/2) : ($w/2) $h;
-    {$dir}: - $h;
-    margin-{$dir}: 0;
+_triangleShape($dir=top, $color=#fff, $h=10px, $w=null, $pos=50%, $posFrom=null, $shift=0) {
+    $w = (2*$h)  if $w==null;
+    $posFrom = $posFrom || ( isVertical($dir) ? left : top );
     $dirInv = opposite-position($dir);
+
+    {$dir}: - $h;
+    {$posFrom}: $pos;
+    margin: (- $w/2);
+    margin-{$dir}: - $shift;
+    border-width: isVertical($dir) ? $h ($w/2) : ($w/2) $h;
     border-{$dirInv}-color: $color;
     border-{$dir}-width: 0;
 }
