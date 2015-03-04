@@ -76,6 +76,25 @@
     text-align: left;
 }
 
+// generic image replacement
+#__hideText(soft) {
+    overflow: hidden;
+    white-space: nowrap;
+}
+#__hideText() {
+    #__hideText(soft);
+    text-indent: 150%;
+    text-align: left;
+}
+#__hideText(hard) {
+    #__hideText();
+    letter-spacing: -0.4em;
+    text-shadow: none !important;
+    color: transparent !important;
+}
+
+
+
 #__inlineBlock () {
     display:inline-block;
 }
