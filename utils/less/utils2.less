@@ -66,15 +66,6 @@
 }
 
 
-#__ir () { // Image replacement
-    overflow: hidden;
-    white-space: nowrap;
-    letter-spacing: -.4em;
-    text-shadow: none !important;
-    color: transparent !important;
-    text-indent: 150%;
-    text-align: left;
-}
 
 // generic image replacement
 #__hideText(soft) {
@@ -232,4 +223,7 @@
 }
 #__boxInnerGlow ( @color:#fff, @blur:0, @spread:1px ) {
     #__boxShadowInset( 0, 0, @blur, @color, @spread  );
+}
+#__ir () {
+    #__hideText(hard);
 }
