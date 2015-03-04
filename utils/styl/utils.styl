@@ -17,6 +17,16 @@ $media-queries-support ?= true;
 $media-queries-flatten ?= '';
 
 
+retina($res) {
+    $res = (unit($res) != dpi) ? round(96*$res) : round($res,3);
+    // NOTE: autoprefixer converts dpi values to webkit scaling factors
+    @media (min-resolution: ($res)dpi ) {
+        {block}
+    }
+}
+
+
+
 
 // ===============================================================================
 // Icons!
