@@ -203,7 +203,7 @@ module.exports = function (gulp, skin) {
 
         tasks[ns+'css'] = function() {
             return gulp.src( paths.css+cssGlob, basePathCfg )
-                .pipe( plumber( isStylus ? function(err){ console.log(err.message); } : undefined ) )
+                .pipe( plumber(function(err){ console.log(err.message||err); }) )
                 .pipe(
                     isSCSS ?
                         scss({
