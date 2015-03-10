@@ -223,6 +223,7 @@ module.exports = function (gulp, skin) {
                 .pipe( minifycss({
                     // roundingPrecision: 2, // precision for px values
                     noAdvanced:true, // turn off advanced/aggressive merging. It's too buggy still. Ack!
+                    processImport:false, // We want stylus to do that for us.
                     keepBreaks:true,
                     compatibility:'ie8'
                   }) )
