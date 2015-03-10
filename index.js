@@ -167,7 +167,9 @@ module.exports = function (gulp, skin) {
                 .pipe( plumber() )
                 .pipe( changed( paths.dist ) )
                 .pipe( imgFilter )
-                    .pipe( imagemin() )
+                    .pipe( imagemin({
+                        progressive: true // (jpg) Lossless conversion to progressive
+                      }) )
                     .pipe( imgFilter.restore() )
                 .pipe( gulp.dest( paths.dist ) );
           };
@@ -222,7 +224,8 @@ module.exports = function (gulp, skin) {
                 .pipe( autoprefixer({ browsers:['> 0.5%', 'last 2 versions', 'Firefox ESR', 'Opera 12.1'] }) )
                 .pipe( minifycss({
                     // roundingPrecision: 2, // precision for px values
-                    noAdvanced:true, // turn off advanced/aggressive merging. It's too buggy still. Ack!
+                    // aggressiveMerging:true, // set to false to disable aggressive merging of properties
+                    advanced:false, // turn off advanced/aggressive merging. It's too buggy still. Ack!
                     processImport:false, // We want stylus to do that for us.
                     keepBreaks:true,
                     compatibility:'ie8'
