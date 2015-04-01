@@ -34,9 +34,7 @@ $iconfont_name ?=  'icons';
 $iconfont_font-family ?= $iconfont_name, Arial, Helvetica, sans-serif;
 
 _icon( $icon=null ) {
-    if ($icon) {
-        content: $icon;
-    }
+    content: $icon  if $icon;
     display: inline-block;
     text-indent: 0;
     text-align: center;
@@ -123,7 +121,7 @@ _triangleBasic() {
     position: absolute;
     border: 0 solid transparent;
 }
-_triangleShape($dir=top, $color=#fff, $h=10px, $w=null, $pos=50%, $posFrom=null, $shift=0) {
+_triangleShape($dir=top, $color=#fff, $h=10px, $w=null, $pos=50%, $posFrom=null, $shift=null) {
     $w = (2*$h)  if $w==null;
     $posFrom = $posFrom || ( isVertical($dir) ? left : top );
     $dirInv = opposite-position($dir);
@@ -131,7 +129,7 @@ _triangleShape($dir=top, $color=#fff, $h=10px, $w=null, $pos=50%, $posFrom=null,
     {$dir}: - $h;
     {$posFrom}: $pos;
     margin: (- $w/2);
-    margin-{$dir}: - $shift;
+    margin-{$dir}: - $shift  if $shift;
     border-width: isVertical($dir) ? $h ($w/2) : ($w/2) $h;
     border-{$dirInv}-color: $color;
     border-{$dir}-width: 0;
