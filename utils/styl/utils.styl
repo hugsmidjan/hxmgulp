@@ -54,30 +54,34 @@ _iconFontStyling() {
 }
 
 
-$icon-bullet-disc =   "\2022";
-$icon-bullet-square = "\25aa";
+if ( $icons ) {
+    // convert all icon values from Stylus 'ident' to quoted String
+    for $n,$c in $icons { $icons[$n] = ''+$c; }
 
-$icon-space-normal =  "\00a0"; // (NO-BREAK space) (0.28em)
+    $icons.bullet-disc =   '\2022';
+    $icons.bullet-square = '\25aa';
 
-$icon-space-half =    "\2002"; // 1/2em  (EN space
-$icon-space-em =      "\2003"; // 1em    (EM space)
-$icon-space-third =   "\2004"; // 1/3em  (THREE-PER-EM space)
-$icon-space-fourth =  "\2005"; // 1/4em  (FOUR-PER-EM space)
-$icon-space-sixth =   "\2006"; // 1/6em  (SIX-PER-EM space)
-// $icon-space-figure =        "\2007";
-// $icon-space-punctuation =   "\2008";
-$icon-space-fifth =   "\2009"; // 1/5em  (THIN space)
-$icon-space-hair =    "\200A"; // 1/12em (HAIR space)
+    $icons.space-normal =  '\00a0'; // (NO-BREAK space) (0.28em)
 
+    $icons.space-half =    '\2002'; // 1/2em  (EN space
+    $icons.space-em =      '\2003'; // 1em    (EM space)
+    $icons.space-third =   '\2004'; // 1/3em  (THREE-PER-EM space)
+    $icons.space-fourth =  '\2005'; // 1/4em  (FOUR-PER-EM space)
+    $icons.space-sixth =   '\2006'; // 1/6em  (SIX-PER-EM space)
+    // $icons.space-figure =        '\2007';
+    // $icons.space-punctuation =   '\2008';
+    $icons.space-fifth =   '\2009'; // 1/5em  (THIN space)
+    $icons.space-hair =    '\200A'; // 1/12em (HAIR space)
+}
 
 
 // quote marks for use with blockquote
-$quote_upper6 =   "\2018";
-$quote_upper9 =   "\2019";
-$quote_lower9 =   "\201a";
-$quote_upper66 =  "\201c";
-$quote_upper99 =  "\201d";
-$quote_lower99 =  "\201e";
+$quote_upper6 =   '\2018';
+$quote_upper9 =   '\2019';
+$quote_lower9 =   '\201a';
+$quote_upper66 =  '\201c';
+$quote_upper99 =  '\201d';
+$quote_lower99 =  '\201e';
 // icelandic
 $quote_open_is =        $quote_lower99;
 $quote_close_is =       $quote_upper66;
@@ -113,7 +117,7 @@ _triangle($dir=top, $color=#fff, $h=10px, $w=null, $pos=50%, $posFrom=left, $shi
     _triangleShape($dir, $color, $h, $w, $pos, $posFrom, $shift);
 }
 _triangleBasic() {
-    content: "";
+    content: '';
     width: 0;
     height: 0;
     min-width: 0;
@@ -150,7 +154,7 @@ _tuck() {
 
 _afterClear() {
     &:after {
-        content: " ";
+        content: ' ';
         clear: both;
         display: block;
         height: 0;

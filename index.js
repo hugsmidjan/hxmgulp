@@ -121,8 +121,6 @@ module.exports = function (gulp, skin) {
         // ==============================================
 
         tasks[ns+'iconfont'] = function() {
-            var assgn = isStylus ? ' = ' : ':';
-            var varPrefix = (isLESS?'@':'$') + 'icon-';
             return gulp.src([
                 paths.iconfont + '**/*.svg',
                 '!' + paths.iconfont + '_raw/**'
@@ -133,23 +131,32 @@ module.exports = function (gulp, skin) {
                     normalize:  true
                   }) )
                 .on('codepoints', function (codepoints/*, options*/) {
-                    var iconData = isSCSS ? [] : {};
+                    var iconData = {};
+                    var iconDataScss = [];
                     var iconVars = [];
                     codepoints.forEach(function (cp) {
                         var name = cp.name;
                         var chr = cp.codepoint.charAt ? cp.codepoint : String.fromCharCode(cp.codepoint);
-                        var chrCSS = '"' + chr + '"';
-                        var padding = new Array(Math.max(20 - name.length,2)).join(' ');
-                        iconVars.push( varPrefix + name + assgn + padding + chrCSS + ';\n' );
-                        isSCSS ?
-                            iconData.push( '(' + name + ', ' + chrCSS + ')' ):
-                            (iconData[name] = chr); // Stylus
+                        iconData[name] = chr;
+                        if ( isLESS || isSCSS )
+                        {
+                          var varPrefix = (isLESS?'@':'$') + 'icon-';
+                          var chrCSS = '"' + chr + '"';
+                          var padding = new Array(Math.max(20 - name.length,2)).join(' ');
+                          iconVars.push( varPrefix + name + ':' + padding + chrCSS + ';\n' );
+                          if ( isSCSS )
+                          {
+                            iconDataScss.push( '('+name+', '+chrCSS+')' );
+                          }
+                        }
                       });
-                    var code = '// This file is auto-generated. DO NOT EDIT! \n\n' +
+                    if ( isLESS || isSCSS )
+                    {
+                      var code = '// This file is auto-generated. DO NOT EDIT! \n\n' +
                                 iconVars.join('') + '\n' +
-                                (isSCSS ? '$iconData:\n    '+iconData.join(',\n    ')+';\n\n' : '') +
-                                (isStylus ? '$iconData = ' + JSON.stringify(iconData,null,4) + ';\n\n' : '');
-                    fs.writeFileSync( paths.css + paths.css_incl + '_iconVars.'+skin.cssProc, code );
+                                (isSCSS ? '$iconData:\n    '+iconDataScss.join(',\n    ')+';\n\n' : '');
+                      fs.writeFileSync( paths.css + paths.css_incl + '_iconVars.'+skin.cssProc, code );
+                    }
                     try { fs.mkdirSync( paths.dist + imgFolder ); }catch(e){}
                     fs.writeFileSync( paths.dist + imgFolder + 'icons.json', JSON.stringify(iconData,null,'\t') );
                   })

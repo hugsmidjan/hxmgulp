@@ -142,11 +142,11 @@ NOTE: there's a special case for page-templates with filenames with double-exten
 
 ### Icon fonts
 
-Any SVG icons placed in `svg-font-icons`  automatically converted into a web-font (eot, ttf, woff, svg) with human-friendly filename-based Stylus (or SASS/LESS) variables to use when writing CSS.
+Any SVG icons placed in `iconfonts`  automatically converted into a web-font (eot, ttf, woff, svg) with human-friendly filename-based JSON object saved in in `{options.dist}/i/icons.json` for quick import in Stylus using `json('../../dist/i/icons.json')`.
 
-The generated Stylus file is saved at `src/_styl/_iconVars.styl`. (or `src/_(scss|less)/_iconVars.(scss|less)`)
+For projects using LESS (or SCSS) the variables are also written to the file `_less/_iconVars.less` (or `_scss/_iconVars.scss`).
 
-NOTE: SVG files inside the folder `src/iconfonts/_raw/` are ignored as alternative designs and raw-materials for properly normalized icons.
+NOTE: SVG files inside the folder `iconfonts/_raw/` are ignored as alternative designs and raw-materials for properly normalized icons.
 
 ### Images
 
