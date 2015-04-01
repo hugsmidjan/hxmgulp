@@ -150,6 +150,7 @@ module.exports = function (gulp, skin) {
                                 (isSCSS ? '$iconData:\n    '+iconData.join(',\n    ')+';\n\n' : '') +
                                 (isStylus ? '$iconData = ' + JSON.stringify(iconData,null,4) + ';\n\n' : '');
                     fs.writeFileSync( paths.css + paths.css_incl + '_iconVars.'+skin.cssProc, code );
+                    try { fs.mkdirSync( paths.dist + imgFolder ); }catch(e){}
                     fs.writeFileSync( paths.dist + imgFolder + 'icons.json', JSON.stringify(iconData,null,'\t') );
                   })
                 .pipe( gulp.dest( paths.dist + imgFolder ) );
