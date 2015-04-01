@@ -102,8 +102,8 @@ module.exports = function (gulp, skin) {
                 src:          srcPath,
                 dist:         skinDist + moduleName,
 
-                css:         srcPath + '',
-                css_incl:    isSCSS ? '_scss/' : isLESS ? '_less/' : '_styl/',
+                css:          srcPath + '',
+                css_incl:     isSCSS ? '_scss/' : isLESS ? '_less/' : '_styl/',
                 scripts:      srcPath + '',
                 scripts_incl: '_js/',
                 images:       srcPath + imgFolder,
@@ -217,6 +217,7 @@ module.exports = function (gulp, skin) {
                           }):
                     isLESS ?
                         less(/*{ strictMath: true }*/):
+                    // Default:
                         stylus({
                             // linenos: true,
                             // use: [require(nib)],
