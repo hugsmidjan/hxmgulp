@@ -190,3 +190,8 @@ pxem($px, $fs=12px)
 
 isVertical($dir)
     return $dir==top or $dir==bottom;
+
+_one($n)
+    // Returns -1 for values < 0 and 1 for values > 0.
+    // Useful for multipliers
+    return !$n ? 0 : ($n / abs($n));
