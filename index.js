@@ -33,7 +33,7 @@ module.exports = function (gulp, skin) {
 
     var es6transpiler = plugins.es6transpiler = require('gulp-es6-transpiler');
     var browserify = plugins.browserify = require('browserify');
-    var vinyltransform = plugins.vinyltransform = require('vinyl-transform');
+    var through2 = plugins.through2 = require('through2');
     var uglify = plugins.uglify = require('gulp-uglify');
 
     var clone = plugins.clone = require('gulp-clone');
@@ -53,17 +53,21 @@ module.exports = function (gulp, skin) {
 
     var browserifyfy = function (module) {
             // About this: https://medium.com/@sogko/gulp-browserify-the-gulp-y-way-bb359b3f9623
-            return vinyltransform(function(filename) {
+            return through2.obj(function(file, enc, next) {
                 var b;
                 if ( skin.browserify ) {
-                  b = skin.browserify( filename, module, browserify );
+                  b = skin.browserify( file.path, module, browserify );
                 }
                 else {
                   var opts = Object.create(skin.browserifyOpts||{});
-                  opts.entries = filename;
+                  opts.entries = [file.path];
                   b = browserify( opts );
                 }
-                return b.bundle();
+                b.bundle(function (err, res) {
+                    err  &&  console.log(err);
+                    file.contents = res;
+                    next(null, file);
+                  });
               });
           };
 
