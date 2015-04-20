@@ -16,6 +16,7 @@ module.exports = function (gulp, skin) {
     var replace = plugins.replace = require('gulp-replace');
     var header = plugins.header = require('gulp-header');
     var rename = plugins.rename = require('gulp-rename');
+    var foreach = plugins.foreach = require('gulp-foreach');
 
     var isLESS =   skin.cssProc==='less';
     var isSCSS =   skin.cssProc==='scss';
@@ -29,6 +30,8 @@ module.exports = function (gulp, skin) {
     var minifycss = plugins.minifycss = require('gulp-minify-css');
 
     var imagemin = plugins.imagemin = require('gulp-imagemin');
+    var pngquant = plugins.pngquant = require('imagemin-pngquant');
+    var mozjpeg = plugins.mozjpeg = require('imagemin-mozjpeg');
     var iconfont = plugins.iconfont = require('gulp-iconfont');
 
     var es6transpiler = plugins.es6transpiler = require('gulp-es6-transpiler');
@@ -171,18 +174,45 @@ module.exports = function (gulp, skin) {
 
 
         tasks[ns+'images'] = function() {
-            var imgFilter = filter('**/*.{png,gif,jpg,jpeg}');
             return gulp.src([
-                paths.images + '**/*.*',
+                paths.images + '**/*',
                 '!' + paths.images + '_raw/**'
               ], basePathCfg )
                 .pipe( plumber() )
                 .pipe( changed( paths.dist ) )
-                .pipe( imgFilter )
-                    .pipe( imagemin({
-                        progressive: true // (jpg) Lossless conversion to progressive
-                      }) )
-                    .pipe( imgFilter.restore() )
+                .pipe( foreach(function (stream, file) {
+                    var fileParams = file.path.match(/(\---q(\d{1,3}(?:-\d{1,3})?)(?:--d(0))?)\.(png|jpe?g)$/i);
+                    if ( fileParams )
+                    {
+                      if ( fileParams[4].toLowerCase()==='png' )
+                      {
+                        stream = stream.pipe( pngquant({
+                            speed: 1, // default: `3`
+                            quality: fileParams[2],   // default `undefined` (i.e. 256 colors)
+                            nofs: fileParams[3]==='0'
+                            floyd: parseInt(fileParams[3],10)/100
+                          })() );
+                      }
+                      else
+                      {
+                        stream = stream.pipe( mozjpeg({
+                            quality: fileParams[2]
+                          })() );
+                      }
+                      return stream.pipe( rename(function(path){
+                          path.basename = path.basename.slice(0, -fileParams[1].length);
+                        }) );
+                    }
+                    else
+                    {
+                      return stream.pipe( imagemin({
+                          optimizationLevel: 4, // png
+                          progressive: true, // jpg
+                          interlaced: true, // gif
+                          multipass: true // svg
+                        }) );
+                    }
+                  }) )
                 .pipe( gulp.dest( paths.dist ) );
           };
         gulp.task(ns+'images', tasks[ns+'images']);

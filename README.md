@@ -152,6 +152,15 @@ NOTE: SVG files inside the folder `iconfonts/_raw/` are ignored as alternative d
 
 Files placed inside `i/` are automatically copied to the corresponding dist folder. JPG, GIF, SVG and PNG files are passed through a *lossless* minimizer to remove comments, color-profiles, thumbnails and other unwanted meta-data.
 
+PNG and JPEG images can be forced through a lossy compression via a `---q{N}` file-name suffix. The suffix is stripped from the filename before saving in the `dist` folder.
+
+**Examples:**
+
+  * `src/i/photo---q60.jpg` (100% quality original)  --->  `dist/i/photo.png` (recompressed to approx. 60% quality)
+  * `src/i/image---q50.png` (24bit file)  --->  `dist/i/image.png` (png8 with at least 50% quality)
+  * `src/i/image---q50-70.png` (24bit file)  --->  `dist/i/image.png` (png8 with between 50% and 70% quality)
+  * `src/i/image---q50--d0.png` (24bit file)  --->  `dist/i/image.png` (png8 with at least 50% quality - no dithering)
+
 NOTE: Any images placed in the folder `i/_raw/` are ignored as raw-materials.
 
 
