@@ -189,8 +189,8 @@ module.exports = function (gulp, skin) {
                         stream = stream.pipe( pngquant({
                             speed: 1, // default: `3`
                             quality: fileParams[2],   // default `undefined` (i.e. 256 colors)
+                            floyd: parseInt(fileParams[3],10)/100,
                             nofs: fileParams[3]==='0'
-                            floyd: parseInt(fileParams[3],10)/100
                           })() );
                       }
                       else
