@@ -5,7 +5,7 @@ Default gulp tasks for Hugsmiðjan's projects.
 ## Install:
 
     npm install gulp
-    npm install git+https://stash.hugsmidjan.is/scm/~mar/hxmgulp.git
+    npm install git+https://stash.hugsmidjan.is/scm/misc/hxmgulp.git
 
 You can do this with the `--save-dev` option in your project's root folder - or in your home folder, or wherever you store your shared node modules.
 
@@ -100,7 +100,7 @@ becomes:
 
 ### JavaScripts
 
-Any `.js` file placed _directly_ inside the source folder gets rendered to a minified CSS file with the same name inside the `dist` folder. (An unminified version is also saved with the suffix `-source.js`.)
+Any `.js` file placed _directly_ inside the source folder gets rendered to a minified JavaScript file with the same name inside the `dist` folder. (An unminified version is also saved with the suffix `-source.js`.)
 
 `.js` files within the `_js/` folder are watched for changes and trigger rerendering of JavaScript files both within this "module" and all "submodules".
 
