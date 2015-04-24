@@ -364,6 +364,7 @@ module.exports = function (gulp, skin) {
             gulp.watch([ paths.images+'**/*', '!'+paths.images+'_raw/**'],        [ns+'images']);
             gulp.watch([ paths.iconfont+'**/*', '!'+paths.iconfont+'_raw/**/*'],  [ns+'iconfont']);
             gulp.watch([ paths.htmltests+'**/*.htm'],                             [ns+'htmltests-html']);
+            gulp.watch([ paths.dist+'i/icons.json'],                              [ns+'htmltests-html', ns+'css']);
             gulp.watch([ paths.htmltests+'media/**/*'],                           [ns+'htmltests-images']);
             gulp.watch([ paths.htmltests+'**/*.js'],                              [ns+'htmltests-scripts']);
           });
