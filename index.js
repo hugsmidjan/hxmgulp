@@ -343,7 +343,7 @@ module.exports = function (gulp, skin) {
 
 
 
-        var buildGlobs = function (workPath, glob, inclGlob) {
+        var buildWatchGlobs = function (workPath, glob, inclGlob) {
                 var globs = [workPath + glob];
                 var relativePath = path.relative( paths.src , workPath );
                 inclGlob =  relativePath ?
@@ -359,8 +359,8 @@ module.exports = function (gulp, skin) {
               };
 
         gulp.task(ns+'watch', function() {
-            gulp.watch(buildGlobs(paths.css, cssGlob, paths.css_incl+'**/'+cssGlob),   [ns+'css']);
-            gulp.watch(buildGlobs(paths.scripts,'*.js', paths.scripts_incl+'**/*.js'), [ns+'scripts']);
+            gulp.watch(buildWatchGlobs(paths.css, cssGlob, paths.css_incl+'**/'+cssGlob),   [ns+'css']);
+            gulp.watch(buildWatchGlobs(paths.scripts,'*.js', paths.scripts_incl+'**/*.js'), [ns+'scripts']);
             gulp.watch([ paths.images+'**/*', '!'+paths.images+'_raw/**'],        [ns+'images']);
             gulp.watch([ paths.iconfont+'**/*', '!'+paths.iconfont+'_raw/**/*'],  [ns+'iconfont']);
             gulp.watch([ paths.htmltests+'**/*.htm'],                             [ns+'htmltests-html']);
