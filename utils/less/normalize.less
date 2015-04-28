@@ -208,17 +208,20 @@
     sub,
     sup {
         font-size: 75%;
-        line-height: 0;
-        position: relative;
-        vertical-align: baseline;
+        // line-height: 0;
+        // position: relative; // <-- position:relative on large numbers of display:inline elements slows IE11 to a grinding halt -- Már 2015
+        // vertical-align: baseline;
+        display: inline-block; // <-- this works better
     }
 
     sup {
-        top: -0.5em;
+        // top: -0.5em;
+        margin-top: -0.5em;
     }
 
     sub {
-        bottom: -0.25em;
+        // bottom: -0.25em;
+        margin-bottom: -0.25em;
     }
 
 
