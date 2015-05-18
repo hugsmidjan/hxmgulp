@@ -30,11 +30,13 @@ That's it!
 
 The `options` support the following properties (and defaults):
 
-  * **`modules: ['/']`**   - array of (sub)folder names.
-
   * **`src: '_src'`** - path to the root source folder.
 
   * **`dist: '.'`** - path to the root distribution folder where the compiled/minified CSS and JS files are saved.
+
+  * **`modules: ['/']`**   - Array of (sub)folder names (Strings) or `{src,dist}` objects.
+    - `'foo/'^'` processes files within the folder `options.src + '/foo/'` and saves the output into `options.dist + '/foo/'`.
+    - `{ src:'foo/', dist:'../bar/baz/'}` would however, save the output files into `options.dist + '/../bar/baz/'`.
 
   * **`cssProc: 'styl'`** - type of CSS preporcessor being used. Currently valid options are `'styl'`, `'scss'` and `'less'`
 

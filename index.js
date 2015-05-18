@@ -99,15 +99,37 @@ module.exports = function (gulp, skin) {
     var skinDist = (skin.dist || '.').replace(/\/+$/,'');
     var imgFolder = 'i/';
 
+    var resolveModulePath = function (basePath, modulePath) {
+            modulePath = path.relative( basePath, basePath+'/'+modulePath ) + '/';
+            modulePath = path.normalize( modulePath )
+                            .replace(/\\/g, '/');
+            return (modulePath==='/' ? '' : '/') + modulePath;
+          };
+    var normalizeModulePath = function (modulePath) {
+            modulePath =  typeof modulePath === 'string' ?
+                              { src: modulePath }:
+                              modulePath;
+            modulePath.src = modulePath.src ?
+                                  resolveModulePath( skinSrc, modulePath.src ):
+                                  null;
+            if ( !modulePath.src )
+            {
+              throw new Error( '`modulePath.src` is undefined ( '+JSON.stringify(modulePath)+' )' );
+            }
+            modulePath.dist = modulePath.dist ?
+                                  resolveModulePath( skinDist, modulePath.dist ):
+                                  modulePath.src;
+            return modulePath;
+          };
 
-    skinModules.forEach(function (moduleName, folderIndex) {
 
-        moduleName = ('/'+moduleName+'/').replace(/\/\/+/g, '/'); // normalize
-        var ns = moduleName;
-        var srcPath = skinSrc + moduleName;
+    skinModules.forEach(function (modulePath, folderIndex) {
+
+        modulePath = normalizeModulePath(modulePath);
+        var srcPath = skinSrc + modulePath.src;
         var paths = {
                 src:          srcPath,
-                dist:         skinDist + moduleName,
+                dist:         skinDist + modulePath.dist,
 
                 css:          srcPath + '',
                 css_incl:     isSCSS ? '_scss/' : isLESS ? '_less/' : '_styl/',
@@ -117,9 +139,10 @@ module.exports = function (gulp, skin) {
                 iconfont:     srcPath + 'iconfont/',
                 htmltests:    srcPath + '_tests/',
               };
+        var ns = modulePath.src;
         var basePathCfg = { base:paths.src };
         var module = {
-                name:   moduleName,
+                name:   ns,
                 paths:  paths,
                 basePathCfg: Object.create(basePathCfg),
               };
