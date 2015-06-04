@@ -147,6 +147,7 @@ module.exports = function (gulp, skin) {
                 basePathCfg: Object.create(basePathCfg),
               };
 
+        require('mkdirp').sync( paths.dist );
 
         // ==============================================
 
@@ -187,7 +188,7 @@ module.exports = function (gulp, skin) {
                                 (isSCSS ? '$iconData:\n    '+iconDataScss.join(',\n    ')+';\n\n' : '');
                       fs.writeFileSync( paths.css + paths.css_incl + '_iconVars.'+skin.cssProc, code );
                     }
-                    try { fs.mkdirSync( paths.dist + imgFolder ); }catch(e){}
+                    require('mkdirp').sync( paths.dist + imgFolder );
                     fs.writeFileSync( paths.dist + imgFolder + 'icons.json', JSON.stringify(iconData,null,'\t') );
                   })
                 .pipe( gulp.dest( paths.dist + imgFolder ) );
