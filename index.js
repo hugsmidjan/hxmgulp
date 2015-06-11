@@ -257,7 +257,7 @@ module.exports = function (gulp, skin) {
             s1
                 .pipe( rename({ suffix:'-source' }) );
             s2
-                .pipe( uglify({ preserveComments:'some' }) )
+                .pipe( uglify({ preserveComments:'some', compress:{global_defs:{ UGL1FY:true }} }) )
                 .pipe( header('// '+copyrightBanner) );
 
             return es.merge(s1, s2)
