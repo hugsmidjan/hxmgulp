@@ -5,7 +5,8 @@ module.exports = function (gulp, skin) {
     var plugins = gulp._plugins = {};
     var tasks = gulp._tasks = {};
 
-    var pkg = require( process.cwd() + '/package.json');
+    var projectRoot = process.cwd();
+    var pkg = require( projectRoot + '/package.json');
 
     var fs = require('fs');
     var path = require('path');
@@ -411,6 +412,24 @@ module.exports = function (gulp, skin) {
         }
 
       });
+
+
+    gulp.task('test:karma', function (done) {
+        require('karma').server.start({ // Run test once and exit
+            configFile: projectRoot+'/karma.conf.js',
+            singleRun: true
+          }, done);
+      });
+    gulp.task('test:karma:watch', function (done) {
+        require('karma').server.start({ // Watch for file changes and re-run tests on each change
+            configFile: projectRoot+'/karma.conf.js'
+          }, done);
+      });
+    gulp.task('test:nightwatch', function (done) {
+        require('nightwatch/bin/runner.js');
+        done();
+      });
+
 
     nunjucksRender.nunjucks.configure(nunjucksWorkingDirs);
 
