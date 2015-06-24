@@ -31,7 +31,9 @@ module.exports = function (/*opts*/) {
           silent: true,
 
           globals: {
-            waitForConditionTimeout: 750
+            // retryAssertionTimeout: 2000,
+            // waitForConditionPollInterval: xxx,
+            waitForConditionTimeout: 750,
           },
           screenshots: {
             enabled: false,
