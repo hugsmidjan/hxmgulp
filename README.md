@@ -193,13 +193,14 @@ You can save your functional specs where ever you like, but `_src/_js-tests-brow
 
 You must then place a `nightwatch.config.js` ([example](testing/examples/nightwatch.config.js)) file in your project root, and specify the `src_folders` containing your spec files, etc. etc.
 
-To run the tests type in this command:
+To run the tests type in these commands:
 
 ```sh
-gulp test:nightwatch --env chrome,firefox   ## also: phantomjs
+gulp test:nightwatch    ## Defaults to Firefox only
+gulp test:nightwatch  --env firefox,chrome   ## multi-browser
 ```
 
-Hxmgulp runs the tests using Google Chrome and Firefox by default, but also provides an (optional) support for [PhantomJS](http://phantomjs.org/).
+Hxmgulp runs the tests using Firefox by default, but also provides an (optional) support for Google Chrome<!-- and [PhantomJS](http://phantomjs.org/) (experimental) -->.
 
 More browsers can be added on a per-project basis, and configured in your `nightwatch.config.js`.
 

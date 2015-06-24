@@ -1,3 +1,4 @@
+/* global __dirname, process */
 module.exports = function (/*opts*/) {
     return {
       //src_folders: ['_src/_js-tests-browser/spec/'],
@@ -10,12 +11,12 @@ module.exports = function (/*opts*/) {
 
       selenium: {
         start_process: true,
-        server_path: __dirname + '/bin/selenium-server-standalone-2.44.0.jar',
-        log_path: '',
+        server_path: __dirname + '/../bin/selenium-server-standalone-2.46.0.jar',
+        log_path: process.cwd(),
         host: '127.0.0.1',
         port: 4444,
         cli_args: {
-          'webdriver.chrome.driver': __dirname + '/node_modules/.bin/chromedriver'+(process.platform==='win32'?'.cmd':''),
+          'webdriver.chrome.driver': __dirname + '/../node_modules/.bin/chromedriver'+(process.platform==='win32'?'.cmd':''),
           'webdriver.ie.driver': ''
         }
       },
@@ -46,19 +47,21 @@ module.exports = function (/*opts*/) {
         firefox: {
           desiredCapabilities: {
             browserName: 'firefox',
-            javascriptEnabled: true,
-            acceptSslCerts: true
           }
         },
 
         chrome: {
           desiredCapabilities: {
             browserName: 'chrome',
-            javascriptEnabled: true,
-            acceptSslCerts: true
+          }
+        },
+
+        phantomjs: {
+          desiredCapabilities : {
+            browserName : 'phantomjs',
+            'phantomjs.binary.path' : __dirname + '/../node_modules/.bin/phantomjs'+(process.platform==='win32'?'.cmd':'')
           }
         }
-
       }
 
     };
