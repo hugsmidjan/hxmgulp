@@ -398,7 +398,7 @@ module.exports = function (gulp, skin) {
         // allow skinfile.js to define its own tasks
         if ( typeof skin.tasks === 'function' )
         {
-          var customTasks = skin.tasks(module);
+          var customTasks = skin.tasks(module, gulp);
           if ( customTasks )
           {
             if ( customTasks instanceof Array )

@@ -41,7 +41,7 @@ The `options` support the following properties (and defaults):
   * **`cssProc: 'styl'`** - type of CSS preporcessor being used. Currently valid options are `'styl'`, `'scss'` and `'less'`
 
   * **`task: null`** - optional function which then gets run once for each item in the modules array. Example:
-<pre><code>tasks: function (module) {<br/>
+<pre><code>tasks: function (module, gulp) {<br/>
 &nbsp; &nbsp; // module.name === the current module (i.e. (sub)folder)<br/>
 &nbsp; &nbsp; // module.paths === paths config for the current module<br/>
 &nbsp; &nbsp; // module.basePathCfg === A good default options object for gulp.task()<br/>
