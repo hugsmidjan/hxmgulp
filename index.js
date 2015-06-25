@@ -494,6 +494,13 @@ module.exports = function (gulp, skin) {
     gulp.task('watch', watchTasks);
 
     gulp.task('default', ['build'], function(callback) {
+          // // Example usage:
+          // runSequence(
+          //     'build-clean', // run  this first
+          //     ['build-scripts', 'build-styles'], // then run these two in parallel
+          //     'build-html', // finally run this one
+          //     callback // signal end!
+          //   );
           runSequence('watch', callback);
         });
 
