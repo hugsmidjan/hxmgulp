@@ -309,7 +309,7 @@ module.exports = function (gulp, skin) {
           };
         gulp.task(ns+'css', tasks[ns+'css']);
         gulp.task(ns+'css--initial', [ns+'iconfont'], tasks[ns+'css']);
-        // buildTasks.push( ns+'css--initial' );
+        buildTasks.push( ns+'css--initial' );
 
 
         nunjucksWorkingDirs.push( paths.htmltests );
@@ -335,7 +335,7 @@ module.exports = function (gulp, skin) {
                 .pipe( gulp.dest( paths.dist ) );
           };
         gulp.task(ns+'htmltests-html', tasks[ns+'htmltests-html']);
-        gulp.task(ns+'htmltests-html--initial', [ns+'css--initial'], tasks[ns+'htmltests-html']);
+        gulp.task(ns+'htmltests-html--initial', [ns+'iconfont'], tasks[ns+'htmltests-html']);
         htmltestTasks.push( ns+'htmltests-html--initial' );
 
         tasks[ns+'htmltests-images'] = function() {
