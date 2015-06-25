@@ -47,7 +47,7 @@ module.exports = function (gulp, skin) {
     var nunjucksRender = plugins.nunjucksRender = require('gulp-nunjucks-render');
 
 
-    var runSequence = require('run-sequence');
+    var runSequence = plugins.runSequence = require('run-sequence').use(gulp);
 
 
     var es6transpilerOpts = {
