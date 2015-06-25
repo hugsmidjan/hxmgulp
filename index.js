@@ -156,6 +156,7 @@ module.exports = function (gulp, skin) {
                 name:   ns,
                 paths:  paths,
                 basePathCfg: Object.create(basePathCfg),
+                module: module,
               };
 
         require('mkdirp').sync( paths.dist );

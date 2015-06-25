@@ -55,6 +55,7 @@ The `options` support the following properties (and defaults):
 &nbsp; &nbsp; // moduleInfo.name === the current module (i.e. (sub)folder)<br/>
 &nbsp; &nbsp; // moduleInfo.paths === paths config for the current module<br/>
 &nbsp; &nbsp; // moduleInfo.basePathCfg === A good default options object for gulp.task()<br/>
+&nbsp; &nbsp; // moduleInfo.module === Normalized version of the current module<br/>
 &nbsp; &nbsp; gulp.task('mytask', function(){ ... });<br/>
 &nbsp; &nbsp; return { build:['mytask'], watch:null };<br/>
 &nbsp; }</code></pre>
@@ -65,6 +66,7 @@ The `options` support the following properties (and defaults):
 &nbsp; &nbsp; // moduleInfo.name === the current module (i.e. (sub)folder)<br />
 &nbsp; &nbsp; // moduleInfo.paths === paths config for the current module<br />
 &nbsp; &nbsp; // moduleInfo.basePathCfg === A good default options object for gulp.task()<br />
+&nbsp; &nbsp; // moduleInfo.module === Normalized version of the current module<br/>
 &nbsp; &nbsp; var b = browserify();<br />
 &nbsp; &nbsp; b.require([{ file:'foobar.js', expose:'foobar' }]);<br />
 &nbsp; &nbsp; b.external(['react']);<br />
