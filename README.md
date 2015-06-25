@@ -34,9 +34,19 @@ The `options` support the following properties (and defaults):
 
   * **`dist: '.'`** - path to the root distribution folder where the compiled/minified CSS and JS files are saved.
 
-  * **`modules: ['/']`**   - Array of (sub)folder names (Strings) or `{src,dist}` objects.
+  * Feature flags:
+    - **`$minimal: false`** - Setting this to `true` turns off all features by default.
+    - **`do_css: true`** - Render Stylus/LESS.
+    - **`do_scripts: true`** - Minify, ES6 transpile and Browserify JavaScripts.
+    - **`do_images: true`** - Minify/Compress images.
+    - **`do_iconfont: true`** - Convert SVGs to an icon-font.
+    - **`do_htmltests: true`** - Render nunjucks templates to static files.
+    - **`do_htmltestsscripts: true`** - ES6 transpile and Browserify JavaScripts inside the htmltests folder.
+
+  * **`modules: ['/']`**   - Array of (sub)folder names (Strings) or `{ src, dist, [feature-flags] }` objects.
     - `'foo/'` processes files within the folder `options.src + '/foo/'` and saves the output into `options.dist + '/foo/'`.
     - `{ src:'foo/', dist:'../bar/baz/'}` would however, save the output files into `options.dist + '/../bar/baz/'`.
+    - Any feature flags (see above) override the default flags for this module only.
 
   * **`cssProc: 'styl'`** - type of CSS preporcessor being used. Currently valid options are `'styl'`, `'scss'` and `'less'`
 

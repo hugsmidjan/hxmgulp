@@ -121,6 +121,15 @@ module.exports = function (gulp, skin) {
             module.dist = module.dist ?
                                   resolveModulePath( skinDist, module.dist ):
                                   module.src;
+
+            // Set feature flags:
+            var featureFlags = ['do_css','do_scripts','do_images','do_iconfont','do_htmltests','do_htmltestsscripts'];
+            var defaultDoValue = (module.$minimal != null) ? !module.$minimal : !skin.$minimal;
+            featureFlags.forEach(function ( do_xxx ) {
+                var doValue = (module[do_xxx] != null) ? module[do_xxx] : skin[do_xxx];
+                module[do_xxx] = doValue != null ? doValue : defaultDoValue;
+              });
+
             return module;
           };
 
@@ -153,219 +162,243 @@ module.exports = function (gulp, skin) {
 
         // ==============================================
 
-        tasks[ns+'iconfont'] = function() {
-            return gulp.src([
-                paths.iconfont + '**/*.svg',
-                '!' + paths.iconfont + '_raw/**'
-              ], basePathCfg )
-                .pipe( plumber() )
-                .pipe( iconfont({
-                    fontName:   'icons',
-                    normalize:  true
-                  }) )
-                .on('codepoints', function (codepoints/*, options*/) {
-                    var iconData = {};
-                    var iconDataScss = [];
-                    var iconVars = [];
-                    codepoints.forEach(function (cp) {
-                        var name = cp.name;
-                        var chr = cp.codepoint.charAt ? cp.codepoint : String.fromCharCode(cp.codepoint);
-                        iconData[name] = chr;
-                        if ( isLESS || isSCSS )
-                        {
-                          var varPrefix = (isLESS?'@':'$') + 'icon-';
-                          var chrCSS = '"' + chr + '"';
-                          var padding = new Array(Math.max(20 - name.length,2)).join(' ');
-                          iconVars.push( varPrefix + name + ':' + padding + chrCSS + ';\n' );
-                          if ( isSCSS )
+        if ( module.do_iconfont )
+        {
+          tasks[ns+'iconfont'] = function() {
+              return gulp.src([
+                  paths.iconfont + '**/*.svg',
+                  '!' + paths.iconfont + '_raw/**'
+                ], basePathCfg )
+                  .pipe( plumber() )
+                  .pipe( iconfont({
+                      fontName:   'icons',
+                      normalize:  true
+                    }) )
+                  .on('codepoints', function (codepoints/*, options*/) {
+                      var iconData = {};
+                      var iconDataScss = [];
+                      var iconVars = [];
+                      codepoints.forEach(function (cp) {
+                          var name = cp.name;
+                          var chr = cp.codepoint.charAt ? cp.codepoint : String.fromCharCode(cp.codepoint);
+                          iconData[name] = chr;
+                          if ( isLESS || isSCSS )
                           {
-                            iconDataScss.push( '('+name+', '+chrCSS+')' );
+                            var varPrefix = (isLESS?'@':'$') + 'icon-';
+                            var chrCSS = '"' + chr + '"';
+                            var padding = new Array(Math.max(20 - name.length,2)).join(' ');
+                            iconVars.push( varPrefix + name + ':' + padding + chrCSS + ';\n' );
+                            if ( isSCSS )
+                            {
+                              iconDataScss.push( '('+name+', '+chrCSS+')' );
+                            }
                           }
-                        }
-                      });
-                    if ( isLESS || isSCSS )
-                    {
-                      var code = '// This file is auto-generated. DO NOT EDIT! \n\n' +
-                                iconVars.join('') + '\n' +
-                                (isSCSS ? '$iconData:\n    '+iconDataScss.join(',\n    ')+';\n\n' : '');
-                      fs.writeFileSync( paths.css + paths.css_incl + '_iconVars.'+skin.cssProc, code );
-                    }
-                    require('mkdirp').sync( paths.dist + imgFolder );
-                    fs.writeFileSync( paths.dist + imgFolder + 'icons.json', JSON.stringify(iconData,null,'\t') );
-                  })
-                .pipe( gulp.dest( paths.dist + imgFolder ) );
-          };
-        gulp.task(ns+'iconfont', tasks[ns+'iconfont']);
-        buildTasks.push( ns+'iconfont' );
-
-
-        tasks[ns+'images'] = function() {
-            return gulp.src([
-                paths.images + '**/*',
-                '!' + paths.images + '_raw/**'
-              ], basePathCfg )
-                .pipe( plumber() )
-                .pipe( changed( paths.dist ) )
-                .pipe( foreach(function (stream, file) {
-                    var fileParams = file.path.match(/(\---q(\d{1,3}(?:-\d{1,3})?)(?:--d(0))?)\.(png|jpe?g)$/i);
-                    if ( fileParams )
-                    {
-                      if ( fileParams[4].toLowerCase()==='png' )
+                        });
+                      if ( isLESS || isSCSS )
                       {
-                        stream = stream.pipe( pngquant({
-                            speed: 1, // default: `3`
-                            quality: fileParams[2],   // default `undefined` (i.e. 256 colors)
-                            floyd: parseInt(fileParams[3],10)/100,
-                            nofs: fileParams[3]==='0'
-                          })() );
+                        var code = '// This file is auto-generated. DO NOT EDIT! \n\n' +
+                                  iconVars.join('') + '\n' +
+                                  (isSCSS ? '$iconData:\n    '+iconDataScss.join(',\n    ')+';\n\n' : '');
+                        fs.writeFileSync( paths.css + paths.css_incl + '_iconVars.'+skin.cssProc, code );
+                      }
+                      require('mkdirp').sync( paths.dist + imgFolder );
+                      fs.writeFileSync( paths.dist + imgFolder + 'icons.json', JSON.stringify(iconData,null,'\t') );
+                    })
+                  .pipe( gulp.dest( paths.dist + imgFolder ) );
+            };
+          gulp.task(ns+'iconfont', tasks[ns+'iconfont']);
+          buildTasks.push( ns+'iconfont' );
+        }
+
+
+        if ( module.do_images )
+        {
+          tasks[ns+'images'] = function() {
+              return gulp.src([
+                  paths.images + '**/*',
+                  '!' + paths.images + '_raw/**'
+                ], basePathCfg )
+                  .pipe( plumber() )
+                  .pipe( changed( paths.dist ) )
+                  .pipe( foreach(function (stream, file) {
+                      var fileParams = file.path.match(/(\---q(\d{1,3}(?:-\d{1,3})?)(?:--d(0))?)\.(png|jpe?g)$/i);
+                      if ( fileParams )
+                      {
+                        if ( fileParams[4].toLowerCase()==='png' )
+                        {
+                          stream = stream.pipe( pngquant({
+                              speed: 1, // default: `3`
+                              quality: fileParams[2],   // default `undefined` (i.e. 256 colors)
+                              floyd: parseInt(fileParams[3],10)/100,
+                              nofs: fileParams[3]==='0'
+                            })() );
+                        }
+                        else
+                        {
+                          stream = stream.pipe( mozjpeg({
+                              quality: fileParams[2]
+                            })() );
+                        }
+                        return stream.pipe( rename(function(path){
+                            path.basename = path.basename.slice(0, -fileParams[1].length);
+                          }) );
                       }
                       else
                       {
-                        stream = stream.pipe( mozjpeg({
-                            quality: fileParams[2]
-                          })() );
+                        return stream.pipe( imagemin({
+                            optimizationLevel: 4, // png
+                            progressive: true, // jpg
+                            interlaced: true, // gif
+                            multipass: true // svg
+                          }) );
                       }
-                      return stream.pipe( rename(function(path){
-                          path.basename = path.basename.slice(0, -fileParams[1].length);
-                        }) );
-                    }
-                    else
-                    {
-                      return stream.pipe( imagemin({
-                          optimizationLevel: 4, // png
-                          progressive: true, // jpg
-                          interlaced: true, // gif
-                          multipass: true // svg
-                        }) );
-                    }
-                  }) )
-                .pipe( gulp.dest( paths.dist ) );
-          };
-        gulp.task(ns+'images', tasks[ns+'images']);
-        buildTasks.push( ns+'images' );
+                    }) )
+                  .pipe( gulp.dest( paths.dist ) );
+            };
+          gulp.task(ns+'images', tasks[ns+'images']);
+          buildTasks.push( ns+'images' );
+        }
+
+        var iconfontDependency = module.do_iconfont ? [ns+'iconfont'] : [];
+
+        if ( module.do_scripts )
+        {
+          tasks[ns+'scripts'] = function() {
+              var commonjsScripts = filter('**/*-common.js');
+              var s1 = gulp.src([ paths.scripts+'*.js'], basePathCfg )
+                  .pipe( plumber() )
+                  .pipe( commonjsScripts )
+                      .pipe( browserifyfy(moduleInfo) )
+                      .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
+                  .pipe( commonjsScripts.restore() )
+                  .pipe( es6transpiler(es6transpilerOpts) );
+              var s2 = s1.pipe( clone() );
+
+              s1
+                  .pipe( rename({ suffix:'-source' }) );
+              s2
+                  .pipe( uglify({ preserveComments:'some', compress:{global_defs:{ UGL1FY:true }} }) )
+                  .pipe( header('// '+copyrightBanner) );
+
+              return es.merge(s1, s2)
+                  .pipe( gulp.dest( paths.dist ) );
+
+            };
+          gulp.task(ns+'scripts', tasks[ns+'scripts']);
+          gulp.task(ns+'scripts--initial', iconfontDependency, tasks[ns+'scripts']);
+          buildTasks.push( ns+'scripts--initial' );
+        }
 
 
-        tasks[ns+'scripts'] = function() {
-            var commonjsScripts = filter('**/*-common.js');
-            var s1 = gulp.src([ paths.scripts+'*.js'], basePathCfg )
-                .pipe( plumber() )
-                .pipe( commonjsScripts )
-                    .pipe( browserifyfy(moduleInfo) )
-                    .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
-                .pipe( commonjsScripts.restore() )
-                .pipe( es6transpiler(es6transpilerOpts) );
-            var s2 = s1.pipe( clone() );
-
-            s1
-                .pipe( rename({ suffix:'-source' }) );
-            s2
-                .pipe( uglify({ preserveComments:'some', compress:{global_defs:{ UGL1FY:true }} }) )
-                .pipe( header('// '+copyrightBanner) );
-
-            return es.merge(s1, s2)
-                .pipe( gulp.dest( paths.dist ) );
-
-          };
-        gulp.task(ns+'scripts', tasks[ns+'scripts']);
-        gulp.task(ns+'scripts--initial', [ns+'iconfont'], tasks[ns+'scripts']);
-        buildTasks.push( ns+'scripts--initial' );
-
-
-        tasks[ns+'css'] = function() {
-            return gulp.src( paths.css+cssGlob, basePathCfg )
-                .pipe( plumber(function(err){ console.log(err.message||err); }) )
-                .pipe(
-                    isSCSS ?
-                        scss({
-                            precision:7,
-                            'sourcemap=none':true, // dodgy temporary workaround
-                            // sourcemap:'none',
-                            container:'gulp-ruby-sass-'+folderIndex, // Workaround for https://github.com/sindresorhus/gulp-ruby-sass/issues/124#issuecomment-54682317
-                          }):
-                    isLESS ?
-                        less(/*{ strictMath: true }*/):
-                    // Default:
-                        stylus({
-                            // linenos: true,
-                            // use: [require(nib)],
-                          })
-                 )
-                .pipe( autoprefixer({ browsers:['> 0.5%', 'last 2 versions', 'Firefox ESR', 'Opera 12.1'] }) )
-                .pipe( minifycss({
-                    // roundingPrecision: 2, // precision for px values
-                    // aggressiveMerging:true, // set to false to disable aggressive merging of properties
-                    advanced:false, // turn off advanced/aggressive merging. It's too buggy still. Ack!
-                    processImport:false, // We want stylus to do that for us.
-                    keepBreaks:true,
-                    compatibility:'ie8'
-                  }) )
-                .pipe( replace(/ -no-merge/g,'') )
-                .pipe( datauri({
-                    baseDir: paths.dist,
-                    extensions: [ (/#datauri$/) ],
-                    // maxImageSize: bytes,
-                    // debug: true,
-                  }) )
-                .pipe( gulp.dest( paths.dist ) );
-          };
-        gulp.task(ns+'css', tasks[ns+'css']);
-        gulp.task(ns+'css--initial', [ns+'iconfont'], tasks[ns+'css']);
-        buildTasks.push( ns+'css--initial' );
+        if ( module.do_css )
+        {
+          tasks[ns+'css'] = function() {
+              return gulp.src( paths.css+cssGlob, basePathCfg )
+                  .pipe( plumber(function(err){ console.log(err.message||err); }) )
+                  .pipe(
+                      isSCSS ?
+                          scss({
+                              precision:7,
+                              'sourcemap=none':true, // dodgy temporary workaround
+                              // sourcemap:'none',
+                              container:'gulp-ruby-sass-'+folderIndex, // Workaround for https://github.com/sindresorhus/gulp-ruby-sass/issues/124#issuecomment-54682317
+                            }):
+                      isLESS ?
+                          less(/*{ strictMath: true }*/):
+                      // Default:
+                          stylus({
+                              // linenos: true,
+                              // use: [require(nib)],
+                            })
+                   )
+                  .pipe( autoprefixer({ browsers:['> 0.5%', 'last 2 versions', 'Firefox ESR', 'Opera 12.1'] }) )
+                  .pipe( minifycss({
+                      // roundingPrecision: 2, // precision for px values
+                      // aggressiveMerging:true, // set to false to disable aggressive merging of properties
+                      advanced:false, // turn off advanced/aggressive merging. It's too buggy still. Ack!
+                      processImport:false, // We want stylus to do that for us.
+                      keepBreaks:true,
+                      compatibility:'ie8'
+                    }) )
+                  .pipe( replace(/ -no-merge/g,'') )
+                  .pipe( datauri({
+                      baseDir: paths.dist,
+                      extensions: [ (/#datauri$/) ],
+                      // maxImageSize: bytes,
+                      // debug: true,
+                    }) )
+                  .pipe( gulp.dest( paths.dist ) );
+            };
+          gulp.task(ns+'css', tasks[ns+'css']);
+          gulp.task(ns+'css--initial', iconfontDependency, tasks[ns+'css']);
+          buildTasks.push( ns+'css--initial' );
+        }
 
 
-        nunjucksWorkingDirs.push( paths.htmltests );
-        tasks[ns+'htmltests-html'] = function() {
-            var nonHTMLFiles = filter('**/*.*.html'); // <-- because nunjucksRender renames all files to .html
-            var testsFolder = paths.htmltests.substr(paths.src.length);
-            var file;
-            try { file = fs.readFileSync( paths.dist + imgFolder + 'icons.json' ); }catch(e){}
-            var icons = JSON.parse( file || '{}' );
-            return gulp.src([
-                paths.htmltests+'**/*.htm',
-                '!'+paths.htmltests+'{incl,media}/**'
-              ], basePathCfg )
-                .pipe( plumber() )
-                .pipe( nunjucksRender({ icons:icons }) )
-                .pipe( replace(/^[\s*\n]+/, '') ) // remove macro/config induced whitespace at start of file.
-                .pipe( nonHTMLFiles )
-                    .pipe( rename(function(path){
-                        path.extname = '';
-                        path.dirname = path.dirname.substr(testsFolder.length);
-                      }) )
-                    .pipe( nonHTMLFiles.restore() )
-                .pipe( gulp.dest( paths.dist ) );
-          };
-        gulp.task(ns+'htmltests-html', tasks[ns+'htmltests-html']);
-        gulp.task(ns+'htmltests-html--initial', [ns+'iconfont'], tasks[ns+'htmltests-html']);
-        htmltestTasks.push( ns+'htmltests-html--initial' );
+        if ( module.do_htmltests )
+        {
+          nunjucksWorkingDirs.push( paths.htmltests );
+          tasks[ns+'htmltests-html'] = function() {
+              var nonHTMLFiles = filter('**/*.*.html'); // <-- because nunjucksRender renames all files to .html
+              var testsFolder = paths.htmltests.substr(paths.src.length);
+              var file;
+              var icons;
+              if ( module.do_iconfont )
+              {
+                try { file = fs.readFileSync( paths.dist + imgFolder + 'icons.json' ); }catch(e){}
+                icons = JSON.parse( file || '{}' );
+              }
+              return gulp.src([
+                  paths.htmltests+'**/*.htm',
+                  '!'+paths.htmltests+'{incl,media}/**'
+                ], basePathCfg )
+                  .pipe( plumber() )
+                  .pipe( nunjucksRender( module.do_iconfont?{ icons:icons }:{} ) )
+                  .pipe( replace(/^[\s*\n]+/, '') ) // remove macro/config induced whitespace at start of file.
+                  .pipe( nonHTMLFiles )
+                      .pipe( rename(function(path){
+                          path.extname = '';
+                          path.dirname = path.dirname.substr(testsFolder.length);
+                        }) )
+                      .pipe( nonHTMLFiles.restore() )
+                  .pipe( gulp.dest( paths.dist ) );
+            };
+          gulp.task(ns+'htmltests-html', tasks[ns+'htmltests-html']);
+          gulp.task(ns+'htmltests-html--initial', iconfontDependency, tasks[ns+'htmltests-html']);
+          htmltestTasks.push( ns+'htmltests-html--initial' );
 
-        tasks[ns+'htmltests-images'] = function() {
-            return gulp.src( paths.htmltests+'media/**/*.*', basePathCfg )
-                .pipe( plumber() )
-                .pipe( changed( paths.dist ) )
-                    .pipe( imagemin() )
-                .pipe( gulp.dest( paths.dist ) );
-          };
-        gulp.task(ns+'htmltests-images', tasks[ns+'htmltests-images']);
-        htmltestTasks.push( ns+'htmltests-images' );
+          tasks[ns+'htmltests-images'] = function() {
+              return gulp.src( paths.htmltests+'media/**/*.*', basePathCfg )
+                  .pipe( plumber() )
+                  .pipe( changed( paths.dist ) )
+                      .pipe( imagemin() )
+                  .pipe( gulp.dest( paths.dist ) );
+            };
+          gulp.task(ns+'htmltests-images', tasks[ns+'htmltests-images']);
+          htmltestTasks.push( ns+'htmltests-images' );
 
-        tasks[ns+'htmltests-scripts'] = function() {
-            var commonjsScripts = filter('**/*-common.js');
-            return gulp.src([
-                paths.htmltests+'**/*.js',
-                '!'+paths.htmltests+'_js/**'
-              ], basePathCfg )
-                .pipe( plumber() )
-                .pipe( commonjsScripts )
-                    .pipe( browserifyfy(moduleInfo) )
-                    .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
-                    .pipe( commonjsScripts.restore() )
-                .pipe( es6transpiler(es6transpilerOpts) )
-                .pipe( gulp.dest( paths.dist ) );
-          };
-        gulp.task(ns+'htmltests-scripts', tasks[ns+'htmltests-scripts']);
-        gulp.task(ns+'htmltests-scripts--initial', [ns+'iconfont'], tasks[ns+'htmltests-scripts']);
-        buildTasks.push( ns+'htmltests-scripts--initial');
+
+          if ( module.do_htmltestsscripts )
+          {
+            tasks[ns+'htmltests-scripts'] = function() {
+                var commonjsScripts = filter('**/*-common.js');
+                return gulp.src([
+                    paths.htmltests+'**/*.js',
+                    '!'+paths.htmltests+'_js/**'
+                  ], basePathCfg )
+                    .pipe( plumber() )
+                    .pipe( commonjsScripts )
+                        .pipe( browserifyfy(moduleInfo) )
+                        .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
+                        .pipe( commonjsScripts.restore() )
+                    .pipe( es6transpiler(es6transpilerOpts) )
+                    .pipe( gulp.dest( paths.dist ) );
+              };
+            gulp.task(ns+'htmltests-scripts', tasks[ns+'htmltests-scripts']);
+            gulp.task(ns+'htmltests-scripts--initial', iconfontDependency, tasks[ns+'htmltests-scripts']);
+            buildTasks.push( ns+'htmltests-scripts--initial');
+          }
+        }
 
 
 
@@ -385,14 +418,31 @@ module.exports = function (gulp, skin) {
               };
 
         gulp.task(ns+'watch', function() {
-            gulp.watch(buildWatchGlobs(paths.css, cssGlob, paths.css_incl+'**/'+cssGlob),   [ns+'css']);
-            gulp.watch(buildWatchGlobs(paths.scripts,'*.js', paths.scripts_incl+'**/*.js'), [ns+'scripts']);
-            gulp.watch([ paths.images+'**/*', '!'+paths.images+'_raw/**'],        [ns+'images']);
-            gulp.watch([ paths.iconfont+'**/*', '!'+paths.iconfont+'_raw/**/*'],  [ns+'iconfont']);
-            gulp.watch([ paths.htmltests+'**/*.htm'],                             [ns+'htmltests-html']);
-            gulp.watch([ paths.dist+'i/icons.json'],                              [ns+'htmltests-html', ns+'css']);
-            gulp.watch([ paths.htmltests+'media/**/*'],                           [ns+'htmltests-images']);
-            gulp.watch([ paths.htmltests+'**/*.js'],                              [ns+'htmltests-scripts']);
+            module.do_css &&
+                gulp.watch(buildWatchGlobs(paths.css, cssGlob, paths.css_incl+'**/'+cssGlob),   [ns+'css']);
+            module.do_scripts &&
+                gulp.watch(buildWatchGlobs(paths.scripts,'*.js', paths.scripts_incl+'**/*.js'), [ns+'scripts']);
+            module.do_images &&
+                gulp.watch([ paths.images+'**/*', '!'+paths.images+'_raw/**'],  [ns+'images']);
+
+            if ( module.do_htmltests )
+            {
+              gulp.watch([ paths.htmltests+'**/*.htm'],     [ns+'htmltests-html']);
+              gulp.watch([ paths.htmltests+'media/**/*'],   [ns+'htmltests-images']);
+              module.do_htmltestsscripts &&
+                  gulp.watch([ paths.htmltests+'**/*.js'],  [ns+'htmltests-scripts']);
+            }
+
+            if ( module.do_iconfont )
+            {
+              gulp.watch([ paths.iconfont+'**/*', '!'+paths.iconfont+'_raw/**/*'],  [ns+'iconfont']);
+
+              var iconsJsonTasks = [];
+              module.do_css && iconsJsonTasks.push(ns+'css');
+              module.do_htmltests && iconsJsonTasks.push(ns+'htmltests-html');
+              iconsJsonTasks.length &&
+                  gulp.watch([ paths.dist+'i/icons.json'],  iconsJsonTasks);
+            }
           });
         watchTasks.push(ns+'watch');
 
