@@ -47,6 +47,8 @@ module.exports = function (gulp, skin) {
     var nunjucksRender = plugins.nunjucksRender = require('gulp-nunjucks-render');
 
 
+    var runSequence = require('run-sequence');
+
 
     var es6transpilerOpts = {
             //environments: ['browser', 'devel', 'node'], // 'devel' includes alert(), confirm(), etc. etc.
@@ -491,6 +493,8 @@ module.exports = function (gulp, skin) {
     gulp.task('build', buildTasks);
     gulp.task('watch', watchTasks);
 
-    gulp.task('default', ['build', 'watch']);
+    gulp.task('default', ['build'], function(callback) {
+          runSequence('watch', callback);
+        });
 
   };
