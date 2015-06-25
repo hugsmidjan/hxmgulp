@@ -1,3 +1,4 @@
+/* global process, console */
 module.exports = function (gulp, skin) {
     skin = skin || {};
     skin.cssProc = /^(?:less|scss)$/.test(skin.cssProc) ? skin.cssProc : 'styl';
@@ -55,12 +56,12 @@ module.exports = function (gulp, skin) {
             // includePolyfills: true, // (defaults to false) insert polyfills in the output file. true - insert only the necessary polyfills. "full" - insert all available polyfills.
           };
 
-    var browserifyfy = function (module) {
+    var browserifyfy = function (moduleInfo) {
             // About this: https://medium.com/@sogko/gulp-browserify-the-gulp-y-way-bb359b3f9623
             return through2.obj(function(file, enc, next) {
                 var b;
                 if ( skin.browserify ) {
-                  b = skin.browserify( file.path, module, browserify );
+                  b = skin.browserify( file.path, moduleInfo, browserify );
                 }
                 else {
                   var opts = Object.create(skin.browserifyOpts||{});
@@ -106,31 +107,31 @@ module.exports = function (gulp, skin) {
                             .replace(/\\/g, '/');
             return (modulePath==='/' ? '' : '/') + modulePath;
           };
-    var normalizeModulePath = function (modulePath) {
-            modulePath =  typeof modulePath === 'string' ?
-                              { src: modulePath }:
-                              modulePath;
-            modulePath.src = modulePath.src ?
-                                  resolveModulePath( skinSrc, modulePath.src ):
+    var normalizeModule = function (module) {
+            module =  typeof module === 'string' ?
+                              { src: module }:
+                              module;
+            module.src = module.src ?
+                                  resolveModulePath( skinSrc, module.src ):
                                   null;
-            if ( !modulePath.src )
+            if ( !module.src )
             {
-              throw new Error( '`modulePath.src` is undefined ( '+JSON.stringify(modulePath)+' )' );
+              throw new Error( '`module.src` is undefined ( '+JSON.stringify(module)+' )' );
             }
-            modulePath.dist = modulePath.dist ?
-                                  resolveModulePath( skinDist, modulePath.dist ):
-                                  modulePath.src;
-            return modulePath;
+            module.dist = module.dist ?
+                                  resolveModulePath( skinDist, module.dist ):
+                                  module.src;
+            return module;
           };
 
 
-    skinModules.forEach(function (modulePath, folderIndex) {
+    skinModules.forEach(function (module, folderIndex) {
 
-        modulePath = normalizeModulePath(modulePath);
-        var srcPath = skinSrc + modulePath.src;
+        module = normalizeModule(module);
+        var srcPath = skinSrc + module.src;
         var paths = {
                 src:          srcPath,
-                dist:         skinDist + modulePath.dist,
+                dist:         skinDist + module.dist,
 
                 css:          srcPath + '',
                 css_incl:     isSCSS ? '_scss/' : isLESS ? '_less/' : '_styl/',
@@ -140,9 +141,9 @@ module.exports = function (gulp, skin) {
                 iconfont:     srcPath + 'iconfont/',
                 htmltests:    srcPath + '_tests/',
               };
-        var ns = modulePath.src;
+        var ns = module.src;
         var basePathCfg = { base:paths.src };
-        var module = {
+        var moduleInfo = {
                 name:   ns,
                 paths:  paths,
                 basePathCfg: Object.create(basePathCfg),
@@ -249,7 +250,7 @@ module.exports = function (gulp, skin) {
             var s1 = gulp.src([ paths.scripts+'*.js'], basePathCfg )
                 .pipe( plumber() )
                 .pipe( commonjsScripts )
-                    .pipe( browserifyfy(module) )
+                    .pipe( browserifyfy(moduleInfo) )
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                 .pipe( commonjsScripts.restore() )
                 .pipe( es6transpiler(es6transpilerOpts) );
@@ -356,7 +357,7 @@ module.exports = function (gulp, skin) {
               ], basePathCfg )
                 .pipe( plumber() )
                 .pipe( commonjsScripts )
-                    .pipe( browserifyfy(module) )
+                    .pipe( browserifyfy(moduleInfo) )
                     .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                     .pipe( commonjsScripts.restore() )
                 .pipe( es6transpiler(es6transpilerOpts) )
@@ -399,7 +400,7 @@ module.exports = function (gulp, skin) {
         // allow skinfile.js to define its own tasks
         if ( typeof skin.tasks === 'function' )
         {
-          var customTasks = skin.tasks(module, gulp);
+          var customTasks = skin.tasks(moduleInfo, gulp);
           if ( customTasks )
           {
             if ( customTasks instanceof Array )
