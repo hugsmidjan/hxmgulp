@@ -15,11 +15,14 @@
     "Már Örlygsson <mar@hugsmidjan.is>"
   ],
   "license": "ISC",
+  "peerDependencies": {
+    "gulp": "^3.8"
+  },
   "dependencies": {
     "browserify": "^9.0",
+    "chromedriver": "^2.15.1",
     "es6-browserify": "^0.0.7",
     "event-stream": "^3.1",
-    "gulp": "^3.8",
     "gulp-autoprefixer": "^2.1",
     "gulp-base64": "^0.1",
     "gulp-changed": "^1.2",
@@ -52,8 +55,5 @@
     "phantomjs": "^1.9",
     "run-sequence": "^1.1.1",
     "through2": "^0.6"
-  },
-  "devDependencies": {
-    "chromedriver": "^2.15.1"
   }
 }
