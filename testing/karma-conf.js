@@ -35,7 +35,7 @@ module.exports = function (config, opts) {
     // preprocessor Config:
     browserify: {
       // debug: true,
-      transform: [ 'es6-browserify' ]
+      transform: [ 'hxmgulp/node_modules/es6-browserify' ]
     },
 
 
