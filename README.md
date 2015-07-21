@@ -118,6 +118,8 @@ Any `.js` file placed _directly_ inside the source folder gets rendered to a min
 
 `.js` files within the `_js/` folder are watched for changes and trigger rerendering of JavaScript files both within this "module" and all "submodules".
 
+All naked references to `console.[log|error|warn|etc...]()` are converted to `undefined` during minification, to avoid accidental console.logging in production code. Logging on production is still available as opt-in, either through indirection ((i.e. `var konsole = console; konsole.log('Hi');`), or via `window`-property access (i.e. `window.console.log('Hi');`).
+
 All scripts are run through the [es6-transpiler][es6t] so using its subset of supported es6 features is allowed.
 
 Additionally: Any JavaScript file with the suffix `-common.js` is passed through browserify. The `-common` suffix is then stripped off.
