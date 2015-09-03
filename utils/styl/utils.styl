@@ -54,7 +54,7 @@ _iconFontStyling() {
 }
 
 
-if ( $icons ) {
+if ( $icons is defined ) {
     // convert all icon values from Stylus 'ident' to quoted String
     for $n,$c in $icons { $icons[$n] = ''+$c; }
 
