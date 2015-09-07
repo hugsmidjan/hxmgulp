@@ -67,7 +67,7 @@
 
 
 
-@mixin _eplica_byggiraeplica_image ( $img, $url:"//codecentre.eplica.is" ) {
+@mixin _eplica_byggiraeplica_image ( $img, $url:"https://eplica-cdn.is" ) {
     background-image: url( $url + "/f/e2-" + $img + ".png" );
 
     &:lang(is) {
@@ -75,7 +75,7 @@
     }
 }
 
-@mixin _eplica_byggiraeplica ( $img:"b33", $padding:20 0 0 0, $url:"//codecentre.eplica.is" ) {
+@mixin _eplica_byggiraeplica ( $img:"b33", $padding:20 0 0 0, $url:"https://eplica-cdn.is" ) {
     // $img values:  "b15", "b25", "b33", "b50", "b75", "b",
     //               "w15", "w25", "w33", "w50", "w75", "w"
     .byggiraeplica {
