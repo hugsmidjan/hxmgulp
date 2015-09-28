@@ -175,15 +175,16 @@ module.exports = function (gulp, skin) {
                   .pipe( plumber() )
                   .pipe( iconfont({
                       fontName:   'icons',
+                      formats: ['woff2','woff','ttf','eot','svg'],
                       normalize:  true
                     }) )
-                  .on('codepoints', function (codepoints/*, options*/) {
+                  .on('glyphs', function (glyphs/*, options*/) {
                       var iconData = {};
                       var iconDataScss = [];
                       var iconVars = [];
-                      codepoints.forEach(function (cp) {
+                      glyphs.forEach(function (cp) {
                           var name = cp.name;
-                          var chr = cp.codepoint.charAt ? cp.codepoint : String.fromCharCode(cp.codepoint);
+                          var chr = cp.unicode[0];
                           iconData[name] = chr;
                           if ( isLESS || isSCSS )
                           {
