@@ -185,7 +185,8 @@ fade($color, $opacity)
 percent( $value )
     return (100*$value)%;
 
-pxem($px, $fs=12px)
+$pxem-base ?= 12;
+pxem($px, $fs=$pxem-base)
     return ($px/$fs)em;
 
 isVertical($dir)
