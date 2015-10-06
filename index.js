@@ -325,6 +325,11 @@ module.exports = function (gulp, skin) {
                       compatibility:'ie8'
                     }) )
                   .pipe( replace(/ -no-merge/g,'') )
+                  // Crude trimming of decimal em, rem, % values
+                  // Temporary Hack - until either of these two feature-requests has been resolved:
+                  //   * https://github.com/jakubpawlowicz/clean-css/issues/686
+                  //   * https://github.com/stylus/stylus/issues/2024
+                  .pipe( replace( new RegExp('(\\.\\d{'+(skin.cssFloatPrecision||6)+'})\\d+((?:e[xm]|rem|%|pt|v(?:w|h|min|max))[;}\\),\\s])','g') ,'$1$2') )
                   .pipe( datauri({
                       baseDir: paths.dist,
                       extensions: [ (/#datauri$/) ],
