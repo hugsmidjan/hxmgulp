@@ -176,7 +176,8 @@ module.exports = function (gulp, skin) {
                   .pipe( iconfont({
                       fontName:   'icons',
                       formats: ['woff2','woff','ttf','eot','svg'],
-                      normalize:  true
+                      normalize:  true,
+                      timestamp: 0,
                     }) )
                   .on('glyphs', function (glyphs/*, options*/) {
                       var iconData = {};
