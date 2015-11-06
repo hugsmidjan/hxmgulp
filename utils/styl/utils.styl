@@ -196,3 +196,7 @@ _one($n)
     // Returns -1 for values < 0 and 1 for values > 0.
     // Useful for multipliers
     return !$n ? 0 : ($n / abs($n));
+
+csscalc(str, rest...)
+    str = 'calc(' + str + ')';
+    return str % rest;
