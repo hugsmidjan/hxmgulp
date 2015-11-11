@@ -94,10 +94,6 @@ h6 {
     margin: 2.33em 0;
 }
 
-abbr[title] {
-    border-bottom: 1px dotted;
-}
-
 b,
 strong {
     font-weight: bold;
@@ -320,4 +316,10 @@ textarea,
 input[type="password"],
 input[type="text"] {
     -webkit-appearance: none;
+}
+
+abbr,
+acronym {
+    text-decoration: none;
+    border-bottom: 1px dotted;
 }

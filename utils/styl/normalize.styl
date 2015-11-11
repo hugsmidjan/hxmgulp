@@ -130,10 +130,10 @@
         margin: 2.33em 0;
     }
 
-    // Address styling not present in IE 7/8/9, Safari 5, and Chrome.
-    abbr[title] {
-        border-bottom: 1px dotted;
-    }
+    // // Address styling not present in IE 7/8/9, Safari 5, and Chrome.
+    // abbr[title] {
+    //     border-bottom: 1px dotted;
+    // }
 
     // Address style set to `bolder` in Firefox 3+, Safari 4/5, and Chrome.
     b,
@@ -446,5 +446,12 @@
         -webkit-appearance: none;
     }
 
+    // Normalize to old-school border-bottom - rather than the new standard
+    // which uses advanced `text-decoration: dotted underline;
+    abbr,
+    acronym {
+        text-decoration: none;
+        border-bottom: 1px dotted;
+    }
 
 }
