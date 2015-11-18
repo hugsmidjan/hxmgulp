@@ -229,7 +229,6 @@ module.exports = function (gulp, skin) {
                       var fileParams = file.path.match(/(\---q(\d{1,3}(?:-\d{1,3})?)(?:--d(0))?)\.(png|jpe?g)$/i);
                       if ( fileParams )
                       {
-                        console.log(fileParams[2]);
                         if ( fileParams[4].toLowerCase()==='png' )
                         {
                           stream = stream.pipe( pngquant({
