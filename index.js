@@ -3,6 +3,11 @@ module.exports = function (gulp, skin) {
     skin = skin || {};
     skin.cssProc = /^(?:less|scss)$/.test(skin.cssProc) ? skin.cssProc : 'styl';
 
+    if ( skin.js_suffixSource === undefined )
+    {
+      skin.js_suffixSource = '-source';
+    }
+
     var plugins = gulp._plugins = {};
     var tasks = gulp._tasks = {};
 
@@ -279,8 +284,14 @@ module.exports = function (gulp, skin) {
                   .pipe( es6transpiler(es6transpilerOpts) );
               var s2 = s1.pipe( clone() );
 
-              s1
-                  .pipe( rename({ suffix:'-source' }) );
+              if ( skin.js_suffixSource )
+              {
+                s1.pipe( rename({ suffix:skin.js_suffixSource }) );
+              }
+              if ( skin.js_suffixMin )
+              {
+                s2.pipe( rename({ suffix:skin.js_suffixMin }) );
+              }
               s2
                   .pipe( uglify({ preserveComments:'some', compress:{drop_console:true, global_defs:{ UGL1FY:true }} }) )
                   .pipe( header('// '+copyrightBanner) );

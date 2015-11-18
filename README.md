@@ -50,7 +50,11 @@ The `options` support the following properties (and defaults):
 
   * **`cssProc: 'styl'`** - type of CSS preporcessor being used. Currently valid options are `'styl'`, `'scss'` and `'less'`
 
-  * **`task: null`** - optional function which then gets run once for each item in the modules array. Example:
+  * **`js_suffixSource: '-source'`** - file-name suffix for unminified JavaScript files.
+
+  * **`js_suffixMin: undefined`** - file-name suffix for minified JavaScript files.
+
+  * **`task: undefined`** - optional function which then gets run once for each item in the modules array. Example:
 <pre><code>tasks: function (moduleInfo, gulp) {<br/>
 &nbsp; &nbsp; // moduleInfo.name === the current module (i.e. (sub)folder)<br/>
 &nbsp; &nbsp; // moduleInfo.paths === paths config for the current module<br/>
@@ -60,9 +64,9 @@ The `options` support the following properties (and defaults):
 &nbsp; &nbsp; return { build:['mytask'], watch:null };<br/>
 &nbsp; }</code></pre>
 
-  * **`browserifyOpts: null`** - object with options for browserify
+  * **`browserifyOpts: undefined`** - object with options for browserify
 
-  * **`browserify: null`** - optional function to run (and configure) browserify.  Example: <pre><code data-language="js">browserify: function (filename, moduleInfo, browserify) {<br />
+  * **`browserify: undefined`** - optional function to run (and configure) browserify.  Example: <pre><code data-language="js">browserify: function (filename, moduleInfo, browserify) {<br />
 &nbsp; &nbsp; // moduleInfo.name === the current module (i.e. (sub)folder)<br />
 &nbsp; &nbsp; // moduleInfo.paths === paths config for the current module<br />
 &nbsp; &nbsp; // moduleInfo.basePathCfg === A good default options object for gulp.task()<br />
