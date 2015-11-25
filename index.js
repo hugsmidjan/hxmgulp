@@ -84,6 +84,15 @@ module.exports = function (gulp, skin) {
               });
           };
 
+    var notifyError = function(err){
+            var errmsg = err.message||err;
+            notifier.notify({
+              'title': 'Error',
+              'message': errmsg
+            });
+            console.log(errmsg);
+        };
+
     // =========================================================================
 
 
@@ -178,14 +187,7 @@ module.exports = function (gulp, skin) {
                   paths.iconfont + '**/*.svg',
                   '!' + paths.iconfont + '_raw/**'
                 ], basePathCfg )
-                  .pipe( plumber(function(err){
-                      var errmsg = err.message||err;
-                      notifier.notify({
-                        'title': 'Error',
-                        'message': errmsg
-                      });
-                      console.log(errmsg);
-                    }))
+                  .pipe( plumber(function (err) { notifyError(err); }) )
                   .pipe( iconfont({
                       fontName:   'icons',
                       formats: ['woff2','woff','ttf','eot','svg'],
@@ -236,14 +238,7 @@ module.exports = function (gulp, skin) {
                   paths.images + '**/*',
                   '!' + paths.images + '_raw/**'
                 ], basePathCfg )
-                  .pipe( plumber(function(err){
-                      var errmsg = err.message||err;
-                      notifier.notify({
-                        'title': 'Error',
-                        'message': errmsg
-                      });
-                      console.log(errmsg);
-                    }))
+                  .pipe( plumber(function (err) { notifyError(err); }) )
                   .pipe( changed( paths.dist ) )
                   .pipe( foreach(function (stream, file) {
                       var fileParams = file.path.match(/(\---q(\d{1,3}(?:-\d{1,3})?)(?:--d(0))?)\.(png|jpe?g)$/i);
@@ -291,14 +286,7 @@ module.exports = function (gulp, skin) {
           tasks[ns+'scripts'] = function() {
               var commonjsScripts = filter('**/*-common.js');
               var s1 = gulp.src([ paths.scripts+'*.js'], basePathCfg )
-                  .pipe( plumber(function(err){
-                      var errmsg = err.message||err;
-                      notifier.notify({
-                        'title': 'Error',
-                        'message': errmsg
-                      });
-                      console.log(errmsg);
-                    }))
+                  .pipe( plumber(function (err) { notifyError(err); }) )
                   .pipe( commonjsScripts )
                       .pipe( browserifyfy(moduleInfo) )
                       .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
@@ -332,7 +320,7 @@ module.exports = function (gulp, skin) {
         {
           tasks[ns+'css'] = function() {
               return gulp.src( paths.css+cssGlob, basePathCfg )
-                  .pipe( plumber(function(err){ console.log(err.message||err); }) )
+                  .pipe( plumber(function (err) { notifyError(err); }) )
                   .pipe(
                       isSCSS ?
                           scss({
@@ -395,14 +383,7 @@ module.exports = function (gulp, skin) {
                   paths.htmltests+'**/*.htm',
                   '!'+paths.htmltests+'{incl,media}/**'
                 ], basePathCfg )
-                  .pipe( plumber(function(err){
-                      var errmsg = err.message||err;
-                      notifier.notify({
-                        'title': 'Error',
-                        'message': errmsg
-                      });
-                      console.log(errmsg);
-                    }))
+                  .pipe( plumber(function (err) { notifyError(err); }) )
                   .pipe( nunjucksRender( module.do_iconfont?{ icons:icons }:{} ) )
                   .pipe( replace(/^[\s*\n]+/, '') ) // remove macro/config induced whitespace at start of file.
                   .pipe( nonHTMLFiles )
@@ -419,14 +400,7 @@ module.exports = function (gulp, skin) {
 
           tasks[ns+'htmltests-images'] = function() {
               return gulp.src( paths.htmltests+'media/**/*.*', basePathCfg )
-                  .pipe( plumber(function(err){
-                      var errmsg = err.message||err;
-                      notifier.notify({
-                        'title': 'Error',
-                        'message': errmsg
-                      });
-                      console.log(errmsg);
-                    }))
+                  .pipe( plumber(function (err) { notifyError(err); }) )
                   .pipe( changed( paths.dist ) )
                       .pipe( imagemin() )
                   .pipe( gulp.dest( paths.dist ) );
@@ -443,14 +417,7 @@ module.exports = function (gulp, skin) {
                     paths.htmltests+'**/*.js',
                     '!'+paths.htmltests+'_js/**'
                   ], basePathCfg )
-                  .pipe( plumber(function(err){
-                      var errmsg = err.message||err;
-                      notifier.notify({
-                        'title': 'Error',
-                        'message': errmsg
-                      });
-                      console.log(errmsg);
-                    }))
+                  .pipe( plumber(function (err) { notifyError(err); }) )
                     .pipe( commonjsScripts )
                         .pipe( browserifyfy(moduleInfo) )
                         .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
