@@ -41,10 +41,17 @@
 }
 
 
-#_eplica_skiplink-full ( @link:#c00, @border:#029 ) {
+#_eplica_skiplink-full ( @link:#c00, @border:#029, @align:right ) {
+    @tuck: 9999px;
 
     .pghead .skiplink {
-        #__tuck;
+        position:absolute;
+        & when (@align = left) {
+            left: -@tuck;
+        }
+        & when (@align = right) {
+            right: @tuck;
+        }
         white-space:nowrap;
         top: 10px;
         font-size: 1em;
@@ -52,7 +59,12 @@
         a:focus,
         a:active {
             position: absolute;
-            right: -9999px;
+            & when (@align = left) {
+                left: @tuck;
+            }
+            & when (@align = right) {
+                right: -@tuck;
+            }
             background: #fff;
             border: 1px solid @border;
             margin: 0;
@@ -65,7 +77,6 @@
     }
 
 }
-
 
 
 

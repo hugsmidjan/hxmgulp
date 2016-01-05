@@ -39,10 +39,12 @@
 }
 
 
-_eplica_skiplink-full( $link=#c00, $border=#029 ) {
+_eplica_skiplink-full( $link=#c00, $border=#029, $align=right ) {
+    $tuck = $align==left ? -9999px : 9999px;
 
     .pghead .skiplink {
-        _tuck();
+        position: absolute;
+        {$align}: $tuck;
         white-space:nowrap;
         top: 10px;
         font-size: 1em;
@@ -50,7 +52,7 @@ _eplica_skiplink-full( $link=#c00, $border=#029 ) {
         a:focus,
         a:active {
             position: absolute;
-            right: -9999px;
+            {$align}: -($tuck);
             background: #fff;
             border: 1px solid $border;
             margin: 0;
