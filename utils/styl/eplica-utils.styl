@@ -77,23 +77,27 @@ _eplica_byggiraeplica_image( $img, $url="https://eplica-cdn.is" ) {
     }
 }
 
-_eplica_byggiraeplica( $img="b33", $padding=20px 0 0 0, $url="https://eplica-cdn.is" ) {
+_eplica_byggiraeplica( $img="b33", $padding=20px 0 0 0, $url="https://eplica-cdn.is", $align=right ) {
     // $img values:  "b15", "b25", "b33", "b50", "b75", "b",
     //               "w15", "w25", "w33", "w50", "w75", "w"
     .byggiraeplica {
         padding: $padding;
-        text-align: right;
+        text-align: $align;
         line-height: 0;
-        {block}
 
         > a {
             _hideText();
-            background: none 0 0 no-repeat;
+            background: none 100% 50% no-repeat;
             display: inline-block;
             width:  135px;
             height: 20px;
             _eplica_byggiraeplica_image( $img, $url );
+            &:lang(\is) {
+                width: 124px;
+            }
         }
+
+        {block}
     }
 }
 
