@@ -34,12 +34,12 @@ $iconfont_name ?=  'icons';
 $iconfont_font-family ?= $iconfont_name, Arial, Helvetica, sans-serif;
 
 _icon( $icon=null ) {
-    content: $icon  if $icon;
     display: inline-block;
     text-indent: 0;
     text-align: center;
     vertical-align: top;
     _iconFontStyling();
+    content: $icon  if $icon;
 }
 
 _iconFontStyling() {
