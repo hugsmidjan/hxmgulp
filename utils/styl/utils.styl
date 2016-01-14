@@ -178,6 +178,16 @@ _hideText( $mode=normal ) {
 }
 
 
+// Usage:
+//     position: fixed 0;
+position( $pos, $top=null, $right=$top, $bottom=$top, $left=$right ) {
+    position: $pos;
+    top: $top  if $top!=null;
+    bottom: $bottom  if $bottom!=null;
+    left: $left  if $left!=null;
+    right: $right  if $right!=null;
+}
+
 
 fade($color, $opacity)
     return rgba( $color, alpha($color)*$opacity );
