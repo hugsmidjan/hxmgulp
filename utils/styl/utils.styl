@@ -182,10 +182,10 @@ _hideText( $mode=normal ) {
 //     position: fixed 0;
 position( $pos, $top=null, $right=$top, $bottom=$top, $left=$right ) {
     position: $pos;
-    top: $top  if $top!=null;
-    bottom: $bottom  if $bottom!=null;
-    left: $left  if $left!=null;
-    right: $right  if $right!=null;
+    top: $top  if $top!=null&&$top!=_;
+    bottom: $bottom  if $bottom!=null&&$bottom!=_;
+    left: $left  if $left!=null&&$left!=_;
+    right: $right  if $right!=null&&$right!=_;
 }
 
 
