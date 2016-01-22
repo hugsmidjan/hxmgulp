@@ -93,6 +93,17 @@ $quote_close_en =       $quote_upper99;
 $quote_openSingle_en =  $quote_upper6;
 $quote_closeSingle_en = $quote_upper9;
 
+_addQuotationMarks() {
+    all = length(arguments) == 0;
+    if ( all || en in arguments ) {
+        &:lang(en)::before { content: $quote_open_en; }
+        &:lang(en)::after { content: $quote_close_en; }
+    }
+    if ( all || \is in arguments ) {
+        &:lang(\is)::before { content: $quote_open_is; }
+        &:lang(\is)::after { content: $quote_close_is; }
+    }
+}
 
 
 
