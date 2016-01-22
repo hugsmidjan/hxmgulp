@@ -189,6 +189,34 @@ _hideText( $mode=normal ) {
 }
 
 
+// =======================================================
+// Column-based calc functions
+//
+// These globals are required for them to work:
+//   * $gutter
+//   * $column
+//   * $numCols
+
+// percentage length - by columns
+//   $w = custom container width in pixels. When specified, this overrides the default column-based container width.
+//   $px = pixel-based modifier for the column-based container width. (Useful for gridded-containers with non-standard padding/margin)
+cols_pct( $nCol, $nGutter=($nCol - _one($nCol)), $nOfCol=$numCols, $nOfGutter=($nOfCol - _one($nOfCol)), $w=null, $px=0 )
+    $w = $w  ||  ($nOfCol*$column + $nOfGutter*$gutter + $px);
+    return (100 * ($nCol*$column + $nGutter*$gutter) / $w )%;
+
+// percentage length - pixels to page-width
+//   $px = pixel-based modifier for the column-based container width. (Useful for gridded-containers with non-standard padding/margin)
+px_pct( $nPx, $nOfCol=$numCols, $nOfGutter=($nOfCol - _one($nOfCol)), $px=0 )
+    return ( 100 * $nPx / ($nOfCol*$column + $nOfGutter*$gutter + $px) )%;
+
+// pixel length - by columns
+cols_px( $nCol, $nGutter=($nCol - _one($nCol)) )
+    return ($nCol*$column + $nGutter*$gutter)px;
+
+// =======================================================
+
+
+
 _edgeProps( type, top=_, right=top, bottom=top, left=right ) {
     type = type!='' ? type+'-' : type;
     {type}top: top   if top!=_;
