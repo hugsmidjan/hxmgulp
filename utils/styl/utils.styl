@@ -219,27 +219,42 @@ cols_px( $nCol, $nGutter=($nCol - _one($nCol)) )
 
 
 
-_edgeProps( type, top=_, right=top, bottom=top, left=right ) {
-    type = type!='' ? type+'-' : type;
-    {type}top: top   if top!=_;
-    {type}bottom: bottom   if bottom!=_;
-    {type}left: left   if left!=_;
-    {type}right: right   if right!=_;
-}
-
 // Usage:
 //     position: fixed _ 0;
 position( type, top=_, right=top, bottom=top, left=right ) {
     position: type  if type!=_;
-    _edgeProps('', top, right, bottom, left );
+    top: top   if top!=_;
+    bottom: bottom   if bottom!=_;
+    left: left   if left!=_;
+    right: right   if right!=_;
 }
-margin( top=_, right=top, bottom=top, left=right ) {
+
+_edgeProps( type, top=x, right=x, bottom=x, left=x ) {
+    if ( _ in arguments) {
+        type = type!='' ? type+'-' : type;
+        right = right!=x ? right : top;
+        bottom = bottom!=x ? bottom : top;
+        left = left!=x ? left : right;
+
+        {type}top: top   if top!=_;
+        {type}bottom: bottom   if bottom!=_;
+        {type}left: left   if left!=_;
+        {type}right: right   if right!=_;
+    } else {
+        right = right!=x ? right : ;
+        bottom = bottom!=x ? bottom : ;
+        left = left!=x ? left : ;
+
+        {type}: top right bottom left;
+    }
+}
+margin( top=x, right=x, bottom=x, left=x ) {
     _edgeProps('margin', top, right, bottom, left );
 }
-padding( top=_, right=top, bottom=top, left=right ) {
+padding( top=x, right=x, bottom=x, left=x ) {
     _edgeProps('padding', top, right, bottom, left );
 }
-border-width( top=_, right=top, bottom=top, left=right ) {
+border-width( top=x, right=x, bottom=x, left=x ) {
     _edgeProps('border-width', top, right, bottom, left );
 }
 
