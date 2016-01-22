@@ -178,14 +178,28 @@ _hideText( $mode=normal ) {
 }
 
 
+_edgeProps( type, top=_, right=top, bottom=top, left=right ) {
+    type = type!='' ? type+'-' : type;
+    {type}top: top   if top!=_;
+    {type}bottom: bottom   if bottom!=_;
+    {type}left: left   if left!=_;
+    {type}right: right   if right!=_;
+}
+
 // Usage:
-//     position: fixed 0;
-position( $pos, $top=null, $right=$top, $bottom=$top, $left=$right ) {
-    position: $pos;
-    top: $top  if $top!=null&&$top!=_;
-    bottom: $bottom  if $bottom!=null&&$bottom!=_;
-    left: $left  if $left!=null&&$left!=_;
-    right: $right  if $right!=null&&$right!=_;
+//     position: fixed _ 0;
+position( type, top=_, right=top, bottom=top, left=right ) {
+    position: type  if type!=_;
+    _edgeProps('', top, right, bottom, left );
+}
+margin( top=_, right=top, bottom=top, left=right ) {
+    _edgeProps('margin', top, right, bottom, left );
+}
+padding( top=_, right=top, bottom=top, left=right ) {
+    _edgeProps('padding', top, right, bottom, left );
+}
+border-width( top=_, right=top, bottom=top, left=right ) {
+    _edgeProps('border-width', top, right, bottom, left );
 }
 
 
