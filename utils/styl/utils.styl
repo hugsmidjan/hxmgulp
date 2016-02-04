@@ -276,6 +276,10 @@ _one($n)
     // Useful for multipliers
     return !$n ? 0 : ($n / abs($n));
 
-csscalc(str, rest...)
-    str = 'calc(' + str + ')';
-    return str % rest;
+
+csscalc(tmpl, rest...)
+    tmpl = 'calc(' + tmpl + ')';
+    return tmpl % rest;
+
+cssadd()
+    return s('calc('+join(' + ',arguments)+')');
