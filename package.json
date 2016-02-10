@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "ssh://git@stash.hugsmidjan.is:7999/misc/hxmgulp.git"
+    "url": "ssh://git@stash.hugsmidjan.is:7999/misc/hxmgulp.git#v1"
   },
   "author": "Hugsmiðjan ehf. (www.hugsmidjan.is)",
   "contributors": [
