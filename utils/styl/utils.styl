@@ -125,7 +125,7 @@ _addQuotationMarks( langs... ) {
 //               $shift      // shift along the "height" axis, away or towards the container. (Defaults to 0)
 //             );
 //     }
-_triangle($dir=top, $color=#fff, $h=10px, $w=null, $pos=50%, $posFrom=null, $shift=null) {
+_triangle($dir=top, $color=#fff, $h=10px, $w=(2*$h), $pos=50%, $posFrom=null, $shift=0) {
     _triangleBasic();
     _triangleShape($dir, $color, $h, $w, $pos, $posFrom, $shift);
 }
@@ -138,17 +138,15 @@ _triangleBasic() {
     position: absolute;
     border: 0 solid transparent;
 }
-_triangleShape($dir=top, $color=#fff, $h=10px, $w=null, $pos=50%, $posFrom=null, $shift=null) {
-    $w = (2*$h)  if $w==null;
+_triangleShape($dir=top, $color=#fff, $h=10px, $w=(2*$h), $pos=50%, $posFrom=null, $shift=0) {
     $posFrom = $posFrom || ( isVertical($dir) ? left : top );
-    $dirInv = opposite-position($dir);
 
     {$dir}: - $h;
     {$posFrom}: $pos;
     margin: (- $w/2);
-    margin-{$dir}: -($shift||0);
+    margin-{$dir}: - $shift;
     border-width: isVertical($dir) ? $h ($w/2) : ($w/2) $h;
-    border-{$dirInv}-color: $color;
+    border-{opposite-position($dir)}-color: $color;
     border-{$dir}-width: 0;
 }
 

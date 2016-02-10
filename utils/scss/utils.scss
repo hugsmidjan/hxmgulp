@@ -110,16 +110,15 @@ $quote_closeSingle_en: $quote_upper9;
     position: absolute;
     border: 0 solid transparent;
 }
-@mixin _triangleShape ($dir:top, $color:#fff, $h:10px, $w:0, $wOffs:50%, $wEdge:left, $shift:'') {
+@mixin _triangleShape ($dir:top, $color:#fff, $h:10px, $w:0, $wOffs:50%, $wEdge:left, $shift:0) {
     @if ($w==0) { $w: $h*2; }
     @if (($dir==left) or ($dir==right)) and ($wEdge==left) { $wEdge:top }
-    @if ($shift=='') { $shift: ($w/2); }
 
-    #{$wEdge}: $wOffs;
-    margin: -$shift;
-    border-width: if(isVertical($dir), $h $w/2, $w/2 $h);
     #{$dir}: -$h;
+    #{$wEdge}: $wOffs;
+    margin: -($w/2);
     margin-#{$dir}: 0;
+    border-width: if(isVertical($dir), $h $w/2, $w/2 $h);
     border-#{opposite($dir)}-color: $color;
     border-#{$dir}-width: 0;
 }
@@ -160,15 +159,15 @@ $quote_closeSingle_en: $quote_upper9;
     }
 }
 
-
+$opposites: (
+    top: bottom,
+    bottom: top,
+    left: right,
+    right: left
+  );
 
 @function opposite ($dir) {
-    @return map-get((
-                top: bottom,
-                bottom: top,
-                left: right,
-                right: left
-              ), $dir);
+    @return map-get($opposites, $dir);
 };
 @function isVertical ($dir) {
     @return $dir==top or $dir==bottom;
