@@ -281,9 +281,24 @@ _one($n)
     return !$n ? 0 : ($n / abs($n));
 
 
-csscalc(tmpl, rest...)
-    tmpl = 'calc(' + tmpl + ')';
-    return tmpl % rest;
 
-cssadd()
-    return s('calc('+join(' + ',arguments)+')');
+csscalc($first, $rest...) {
+    $first = '' + $first;
+    if match('%s', $first) {
+        $first = 'calc(' + $first + ')';
+        return $first % $rest;
+    }
+    else {
+        $values = $first;
+        for $arg in $rest {
+            $values = $values + ($arg<0 ? ' - ' : ' + ') + abs($arg);
+        }
+        return s('calc('+ $values +')');
+    }
+}
+
+// depricated
+cssadd() {
+    return csscalc(arguments);
+}
+
