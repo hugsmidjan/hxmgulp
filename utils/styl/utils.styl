@@ -17,10 +17,16 @@ $media-queries-support ?= true;
 $media-queries-flatten ?= '';
 
 
+// Add retina-only styles
+// Usage:
+// +retina($minRes){
+//   ...styles...
+// }
 retina($res) {
-    $res = (unit($res) != dpi) ? round(96*$res) : round($res,3);
+    $res = $res || 1.5dppx;
+    $res = (unit($res) == '') ? (round($res,3))dppx : $res;
     // NOTE: autoprefixer converts dpi values to webkit scaling factors
-    @media (min-resolution: ($res)dpi ) {
+    @media (min-resolution: $res ) {
         {block}
     }
 }
