@@ -482,23 +482,23 @@
     //  * position:relative on large numbers of display:inline elements
     //  * slows IE11 to a grinding halt -- Már 2015
     //  */
-    sub,
     sup {
         position: static;
         line-height: inherit;
-        // /* this works better */
-        display: inline-block;
-    }
-    sup {
         top: auto;
         // /* this works better */
-        margin-top: -0.5em;
+        display: inline-block;
+        vertical-align: top;
+        margin-top: -0.1em;
     }
-
     sub {
+        position: static;
+        line-height: inherit;
         bottom: auto;
         // /* this works better */
-        margin-bottom: -0.25em;
+        display: inline-block;
+        vertical-align: bottom;
+        margin-bottom: -0.2em;
     }
 
 }
