@@ -251,7 +251,7 @@ border-width() {
 //     right: 0;
 position( $pos, $edges... ) {
     position: $pos  if $pos!=_;
-    __edgeProps('', $edges );
+    __edgeProps('', $edges ) if $edges;
 }
 // Private use mixin used above
 __edgeProps( $type, $sides ) {
