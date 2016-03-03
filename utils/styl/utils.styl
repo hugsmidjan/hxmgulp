@@ -257,21 +257,21 @@ position( $pos, $edges... ) {
 __edgeProps( $type, $sides ) {
     if ( !$type  ||  _ in $sides) {
         $type = $type ? $type+'-' : $type;
-        top = $sides[0];
-        right = length($sides)>1 ? $sides[1] : top;
-        bottom = length($sides)>2 ? $sides[2] : top;
-        left = length($sides)>3 ? $sides[3] : right;
+        $top = $sides[0];
+        $right = length($sides)>1 ? $sides[1] : $top;
+        $bottom = length($sides)>2 ? $sides[2] : $top;
+        $left = length($sides)>3 ? $sides[3] : $right;
 
-        {$type}top: top   if top!=_;
-        {$type}bottom: bottom   if bottom!=_;
-        {$type}left: left   if left!=_;
-        {$type}right: right   if right!=_;
+        {$type}top: $top   if $top!=_;
+        {$type}bottom: $bottom   if $bottom!=_;
+        {$type}left: $left   if $left!=_;
+        {$type}right: $right   if $right!=_;
     } else {
-        top = $sides[0]!=x ? $sides[0] : ;
-        right = $sides[1]!=x ? $sides[1] : ;
-        bottom = $sides[2]!=x ? $sides[2] : ;
-        left = $sides[3]!=x ? $sides[3] : ;
-        {$type}: top right bottom left;
+        $top = $sides[0]!=x ? $sides[0] : ;
+        $right = $sides[1]!=x ? $sides[1] : ;
+        $bottom = $sides[2]!=x ? $sides[2] : ;
+        $left = $sides[3]!=x ? $sides[3] : ;
+        {$type}: $top $right $bottom $left;
     }
 }
 
