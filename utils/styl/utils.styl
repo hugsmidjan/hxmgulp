@@ -169,6 +169,33 @@ _tuck() {
     left: auto;
 }
 
+// screen-reader- and rtl-friendly off-screen hiding
+_sr-only( $mode=normal ) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    opacity: 0.00001;
+    pointer-events: none;
+    margin: 0  if $mode!=soft;
+}
+// undo _sr-only() on :focus and :active
+_sr-only-focusable( $mode=normal ) {
+    &:active,
+    &:focus {
+        z-index: 99999;
+        width: auto;
+        height: auto;
+        overflow: visible;
+        clip: auto;
+        opacity: 1;
+        pointer-events: auto;
+        margin: 0  if $mode!=soft;
+    }
+}
+
+
 _afterClear() {
     &:after {
         content: ' ';
