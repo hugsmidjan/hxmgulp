@@ -272,11 +272,7 @@ __edgeProps( $type, $sides ) {
         {$type}left: $left   if $left!=_;
         {$type}right: $right   if $right!=_;
     } else {
-        $top = $sides[0]!=x ? $sides[0] : ;
-        $right = $sides[1]!=x ? $sides[1] : ;
-        $bottom = $sides[2]!=x ? $sides[2] : ;
-        $left = $sides[3]!=x ? $sides[3] : ;
-        {$type}: $top $right $bottom $left;
+        {$type}: $sides;
     }
 }
 
