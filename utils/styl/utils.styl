@@ -195,6 +195,25 @@ _hideText( $mode=normal ) {
 }
 
 
+
+// reset <button> styles for easier custom styling
+_buttonReset() {
+    border: 0;
+    padding: 0;
+    background-color: transparent;
+    font-size: inherit;
+    line-height: inherit;
+    text-align: inherit;
+    color: inherit;
+    cursor: pointer;
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+
 // =======================================================
 // Column-based calc functions
 //
