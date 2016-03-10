@@ -250,8 +250,13 @@ border-width() {
 //     left: 0;
 //     right: 0;
 position( $pos, $edges... ) {
-    position: $pos  if $pos!=_;
-    __edgeProps('', $edges ) if $edges;
+    if (typeof($pos)=='ident' && $pos!=_) {
+        position: $pos;
+        __edgeProps('', $edges );
+    }
+    else {
+        __edgeProps( '', arguments );
+    }
 }
 // Private use mixin used above
 __edgeProps( $type, $sides ) {
