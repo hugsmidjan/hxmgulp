@@ -314,7 +314,9 @@ border-width() {
 position( $pos, $edges... ) {
     if (typeof($pos)=='ident' && $pos!=_) {
         position: $pos;
-        __edgeProps('', $edges );
+        if ( length($edges) ) {
+            __edgeProps('', $edges);
+        }
     }
     else {
         __edgeProps( '', arguments );
