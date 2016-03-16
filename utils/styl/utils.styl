@@ -206,7 +206,23 @@ _afterClear() {
 }
 
 
-// generic image replacement
+// Hide element's text for image or ::before icon replacement
+//
+//   _hideText(soft);
+//      Applies nowrap + hide overflow.
+//      Great for ::before inline-block icons.
+//
+//   _hideText();
+//   _hideText(normal);
+//      `soft` + indents text into the overflow
+//      Great for most background-image applications
+//
+//   _hideText(hard);
+//      `normal` + transparency + collapsed letter-spacing.
+//      Verbose version for weird edge-cases, with
+//      long paragraphs of text and/or cases where
+//      nasty inherited text-styling causes trouble.
+//
 _hideText( $mode=normal ) {
     overflow: hidden;
     white-space: nowrap;
