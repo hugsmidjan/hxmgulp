@@ -145,6 +145,7 @@ _triangleBasic() {
     border: 0 solid transparent;
 }
 _triangleShape($dir=top, $color=#fff, $h=10px, $w=(2*$h), $pos=50%, $posFrom=null, $shift=0) {
+    isVertical($dir) { return $dir==top or $dir==bottom; }
     $posFrom = $posFrom || ( isVertical($dir) ? left : top );
 
     {$dir}: - $h;
