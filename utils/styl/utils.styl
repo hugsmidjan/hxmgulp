@@ -262,9 +262,9 @@ _buttonReset() {
 // Column-based calc functions
 //
 // These globals are required for them to work:
-//   * $gutter
-//   * $column
-//   * $numCols
+$gutter?= 30px;
+$column ?= 80px;
+$numCols ?= 12;
 
 // percentage length - by columns
 //   $w = custom container width in pixels. When specified, this overrides the default column-based container width.
