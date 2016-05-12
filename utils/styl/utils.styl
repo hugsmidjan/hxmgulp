@@ -287,6 +287,18 @@ cols_px( $nCol, $nGutter=($nCol - _one($nCol)) ) {
 
 
 
+// returns margin/padding value calc() function that delivers approximately
+// $min pixel spacing when the element's container is $minWidth pixels wide
+// $max pixel spacing when the element's container is $maxWidth pixels wide.
+$between-minWidth ?= 320;
+$between-maxWidth ?= ($numCols * $column + ($numCols - 1) * $gutter);
+between( $min, $max, $minWidth=$between-minWidth, $maxWidth=$between-maxWidth) {
+  $slope = ($max - $min) / ($maxWidth - $minWidth);
+  $intercept = $max - ($slope * $maxWidth);
+  return csscalc(($slope*100)%, ($intercept)px);
+}
+
+
 
 
 // Transparent mixins to provide more powerful
