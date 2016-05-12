@@ -192,6 +192,7 @@ module.exports = function (gulp, skin) {
                       fontName:   'icons',
                       formats: ['woff2','woff','ttf','eot','svg'],
                       normalize:  true,
+                      fontHeight: 1000,
                       timestamp: 1,
                     }) )
                   .on('glyphs', function (glyphs/*, options*/) {
