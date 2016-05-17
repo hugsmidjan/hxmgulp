@@ -170,7 +170,7 @@ _tuck() {
     left: auto;
 }
 
-// screen-reader- and rtl-friendly off-screen hiding
+// screen-reader and rtl-friendly off-screen hiding
 _sr-only( $mode=normal ) {
     position: absolute;
     width: 1px;
@@ -182,17 +182,22 @@ _sr-only( $mode=normal ) {
     margin: 0  if $mode!=soft;
 }
 // undo _sr-only() on :focus and :active
+_sr-only--undo( $mode=normal ) {
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    opacity: 1;
+    pointer-events: auto;
+    margin: 0  if $mode!=soft;
+}
 _sr-only-focusable( $mode=normal ) {
+    _sr-only($mode);
+
     &:active,
     &:focus {
         z-index: 99999;
-        width: auto;
-        height: auto;
-        overflow: visible;
-        clip: auto;
-        opacity: 1;
-        pointer-events: auto;
-        margin: 0  if $mode!=soft;
+        _sr-only--undo($mode);
     }
 }
 
