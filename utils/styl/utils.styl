@@ -39,17 +39,17 @@ retina($res) {
 $iconfont_name ?=  'icons';
 $iconfont_font-family ?= $iconfont_name, Arial, Helvetica, sans-serif;
 
-_icon( $icon=null ) {
+_icon( $icon=null, $set=null ) {
     display: inline-block;
     text-indent: 0;
     text-align: center;
     vertical-align: top;
-    _iconFontStyling();
+    _iconFontStyling($set);
     content: $icon  if $icon;
 }
 
-_iconFontStyling() {
-    font-family: $iconfont_font-family;
+_iconFontStyling( $set=null ) {
+    font-family: $set || $iconfont_font-family;
     speak: none;
     font-weight: normal;
     font-style: normal;
