@@ -300,7 +300,12 @@ $between-maxWidth ?= ($numCols * $column + ($numCols - 1) * $gutter);
 between( $min, $max, $minWidth=$between-minWidth, $maxWidth=$between-maxWidth) {
   $slope = ($max - $min) / ($maxWidth - $minWidth);
   $intercept = $max - ($slope * $maxWidth);
-  return csscalc(($slope*100)%, ($intercept)px);
+  if ( $intercept == 0 ) {
+      return ($slope*100)%;
+  }
+  else {
+      return csscalc(($slope*100)%, ($intercept)px);
+  }
 }
 
 
