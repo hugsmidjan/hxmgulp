@@ -11,8 +11,6 @@ media($query='screen', $allowFlatten=false) {
         }
     }
 }
-
-
 $media-queries-support ?= true;
 $media-queries-flatten ?= '';
 
@@ -179,7 +177,7 @@ _sr-only( $mode=normal ) {
     clip: rect(0,0,0,0);
     opacity: 0.00001;
     pointer-events: none;
-    margin: 0  if $mode!=soft;
+    margin: -1px  if $mode!=soft;
 }
 // undo _sr-only() on :focus and :active
 _sr-only--undo( $mode=normal ) {
