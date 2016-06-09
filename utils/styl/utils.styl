@@ -53,7 +53,7 @@ retina($res) {
 //   * where each font-size step increases the width by 40%
 //   * (i.e. where font-size increases at .5 the rate of the width)
 //
-scale-fontsize( basefs, width=320, max=3000, step=0.5px, track=1 ) {
+scale-fontsize( basefs, width=320px, max=3000px, step=0.5px, track=1 ) {
     if ( unit(track) || track > 1 || track <= 0 ) {
         error("scale-fontsize()'s `track` parameter must be a unitless number between 0 and 1");
     }
