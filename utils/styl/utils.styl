@@ -29,6 +29,37 @@ retina($res) {
     }
 }
 
+// Helper to implement fluid/scalable font-size assignments.
+// Especially useful for setting REM base for the html element.
+// `step` can be either a fixed increment or a unitless scaling factor.
+// Usage:
+//      html {
+//          scale-fontsize(
+//              basefs,    // Starting font-size (any unit)
+//              width,     // Starting (minimum) window width
+//              max,       // Maximum window width limit (stopper)
+//              step,      // font-size increment value. (Either a fixed
+//                         // increment or a unitless scaling factor.)
+//              track,     // Unitless scaling factor (0...1) to describe
+//                         // how perfectly font-size should track window width
+//              );
+//      }
+scale-fontsize( basefs, width=320, max=3000, step=0.5px, track=1 ) {
+    if ( unit(track) || track > 1 || track <= 0 ) {
+        error("fluid-fontsize()'s `track` parameter must be a unitless number between 0 and 1");
+    }
+    if ( !unit(step) && step <= 1 ) {
+        error("fluid-fontsize()'s `step` scaling factor must have a unit, or be larger than 1");
+    }
+    if ( width <= max ) {
+        @media screen and (min-width: width) {
+            font-size: basefs;
+        }
+        $nextfs = unit(step) ? basefs + step : basefs * step;
+        $nextwidth = round( (1 + (($nextfs / basefs - 1) / track)) * width );
+        scale-fontsize($nextfs, $nextwidth, max, step, track);
+    }
+}
 
 
 
