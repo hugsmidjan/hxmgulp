@@ -374,7 +374,7 @@ border-width() {
 //     left: 0;
 //     right: 0;
 position( $pos, $edges... ) {
-    if (typeof($pos)=='ident' && $pos!=_) {
+    if (typeof($pos)=='ident' && $pos!=auto && $pos!=_) {
         position: $pos;
         if ( length($edges) ) {
             __edgeProps('', $edges);
