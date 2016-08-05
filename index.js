@@ -41,7 +41,8 @@ module.exports = function (gulp, skin) {
     var mozjpeg = plugins.mozjpeg = require('imagemin-mozjpeg');
     var iconfont = plugins.iconfont = require('gulp-iconfont');
 
-    var es6transpiler = plugins.es6transpiler = require('gulp-es6-transpiler');
+    var babel = require('gulp-babel');
+    var es2015 = require('babel-preset-es2015');
     var browserify = plugins.browserify = require('browserify');
     var through2 = plugins.through2 = require('through2');
     var uglify = plugins.uglify = require('gulp-uglify');
@@ -54,15 +55,6 @@ module.exports = function (gulp, skin) {
 
     var runSequence = plugins.runSequence = require('run-sequence').use(gulp);
     var notifier = require('node-notifier');
-
-
-    var es6transpilerOpts = {
-            //environments: ['browser', 'devel', 'node'], // 'devel' includes alert(), confirm(), etc. etc.
-            // BAH, strict linting should happen elsewhere, if needed.
-            disallowDuplicated: false,
-            disallowUnknownReferences: false,
-            // includePolyfills: true, // (defaults to false) insert polyfills in the output file. true - insert only the necessary polyfills. "full" - insert all available polyfills.
-          };
 
     var browserifyfy = function (moduleInfo) {
             // About this: https://medium.com/@sogko/gulp-browserify-the-gulp-y-way-bb359b3f9623
@@ -292,7 +284,7 @@ module.exports = function (gulp, skin) {
                       .pipe( browserifyfy(moduleInfo) )
                       .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                   .pipe( commonjsScripts.restore() )
-                  .pipe( es6transpiler(es6transpilerOpts) );
+                  .pipe( babel({presets: [es2015]}) );
               var s2 = s1.pipe( clone() );
 
               if ( skin.js_suffixSource )
@@ -423,7 +415,7 @@ module.exports = function (gulp, skin) {
                         .pipe( browserifyfy(moduleInfo) )
                         .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                         .pipe( commonjsScripts.restore() )
-                    .pipe( es6transpiler(es6transpilerOpts) )
+                    .pipe( babel({presets: [es2015]}) )
                     .pipe( gulp.dest( paths.dist ) );
               };
             gulp.task(ns+'htmltests-scripts', tasks[ns+'htmltests-scripts']);
