@@ -124,12 +124,11 @@ Any `.js` file placed _directly_ inside the source folder gets rendered to a min
 
 All naked references to `console.[log|error|warn|etc...]()` are converted to `undefined` during minification, to avoid accidental console.logging in production code. Logging on production is still available as opt-in, either through indirection ((i.e. `var konsole = console; konsole.log('Hi');`), or via `window`-property access (i.e. `window.console.log('Hi');`).
 
-All scripts are run through the [es6-transpiler][es6t] so using its subset of supported es6 features is allowed.
+All scripts are run through the [babel-preset-es2015][] so using that subset es6 features is allowed.
 
 Additionally: Any JavaScript file with the suffix `-common.js` is passed through browserify. The `-common` suffix is then stripped off.
-_(NOTE: this feature will become unneccessary when es6-transpiler starts supporting es6 modules.)_
 
-[es6t]: https://github.com/termi/es6-transpiler
+[babel-preset-es2015]: https://babeljs.io/docs/plugins/preset-es2015/
 
 ### HTML test pages
 
