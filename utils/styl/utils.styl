@@ -336,14 +336,14 @@ cols_px( $nCol, $nGutter=($nCol - _one($nCol)) ) {
 // $max pixel spacing when the element's container is $maxWidth pixels wide.
 $between-minWidth ?= 320;
 $between-maxWidth ?= ($numCols * $column + ($numCols - 1) * $gutter);
-between( $min, $max, $minWidth=$between-minWidth, $maxWidth=$between-maxWidth) {
+between( $min, $max, $minWidth=$between-minWidth, $maxWidth=$between-maxWidth, pct='%') {
   $slope = ($max - $min) / ($maxWidth - $minWidth);
   $intercept = $max - ($slope * $maxWidth);
   if ( $intercept == 0 ) {
-      return ($slope*100)%;
+      return unit($slope*100, pct);
   }
   else {
-      return csscalc(($slope*100)%, ($intercept)px);
+      return csscalc( unit($slope*100, pct), ($intercept)px );
   }
 }
 
