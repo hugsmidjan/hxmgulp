@@ -53,7 +53,7 @@ retina($res) {
 //   * where each font-size step increases the width by 40%
 //   * (i.e. where font-size increases at .5 the rate of the width)
 //
-scale-fontsize( basefs, width=320px, max=3000px, step=0.5px, track=1 ) {
+scale-fontsize( basefs, width=320px, max=1600px, step=0.5px, track=.133, first=true ) {
     if ( unit(track) || track > 1 || track <= 0 ) {
         error("scale-fontsize()'s `track` parameter must be a unitless number between 0 and 1");
     }
@@ -61,12 +61,13 @@ scale-fontsize( basefs, width=320px, max=3000px, step=0.5px, track=1 ) {
         error("scale-fontsize()'s `step` scaling factor must have a unit, or be larger than 1");
     }
     if ( width <= max ) {
-        @media screen and (min-width: width) {
+        $mq = first ? 'screen' : 'screen and (min-width: '+width+')';
+        @media $mq {
             font-size: basefs;
         }
         $nextfs = unit(step) ? basefs + step : basefs * step;
         $nextwidth = round( (1 + (($nextfs / basefs - 1) / track)) * width );
-        scale-fontsize($nextfs, $nextwidth, max, step, track);
+        scale-fontsize($nextfs, $nextwidth, max, step, track, false);
     }
 }
 
