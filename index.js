@@ -284,7 +284,7 @@ module.exports = function (gulp, skin) {
                       .pipe( browserifyfy(moduleInfo) )
                       .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                   .pipe( commonjsScripts.restore() )
-                  .pipe( babel({presets: [es2015]}) );
+                  .pipe( babel({ compact:false, presets: [es2015]}) );
               var s2 = s1.pipe( clone() );
 
               if ( skin.js_suffixSource )
