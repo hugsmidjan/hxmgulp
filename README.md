@@ -77,6 +77,8 @@ The `options` support the following properties (and defaults):
 &nbsp; &nbsp; return b;<br />
 &nbsp; }</code></pre>
 
+  * **`cssBrowserSupport: ...`** - Array of Strings with custom browser-support config for Autoprefixer.
+
   * **`copyrightYear: (new Date()).getFullYear()`** - Starting year for the copyright clauses at the top of minified files.
  
   * **`copyrightInfo: 'Hugsmiðjan ehf. (www.hugsmidjan.is)'`** - text that appears after "Copyright 20XX-20YY ..." in the copyright clause.

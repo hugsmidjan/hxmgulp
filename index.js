@@ -330,7 +330,7 @@ module.exports = function (gulp, skin) {
                               // use: [require(nib)],
                             })
                    )
-                  .pipe( autoprefixer({ browsers:['> 0.5%', 'last 2 versions', 'Firefox ESR', 'iOS >= 8', 'Android >= 4.4'] }) )
+                  .pipe( autoprefixer({ browsers:skin.cssBrowserSupport||['> 0.5%', 'last 2 versions', 'Firefox ESR', 'iOS >= 8', 'Android >= 4.4'] }) )
                   .pipe( minifycss({
                       // roundingPrecision: 2, // precision for px values
                       // aggressiveMerging:true, // set to false to disable aggressive merging of properties
