@@ -24,7 +24,7 @@
     "chromedriver": "^2.15.1",
     "es6-browserify": "^0.0.7",
     "event-stream": "^3.1",
-    "gulp-autoprefixer": "^2.1",
+    "gulp-autoprefixer": "3.1.1",
     "gulp-babel": "^6.1.2",
     "gulp-base64": "^0.1",
     "gulp-changed": "^1.2",
