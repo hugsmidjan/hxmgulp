@@ -41,8 +41,9 @@ module.exports = function (gulp, skin) {
     var mozjpeg = plugins.mozjpeg = require('imagemin-mozjpeg');
     var iconfont = plugins.iconfont = require('gulp-iconfont');
 
-    var babel = require('gulp-babel');
     var es2015 = require('babel-preset-es2015');
+    var reactPreset = require('babel-preset-react');
+    var babelify = require('babelify');
     var browserify = plugins.browserify = require('browserify');
     var through2 = plugins.through2 = require('through2');
     var uglify = plugins.uglify = require('gulp-uglify');
@@ -68,7 +69,7 @@ module.exports = function (gulp, skin) {
                   opts.entries = [file.path];
                   b = browserify( opts );
                 }
-                b.bundle(function (err, res) {
+                b.transform(babelify, {presets: [es2015, reactPreset]}).bundle(function (err, res) {
                     err  &&  console.log(err);
                     file.contents = res;
                     next(null, file);
@@ -283,8 +284,7 @@ module.exports = function (gulp, skin) {
                   .pipe( commonjsScripts )
                       .pipe( browserifyfy(moduleInfo) )
                       .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
-                  .pipe( commonjsScripts.restore() )
-                  .pipe( babel({ compact:false, presets: [es2015]}) );
+                  .pipe( commonjsScripts.restore() );
               var s2 = s1.pipe( clone() );
 
               if ( skin.js_suffixSource )
@@ -415,7 +415,6 @@ module.exports = function (gulp, skin) {
                         .pipe( browserifyfy(moduleInfo) )
                         .pipe( rename(function(path){ path.basename = path.basename.replace(/-common$/, '');  }) )
                         .pipe( commonjsScripts.restore() )
-                    .pipe( babel({presets: [es2015]}) )
                     .pipe( gulp.dest( paths.dist ) );
               };
             gulp.task(ns+'htmltests-scripts', tasks[ns+'htmltests-scripts']);
