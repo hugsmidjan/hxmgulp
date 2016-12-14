@@ -373,11 +373,15 @@ border-width() {
 //     position: fixed;
 //     left: 0;
 //     right: 0;
-position( $pos, $edges... ) {
-    if (typeof($pos)=='ident' && $pos!=auto && $pos!=_) {
+position( $pos, $sides... ) {
+    if ( !important in $sides ) {
+        // pass anything with !important streight through
+        position: arguments;
+    }
+    else if ( typeof($pos)=='ident'  &&  $pos!=auto  &&  $pos!=_ ) {
         position: $pos;
-        if ( length($edges) ) {
-            __edgeProps('', $edges);
+        if ( length($sides) ) {
+            __edgeProps('', $sides);
         }
     }
     else {
@@ -386,7 +390,9 @@ position( $pos, $edges... ) {
 }
 // Private use mixin used above
 __edgeProps( $type, $sides ) {
-    if ( !$type  ||  _ in $sides) {
+    if ( !important in $sides || ($type  &&  !(_ in $sides)) ) {
+        {$type}: $sides;
+    } else {
         $type = $type ? $type+'-' : $type;
         $top = $sides[0];
         $right = length($sides)>1 ? $sides[1] : $top;
@@ -397,8 +403,6 @@ __edgeProps( $type, $sides ) {
         {$type}bottom: $bottom   if $bottom!=_;
         {$type}left: $left   if $left!=_;
         {$type}right: $right   if $right!=_;
-    } else {
-        {$type}: $sides;
     }
 }
 
