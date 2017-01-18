@@ -411,8 +411,8 @@ __edgeProps( $type, $sides ) {
 fade($color, $opacity) {
     return rgba( $color, alpha($color)*$opacity );
 }
-percent($value) {
-    return (100*$value)%;
+percent($value, pct='%') {
+    return unit(100*$value, pct);
 }
 $pxem-base ?= 12;
 pxem($px, $fs=$pxem-base) {
