@@ -69,7 +69,19 @@ module.exports = function (gulp, skin) {
                   opts.entries = [file.path];
                   b = browserify( opts );
                 }
-                b.transform(babelify, {presets: [es2015, reactPreset]}).bundle(function (err, res) {
+                b.transform(babelify, {
+                  presets: [es2015, reactPreset],
+                  // HACK WARNING:
+                  // ------------------------------------------------------------------
+                  // babelify does not transpile non-local (i.e. npm installed) modules.
+                  // The `global` + `only` options let us over-ride that
+                  // by enumerating the npm packages that should be es6 transpiled. (See: https://stackoverflow.com/a/39349302)
+                  // For the time being let's just hard-code white-listing for `jq` and `qj`.
+                  // (The proper solution is to switch to rollup + bublé which
+                  // resolve this automatically via the package.json fields `module`/`jsnext:main`.)
+                  global: true,
+                  only: /^(?:.*\/node_modules\/(?:jq\/req|qj)\/|(?!.*\/node_modules\/)).*$/,
+                }).bundle(function (err, res) {
                     err  &&  console.log(err);
                     file.contents = res;
                     next(null, file);
