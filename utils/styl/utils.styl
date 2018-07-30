@@ -173,26 +173,26 @@ _addQuotationMarks( langs... ) {
 //             );
 //     }
 _triangle($dir=top, $color=#fff, $h=10px, $w=(2*$h), $pos=50%, $posFrom=null, $shift=0) {
-    _triangleBasic();
-    _triangleShape($dir, $color, $h, $w, $pos, $posFrom, $shift);
+    _triangleShape($dir, $color, $h, $w);
+    // Do auto positioning
+    if (!$posFrom) {
+        $posFrom = ($dir==top or $dir==bottom) ? left : top;
+    }
+    position: absolute;
+    {$dir}: -($h);
+    {$posFrom}: $pos;
+    margin: -($w/2);
+    margin-{$dir}: -($shift);
 }
-_triangleBasic() {
-    content: '';
+
+_triangleShape($dir=top, $color=#fff, $h=10px, $w=(2*$h)) {
+    content: ''; // ensure ::before/::after works automatically
+    display: inline-block;
     width: 0;
     height: 0;
     min-width: 0;
     min-height: 0;
-    position: absolute;
     border: 0 solid transparent;
-}
-_triangleShape($dir=top, $color=#fff, $h=10px, $w=(2*$h), $pos=50%, $posFrom=null, $shift=0) {
-    isVertical($dir) { return $dir==top or $dir==bottom; }
-    $posFrom = $posFrom || ( isVertical($dir) ? left : top );
-
-    {$dir}: - $h;
-    {$posFrom}: $pos;
-    margin: (- $w/2);
-    margin-{$dir}: - $shift;
     border-width: isVertical($dir) ? $h ($w/2) : ($w/2) $h;
     border-{opposite-position($dir)}-color: $color;
     border-{$dir}-width: 0;
