@@ -288,12 +288,12 @@ module.exports = function (gulp, skin) {
             var s2 = s1.pipe( clone() );
 
             if ( skin.js_suffixSource ) {
-              s1.pipe( rename({ suffix:skin.js_suffixSource }) );
+              s1 = s1.pipe( rename({ suffix:skin.js_suffixSource }) );
             }
             if ( skin.js_suffixMin ) {
-              s2.pipe( rename({ suffix:skin.js_suffixMin }) );
+              s2 = s2.pipe( rename({ suffix:skin.js_suffixMin }) );
             }
-            s2
+            s2 = s2
                 .pipe( uglify({ preserveComments:'some', compress:{drop_console:true, global_defs:{ UGL1FY:true }} }) )
                 .pipe( header('// '+copyrightBanner) );
 
