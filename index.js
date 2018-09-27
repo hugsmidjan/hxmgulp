@@ -294,6 +294,7 @@ module.exports = function (gulp, skin) {
               s2 = s2.pipe( rename({ suffix:skin.js_suffixMin }) );
             }
             s2 = s2
+                .pipe( replace('process.env.NODE_ENV', '"production"') )
                 .pipe( uglify({ preserveComments:'some', compress:{drop_console:true, global_defs:{ UGL1FY:true }} }) )
                 .pipe( header('// '+copyrightBanner) );
 
