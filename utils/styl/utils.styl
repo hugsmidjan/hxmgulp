@@ -440,7 +440,9 @@ csscalc($first, $rest...) {
     else {
         $values = $first;
         for $arg in $rest {
-            $values = $values + ($arg<0 ? ' - ' : ' + ') + abs($arg);
+            if ($arg) {
+                $values = $values + ($arg<0 ? ' - ' : ' + ') + abs($arg);
+            }
         }
         return s('calc('+ $values +')');
     }
