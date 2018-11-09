@@ -157,6 +157,41 @@ _addQuotationMarks( langs... ) {
 
 
 
+
+// ===============================================================================
+// Make an element reach beyond the left/right edges of it's container
+// all the way to the viewport edges.
+//
+//     _extendSides()
+//     _extendSides(both)  // same as _extendSides()
+//     _extendSides(left)  // only affect the left-hand side
+//     _extendSides(right)  // ...or the right
+//
+//     _extendSides(both, (25/16)em )  // Set additional padding
+//     _extendSides(both, (-25/16)em )  // ...which can also be a negative value
+//     _extendSides(left, (25/16)em )  // etc.
+//
+_extendSides($side = both, $pad = 0) {
+    $margin = 0;
+    if ( $pad < 0 ) {
+        $margin = $pad;
+        $pad = 0;
+    }
+    $page-expand-padding = csscalc(50vw, -50%, $pad);
+    $page-expand-margin = csscalc(-50vw, 50%, $margin);
+    if ( $side != right ) {
+        margin-left: $page-expand-margin;
+        padding-left: $page-expand-padding;
+    }
+    if ( $side != left ) {
+        margin-right: $page-expand-margin;
+        padding-right: $page-expand-padding;
+    }
+}
+
+
+
+
 // ===============================================================================
 // Triangles
 
