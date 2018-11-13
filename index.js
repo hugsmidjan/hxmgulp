@@ -260,17 +260,20 @@ module.exports = function (gulp, skin) {
                         }) );
                     }
                     else {
-                      return stream.pipe( imagemin({
-                          optimizationLevel: 4, // png
-                          progressive: true, // jpg
-                          interlaced: true, // gif
-                          multipass: true, // svg
-                          svgoPlugins: (
-                            (skin.svg_keepIds || /---ids.svg$/i.test(file.path)) ?
-                              [{ cleanupIDs: false }]:
-                              undefined
-                          ),
+                      const hasKeepIdsSuffix = /---ids.svg$/i.test(file.path);
+                      stream = stream.pipe( imagemin({
+                        optimizationLevel: 4, // png
+                        progressive: true, // jpg
+                        interlaced: true, // gif
+                        multipass: true, // svg
+                        svgoPlugins: (skin.svg_keepIds || hasKeepIdsSuffix) ? [{ cleanupIDs: false }] : undefined,
                       }) );
+                      if ( hasKeepIdsSuffix ) {
+                        stream = stream.pipe( rename(function (path) {
+                          path.basename = path.basename.replace(/---ids$/, '');
+                        }) );
+                      }
+                      return stream;
                     }
                   }) )
                 .pipe( gulp.dest( paths.dist ) );
