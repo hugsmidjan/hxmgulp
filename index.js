@@ -265,7 +265,12 @@ module.exports = function (gulp, skin) {
                           progressive: true, // jpg
                           interlaced: true, // gif
                           multipass: true, // svg
-                        }) );
+                          svgoPlugins: (
+                            (skin.svg_keepIds || /---ids.svg$/i.test(file.path)) ?
+                              [{ cleanupIDs: false }]:
+                              undefined
+                          ),
+                      }) );
                     }
                   }) )
                 .pipe( gulp.dest( paths.dist ) );

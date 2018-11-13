@@ -54,6 +54,8 @@ The `options` support the following properties (and defaults):
 
   * **`js_suffixMin: undefined`** - file-name suffix for minified JavaScript files.
 
+  * **`svg_keepIds: false`** - Should the SVG minifier keep `id=""` attributes intact. – this can also be controlled on a per-file level with a `---ids.svg` suffix.
+
   * **`task: undefined`** - optional function which then gets run once for each item in the modules array. Example:
 <pre><code>tasks: function (moduleInfo, gulp) {<br/>
 &nbsp; &nbsp; // moduleInfo.name === the current module (i.e. (sub)folder)<br/>
