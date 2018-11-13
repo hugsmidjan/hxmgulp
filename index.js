@@ -81,7 +81,7 @@ module.exports = function (gulp, skin) {
                 global: true,
                 only: /^(?:.*\/node_modules\/(?:jq\/req|qj)\/|(?!.*\/node_modules\/)).*$/,
               }).bundle(function (err, res) {
-                  err  &&  console.log(err);
+                  err  &&  console.info(err);
                   file.contents = res;
                   next(null, file);
                 });
@@ -94,7 +94,7 @@ module.exports = function (gulp, skin) {
             'title': 'Error',
             'message': errmsg,
           });
-          console.log(errmsg);
+          console.info(errmsg);
       };
 
   // =========================================================================
@@ -240,7 +240,7 @@ module.exports = function (gulp, skin) {
                 .pipe( plumber(function (err) { notifyError(err); }) )
                 .pipe( changed( paths.dist ) )
                 .pipe( foreach(function (stream, file) {
-                    var fileParams = file.path.match(/(\---q(\d{1,3}(?:-\d{1,3})?)(?:--d(0))?)\.(png|jpe?g)$/i);
+                    var fileParams = file.path.match(/(---q(\d{1,3}(?:-\d{1,3})?)(?:--d(0))?)\.(png|jpe?g)$/i);
                     if ( fileParams ) {
                       if ( fileParams[4].toLowerCase()==='png' ) {
                         stream = stream.pipe( pngquant({
@@ -366,7 +366,7 @@ module.exports = function (gulp, skin) {
             var icons;
             if ( module.do_iconfont ) {
               try { file = fs.readFileSync( paths.dist + imgFolder + 'icons.json' ); }
-catch(e) {}
+              catch (e) {}
               icons = JSON.parse( file || '{}' );
             }
             return gulp.src([
@@ -430,7 +430,7 @@ catch(e) {}
               var folder = paths.src;
               while ( folder ) {
                 globs.push( folder + inclGlob );
-                folder = folder.replace(/[^\/]+\/$/,'');
+                folder = folder.replace(/[^/]+\/$/,'');
               }
               return globs;
             };
