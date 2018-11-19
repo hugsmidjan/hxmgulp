@@ -190,38 +190,10 @@ NOTE: Any images placed in the folder `i/_raw/` are ignored as raw-materials.
 
 ### Unit Testing
 
-You can write unit tests for your code using the [Jasmine](http://jasmine.github.io/2.3/introduction.html) unit testing library.
-You can save your specs  where ever you like, but `_src/_js-tests-unit/*.spec.js` is a good default.
-
-You must then place a `karma.config.js` ([example](testing/examples/karma.config.js)) file in your project root, and specify the file-globbing pattern(s) that matches your spec files, etc. etc.
-
-To run the tests with [Karma](http://karma-runner.github.io/0.12/index.html) (an in-browser test runner) type in these commands:
-
-```sh
-gulp test:karma         ## run tests once
-gulp test:karma:watch   ## run tests on file changes
-```
-
-Hxmgulp runs the tests using [PhantomJS](http://phantomjs.org/) browser-emulator, by default, but also provides an (optional) support for Google Chrome (provided you have it installed on your computer).
-
-More browsers can be added on a per-project basis, and configured in your `karma.config.js`.
-
+The built-in unit testing tasks were removed in version 1.5.0
+To use them pin your project to version the version-range `~1.4` or earlier.
 
 ### Functional/Browser Testing
 
-You can write functional/GUI/browser tests using [Nightwatch.js](http://nightwatchjs.org/api).
-You can save your functional specs where ever you like, but `_src/_js-tests-browser/spec/*.js` is a good default.
-
-You must then place a `nightwatch.config.js` ([example](testing/examples/nightwatch.config.js)) file in your project root, and specify the `src_folders` containing your spec files, etc. etc.
-
-To run the tests type in these commands:
-
-```sh
-gulp test:nightwatch    ## Defaults to Firefox only
-gulp test:nightwatch  --env firefox,chrome   ## multi-browser
-```
-
-Hxmgulp runs the tests using Firefox by default, but also provides an (optional) support for Google Chrome<!-- and [PhantomJS](http://phantomjs.org/) (experimental) -->.
-
-More browsers can be added on a per-project basis, and configured in your `nightwatch.config.js`.
-
+The built-in functional/browser testing tasks were removed in version 1.5.0
+To use them pin your project to version the version-range `~1.4` or earlier.

@@ -486,23 +486,6 @@ module.exports = function (gulp, skin) {
     });
 
 
-  gulp.task('test:karma', function (done) {
-      require('karma').server.start({ // Run test once and exit
-          configFile: projectRoot+'/karma.conf.js',
-          singleRun: true,
-        }, done);
-    });
-  gulp.task('test:karma:watch', function (done) {
-      require('karma').server.start({ // Watch for file changes and re-run tests on each change
-          configFile: projectRoot+'/karma.conf.js',
-        }, done);
-    });
-  gulp.task('test:nightwatch', function (done) {
-      require('nightwatch/bin/runner.js');
-      done();
-    });
-
-
   nunjucksRender.nunjucks.configure(nunjucksWorkingDirs);
 
 
