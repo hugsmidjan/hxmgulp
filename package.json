@@ -50,5 +50,11 @@
     "run-sequence": "^1.1.1",
     "through2": "^0.6"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "stylutils": "github:hugsmidjan/stylutils#semver:^1.0.0"
+  },
+  "stylutils": {
+    "destFolder": "utils/styl/",
+    "copyFiles": true
+  }
 }
