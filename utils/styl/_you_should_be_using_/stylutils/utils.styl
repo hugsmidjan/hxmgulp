@@ -1,0 +1,495 @@
+﻿use('helpers.js');
+
+// @media query based wrappers
+media($query='screen', $allowFlatten=false) {
+    if ($media-queries-support) {
+        @media $query {
+            {block}
+        }
+    }
+    else if ($query in $media-queries-flatten  ||  $allowFlatten) {
+        @media screen {
+            {block}
+        }
+    }
+}
+$media-queries-support ?= true;
+$media-queries-flatten ?= '';
+
+
+// Add retina-only styles
+// Usage:
+// +retina($minRes){
+//   ...styles...
+// }
+retina($res) {
+    $res = $res || 1.5dppx;
+    $res = (unit($res) == '') ? (round($res,3))dppx : $res;
+    // NOTE: autoprefixer converts dpi values to webkit scaling factors
+    @media (min-resolution: $res ) {
+        {block}
+    }
+}
+
+// Helper to implement fluid/scalable font-size assignments.
+// Especially useful for setting REM base for the html element.
+// `step` can be either a fixed increment or a unitless scaling factor.
+// Usage:
+//      html {
+//          scale-fontsize(
+//              basefs,    // Starting font-size (any unit)
+//              width,     // Starting (minimum) window width
+//              max,       // Maximum window width limit (stopper)
+//              step,      // font-size increment value. (Either a fixed
+//                         // increment or a unitless scaling factor.)
+//              track,     // Unitless scaling factor (0...1) to describe
+//                         // how perfectly font-size should track window width
+//              );
+//      }
+// Example:
+//      scale-fontsize( 14px, 1000px, max:3000px, step:1.2, track:.5 )
+// means:
+//   * start with 14px font at 1000px width
+//   * increase the font-size by 20% for each step
+//   * up to a width of 3000px
+//   * where each font-size step increases the width by 40%
+//   * (i.e. where font-size increases at .5 the rate of the width)
+//
+scale-fontsize( basefs, width=320px, max=1600px, step=0.5px, track=.133, first=true ) {
+    if ( unit(track) || track > 1 || track <= 0 ) {
+        error("scale-fontsize()'s `track` parameter must be a unitless number between 0 and 1");
+    }
+    if ( !unit(step) && step <= 1 ) {
+        error("scale-fontsize()'s `step` scaling factor must have a unit, or be larger than 1");
+    }
+    if ( width <= max ) {
+        $mq = first ? 'screen' : 'screen and (min-width: '+width+')';
+        @media $mq {
+            font-size: basefs;
+        }
+        $nextfs = unit(step) ? basefs + step : basefs * step;
+        $nextwidth = round( (1 + (($nextfs / basefs - 1) / track)) * width );
+        scale-fontsize($nextfs, $nextwidth, max, step, track, false);
+    }
+}
+
+
+
+// ===============================================================================
+// Icons!
+$iconfont_name ?=  'icons';
+$iconfont_font-family ?= $iconfont_name, Arial, Helvetica, sans-serif;
+
+_icon( $icon=null, $set=null ) {
+    display: inline-block;
+    text-indent: 0;
+    text-align: center;
+    vertical-align: top;
+    _iconFontStyling($set);
+    content: $icon  if $icon;
+}
+
+_iconFontStyling( $set=null ) {
+    font-family: $set || $iconfont_font-family;
+    speak: none;
+    font-weight: normal;
+    font-style: normal;
+    white-space: nowrap;
+    -webkit-font-smoothing: antialiased; // fix for light text on dark background from beeing smudgy in webkit/mac
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: 0;
+}
+
+
+if ( $icons is defined  &&  type($icons) == 'object' ) {
+    // convert all icon values from Stylus 'ident' to quoted String
+    for $n,$c in $icons { $icons[$n] = ''+$c; }
+
+    $icons.bullet-disc =   '\2022';
+    $icons.bullet-square = '\25aa';
+
+    $icons.space-normal =  '\00a0'; // (NO-BREAK space) (0.28em)
+
+    $icons.space-half =    '\2002'; // 1/2em  (EN space
+    $icons.space-em =      '\2003'; // 1em    (EM space)
+    $icons.space-third =   '\2004'; // 1/3em  (THREE-PER-EM space)
+    $icons.space-fourth =  '\2005'; // 1/4em  (FOUR-PER-EM space)
+    $icons.space-sixth =   '\2006'; // 1/6em  (SIX-PER-EM space)
+    // $icons.space-figure =        '\2007';
+    // $icons.space-punctuation =   '\2008';
+    $icons.space-fifth =   '\2009'; // 1/5em  (THIN space)
+    $icons.space-hair =    '\200A'; // 1/12em (HAIR space)
+}
+
+
+// quote marks for use with blockquote
+$quote_upper6 =   '\2018';
+$quote_upper9 =   '\2019';
+$quote_lower9 =   '\201a';
+$quote_upper66 =  '\201c';
+$quote_upper99 =  '\201d';
+$quote_lower99 =  '\201e';
+// icelandic
+$quote_open_is =        $quote_lower99;
+$quote_close_is =       $quote_upper66;
+$quote_openSingle_is =  $quote_lower9;
+$quote_closeSingle_is = $quote_upper6;
+// english
+$quote_open_en =        $quote_upper66;
+$quote_close_en =       $quote_upper99;
+$quote_openSingle_en =  $quote_upper6;
+$quote_closeSingle_en = $quote_upper9;
+
+// Usage:
+//   _addQuotationMarks( en, 'is' ); // adds quotation marks for 'en' and 'is'
+_addQuotationMarks( langs... ) {
+    if ( en in langs ) {
+        &:lang(en)::before { content: $quote_open_en; }
+        &:lang(en)::after { content: $quote_close_en; }
+    }
+    if ( 'is' in langs ) {
+        &:lang(\is)::before { content: $quote_open_is; }
+        &:lang(\is)::after { content: $quote_close_is; }
+    }
+    // TODO: add more languages
+}
+
+
+
+
+
+// ===============================================================================
+// Make an element reach beyond the left/right edges of it's container
+// all the way to the viewport edges.
+//
+//     _extendSides()
+//     _extendSides(both)  // same as _extendSides()
+//     _extendSides(left)  // only affect the left-hand side
+//     _extendSides(right)  // ...or the right
+//
+//     _extendSides(both, (25/16)em )  // Set additional padding
+//     _extendSides(both, (-25/16)em )  // ...which can also be a negative value
+//     _extendSides(left, (25/16)em )  // etc.
+//
+_extendSides($side = both, $pad = 0) {
+    $margin = 0;
+    if ( $pad < 0 ) {
+        $margin = $pad;
+        $pad = 0;
+    }
+    $page-expand-padding = csscalc(50vw, -50%, $pad);
+    $page-expand-margin = csscalc(-50vw, 50%, $margin);
+    if ( $side != right ) {
+        margin-left: $page-expand-margin;
+        padding-left: $page-expand-padding;
+    }
+    if ( $side != left ) {
+        margin-right: $page-expand-margin;
+        padding-right: $page-expand-padding;
+    }
+}
+
+
+
+
+// ===============================================================================
+// Triangles
+
+// Usage:
+//     .box::after {
+//         _triangle(
+//               $dir,       // <-- top, bottom, left, right.
+//               $color,     // arrow color
+//               $h,         // the "Length" of the arrow.
+//               $w,         // total width of the arrow. (Defaults to twice the @height)
+//               $pos,       // sideways placement along the edge of the container. (Defaults to 50%.)
+//               $posFrom,   // edge from which the side-offset is calculated. (Defaults to left or top respectively.)
+//               $shift      // shift along the "height" axis, away or towards the container. (Defaults to 0)
+//             );
+//     }
+_triangle($dir=top, $color=#fff, $h=10px, $w=(2*$h), $pos=50%, $posFrom=null, $shift=0) {
+    _triangleShape($dir, $color, $h, $w);
+    // Do auto positioning
+    if (!$posFrom) {
+        $posFrom = ($dir==top or $dir==bottom) ? left : top;
+    }
+    position: absolute;
+    {$dir}: -($h);
+    {$posFrom}: $pos;
+    margin-{$dir}: -($shift);
+}
+
+_triangleShape($dir=top, $color=#fff, $h=10px, $w=(2*$h)) {
+    content: ''; // ensure ::before/::after works automatically
+    display: inline-block;
+    width: 0;
+    height: 0;
+    min-width: 0;
+    min-height: 0;
+    border: 0 solid transparent;
+    border-width: isVertical($dir) ? $h ($w/2) : ($w/2) $h;
+    border-{opposite-position($dir)}-color: $color;
+    border-{$dir}-width: 0;
+    if ($dir==top or $dir==bottom) {
+        margin: 0 -($w/2);
+    }
+    else {
+        margin: -($w/2) 0;
+    }
+}
+
+
+
+
+// ===============================================================================
+// Misc
+
+// screen-reader friendly off-screen hiding
+_tuck() {
+    position: absolute;
+    right: 9999px;
+    left: auto;
+}
+
+// screen-reader and rtl-friendly off-screen hiding
+_sr-only( $mode=normal ) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    opacity: 0.00001;
+    pointer-events: none;
+    margin: -1px  if $mode!=soft;
+}
+// undo _sr-only() on :focus and :active
+_sr-only--undo( $mode=normal ) {
+    width: auto;
+    height: auto;
+    overflow: visible;
+    clip: auto;
+    opacity: 1;
+    pointer-events: auto;
+    margin: 0  if $mode!=soft;
+}
+_sr-only-focusable( $mode=normal ) {
+    _sr-only($mode);
+
+    &:active,
+    &:focus {
+        z-index: 99999;
+        _sr-only--undo($mode);
+    }
+}
+
+
+_afterClear() {
+    &::after {
+        content: ' ';
+        clear: both;
+        display: block;
+        height: 0;
+    }
+}
+
+
+// Hide element's text for image or ::before icon replacement
+//
+//   _hideText(soft);
+//      Applies nowrap + hide overflow.
+//      Great for ::before inline-block icons.
+//
+//   _hideText();
+//   _hideText(normal);
+//      `soft` + indents text into the overflow
+//      Great for most background-image applications
+//
+//   _hideText(hard);
+//      `normal` + transparency + collapsed letter-spacing.
+//      Verbose version for weird edge-cases, with
+//      long paragraphs of text and/or cases where
+//      nasty inherited text-styling causes trouble.
+//
+_hideText( $mode=normal ) {
+    overflow: hidden;
+    white-space: nowrap;
+    if ($mode != soft) {
+        text-indent: 150%;
+        text-align: left;
+    }
+    if ($mode == hard) {
+        letter-spacing: -0.4em;
+        text-shadow: none !important;
+        color: transparent !important;
+    }
+}
+
+
+
+// reset <button> styles for easier custom styling
+_buttonReset() {
+    border: 0;
+    border-radius: 0;
+    padding: 0;
+    background: transparent;
+    font: inherit;
+    text-align: inherit;
+    color: inherit;
+    cursor: pointer;
+
+    &:focus {
+        outline: none;
+        box-shadow: none;
+    }
+}
+
+
+// =======================================================
+// Column-based calc functions
+//
+// These globals are required for them to work:
+$gutter?= 30px;
+$column ?= 80px;
+$numCols ?= 12;
+
+// percentage length - by columns
+//   $w = custom container width in pixels. When specified, this overrides the default column-based container width.
+//   $px = pixel-based modifier for the column-based container width. (Useful for gridded-containers with non-standard padding/margin)
+cols_pct( $nCol, $nGutter=($nCol - _one($nCol)), $nOfCol=$numCols, $nOfGutter=($nOfCol - _one($nOfCol)), $w=null, $px=0 ) {
+    $w = $w  ||  ($nOfCol*$column + $nOfGutter*$gutter + $px);
+    return (100 * ($nCol*$column + $nGutter*$gutter) / $w )%;
+}
+// percentage length - pixels to page-width
+//   $px = pixel-based modifier for the column-based container width. (Useful for gridded-containers with non-standard padding/margin)
+px_pct( $nPx, $nOfCol=$numCols, $nOfGutter=($nOfCol - _one($nOfCol)), $px=0 ) {
+    return ( 100 * $nPx / ($nOfCol*$column + $nOfGutter*$gutter + $px) )%;
+}
+// pixel length - by columns
+cols_px( $nCol, $nGutter=($nCol - _one($nCol)) ) {
+    return ($nCol*$column + $nGutter*$gutter)px;
+}
+
+// =======================================================
+
+
+
+// returns margin/padding value calc() function that delivers approximately
+// $min pixel spacing when the element's container is $minWidth pixels wide
+// $max pixel spacing when the element's container is $maxWidth pixels wide.
+$between-minWidth ?= 320;
+$between-maxWidth ?= ($numCols * $column + ($numCols - 1) * $gutter);
+between( $min, $max, $minWidth=$between-minWidth, $maxWidth=$between-maxWidth, pct='%') {
+  $slope = ($max - $min) / ($maxWidth - $minWidth);
+  $intercept = $max - ($slope * $maxWidth);
+  if ( $intercept == 0 ) {
+      return unit($slope*100, pct);
+  }
+  else {
+      return csscalc( unit($slope*100, pct), ($intercept)px );
+  }
+}
+
+
+
+
+// Transparent mixins to provide more powerful
+// shorthand to margin|padding|border-width properties.
+// The magic value token `_` instructs the mixin
+// to skip that value.
+// Usage:
+//     margin: _ 10px;
+// -->
+//     margin-left: 10px
+//     margin-right: 10px
+margin() {
+    __edgeProps('margin', arguments );
+}
+padding() {
+    __edgeProps('padding', arguments );
+}
+border-width() {
+    __edgeProps('border-width', arguments );
+}
+// Usage:
+//     position: fixed _ 0;
+// -->
+//     position: fixed;
+//     left: 0;
+//     right: 0;
+position( $pos, $sides... ) {
+    if ( !important in $sides ) {
+        // pass anything with !important streight through
+        position: arguments;
+    }
+    else if ( typeof($pos)=='ident'  &&  $pos!=auto  &&  $pos!=_ ) {
+        position: $pos;
+        if ( length($sides) ) {
+            __edgeProps('', $sides);
+        }
+    }
+    else {
+        __edgeProps( '', arguments );
+    }
+}
+// Private use mixin used above
+__edgeProps( $type, $sides ) {
+    if ( !important in $sides || ($type  &&  !(_ in $sides)) ) {
+        {$type}: $sides;
+    } else {
+        $type = $type ? $type+'-' : $type;
+        $top = $sides[0];
+        $right = length($sides)>1 ? $sides[1] : $top;
+        $bottom = length($sides)>2 ? $sides[2] : $top;
+        $left = length($sides)>3 ? $sides[3] : $right;
+
+        {$type}top: $top   if $top!=_;
+        {$type}bottom: $bottom   if $bottom!=_;
+        {$type}left: $left   if $left!=_;
+        {$type}right: $right   if $right!=_;
+    }
+}
+
+
+
+fade($color, $opacity) {
+    return rgba( $color, alpha($color)*$opacity );
+}
+percent($value, pct='%') {
+    return unit(100*$value, pct);
+}
+$pxem-base ?= 12;
+pxem($px, $fs=$pxem-base) {
+    return ($px/$fs)em;
+}
+isVertical($dir) {
+    return $dir==top or $dir==bottom;
+}
+_one($n) {
+    // Returns -1 for values < 0 and 1 for values > 0.
+    // Useful for multipliers
+    return !$n ? 0 : ($n / abs($n));
+}
+
+
+csscalc($first, $rest...) {
+    $first = '' + $first;
+    if match('%s', $first) {
+        $first = 'calc(' + $first + ')';
+        return $first % $rest;
+    }
+    else {
+        $values = $first;
+        for $arg in $rest {
+            if ($arg) {
+                $values = $values + ($arg<0 ? ' - ' : ' + ') + abs($arg);
+            }
+        }
+        return s('calc('+ $values +')');
+    }
+}
+
+// depricated
+cssadd() {
+    return csscalc(arguments);
+}
+

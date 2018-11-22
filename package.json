@@ -53,8 +53,5 @@
   "devDependencies": {
     "stylutils": "github:hugsmidjan/stylutils#semver:^1.0.0"
   },
-  "stylutils": {
-    "destFolder": "utils/styl/",
-    "copyFiles": true
-  }
+  "vendurcss": "utils/styl/_you_should_be_using_/"
 }
