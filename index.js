@@ -33,7 +33,7 @@ module.exports = function (gulp, skin) {
 
   var autoprefixer = plugins.autoprefixer = require('gulp-autoprefixer');
   var datauri = plugins.datauri = require('gulp-base64');
-  var minifycss = plugins.minifycss = require('gulp-minify-css');
+  var cleancss = plugins.cleancss = require('gulp-clean-css');
 
   var imagemin = plugins.imagemin = require('gulp-imagemin');
   var pngquant = plugins.pngquant = require('imagemin-pngquant');
@@ -65,6 +65,7 @@ module.exports = function (gulp, skin) {
               }
               else {
                 var opts = Object.create(skin.browserifyOpts||{});
+                opts.debug = true; // required for sourcemaps in newer browserify versions
                 opts.entries = [file.path];
                 b = browserify( opts );
               }
@@ -336,14 +337,10 @@ module.exports = function (gulp, skin) {
                             // use: [require(nib)],
                           })
                  )
-                .pipe( autoprefixer({ browsers:skin.cssBrowserSupport||['> 0.5%', 'last 2 versions', 'Firefox ESR', 'iOS >= 8', 'Android >= 4.4'] }) )
-                .pipe( minifycss({
+                .pipe( autoprefixer({ browsers:skin.cssBrowserSupport||['> 0.5%', 'last 2 versions', 'Firefox ESR', 'not dead'] }) )
+                .pipe( cleancss({
                     // roundingPrecision: 2, // precision for px values
-                    // aggressiveMerging:true, // set to false to disable aggressive merging of properties
-                    advanced:false, // turn off advanced/aggressive merging. It's too buggy still. Ack!
-                    processImport:false, // We want stylus to do that for us.
-                    keepBreaks:true,
-                    compatibility:'ie8',
+                    format: 'keep-breaks',
                   }) )
                 .pipe( replace(/ -no-merge/g,'') )
                 // Crude trimming of decimal em, rem, % values
