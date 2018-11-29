@@ -27,47 +27,30 @@ module.exports = function (gulp, skin) {
   var isLESS =   skin.cssProc==='less';
   var isSCSS =   skin.cssProc==='scss';
   var isStylus = !isLESS && !isSCSS;
-  var less =   isLESS   &&  (plugins.less = require('gulp-less'));
-  var scss =   isSCSS   &&  (plugins.scss = require('gulp-ruby-sass'));
-  var stylus = isStylus &&  (plugins.stylus = require('gulp-stylus'));
-
-  var autoprefixer = plugins.autoprefixer = require('gulp-autoprefixer');
-  var datauri = plugins.datauri = require('gulp-base64');
-  var cleancss = plugins.cleancss = require('gulp-clean-css');
-
-  var imagemin = plugins.imagemin = require('gulp-imagemin');
-  var pngquant = plugins.pngquant = require('imagemin-pngquant');
-  var mozjpeg = plugins.mozjpeg = require('imagemin-mozjpeg');
-  var iconfont = plugins.iconfont = require('gulp-iconfont');
-
-  var es2015 = require('babel-preset-es2015');
-  var reactPreset = require('babel-preset-react');
-  var babelify = require('babelify');
-  var browserify = plugins.browserify = require('browserify');
   var through2 = plugins.through2 = require('through2');
-  var uglify = plugins.uglify = require('gulp-uglify');
 
   var clone = plugins.clone = require('gulp-clone');
   var es = plugins.es = require('event-stream');
 
-  var nunjucksRender = plugins.nunjucksRender = require('gulp-nunjucks-render');
+  plugins.runSequence = require('run-sequence').use(gulp);
 
-
-  var runSequence = plugins.runSequence = require('run-sequence').use(gulp);
-  var notifier = require('node-notifier');
 
   var browserifyfy = function (moduleInfo) {
+          var es2015 = require('babel-preset-es2015');
+          var reactPreset = require('babel-preset-react');
+          var babelify = require('babelify');
+
           // About this: https://medium.com/@sogko/gulp-browserify-the-gulp-y-way-bb359b3f9623
           return through2.obj(function (file, enc, next) {
               var b;
               if ( skin.browserify ) {
-                b = skin.browserify( file.path, moduleInfo, browserify );
+                b = skin.browserify( file.path, moduleInfo, plugins.browserify );
               }
               else {
                 var opts = Object.create(skin.browserifyOpts||{});
                 opts.debug = true; // required for sourcemaps in newer browserify versions
                 opts.entries = [file.path];
-                b = browserify( opts );
+                b = plugins.browserify( opts );
               }
               b.transform(babelify, {
                 presets: [es2015, reactPreset],
@@ -91,7 +74,7 @@ module.exports = function (gulp, skin) {
 
   var notifyError = function (err) {
           var errmsg = err.message||err;
-          notifier.notify({
+          require('node-notifier').notify({
             'title': 'Error',
             'message': errmsg,
           });
@@ -115,7 +98,6 @@ module.exports = function (gulp, skin) {
   var buildTasks =    [];
   var watchTasks =    [];
   var htmltestTasks = [];
-  var nunjucksWorkingDirs = [];
 
   var cssGlob = '*.'+skin.cssProc;
   var skinModules = skin.modules || ['/'];
@@ -185,13 +167,14 @@ module.exports = function (gulp, skin) {
       // ==============================================
 
       if ( module.do_iconfont ) {
+        plugins.iconfont = require('gulp-iconfont');
         tasks[ns+'iconfont'] = function () {
             return gulp.src([
                 paths.iconfont + '**/*.svg',
                 '!' + paths.iconfont + '_raw/**',
               ], basePathCfg )
                 .pipe( plumber(function (err) { notifyError(err); }) )
-                .pipe( iconfont({
+                .pipe( plugins.iconfont({
                     fontName:   'icons',
                     formats: ['woff2','woff','ttf','eot','svg'],
                     normalize:  true,
@@ -233,6 +216,10 @@ module.exports = function (gulp, skin) {
 
 
       if ( module.do_images ) {
+        plugins.imagemin = require('gulp-imagemin');
+        plugins.pngquant = require('imagemin-pngquant');
+        plugins.mozjpeg = require('imagemin-mozjpeg');
+
         tasks[ns+'images'] = function () {
             return gulp.src([
                 paths.images + '**/*',
@@ -244,7 +231,7 @@ module.exports = function (gulp, skin) {
                     var fileParams = file.path.match(/(---q(\d{1,3}(?:-\d{1,3})?)(?:--d(0))?)\.(png|jpe?g)$/i);
                     if ( fileParams ) {
                       if ( fileParams[4].toLowerCase()==='png' ) {
-                        stream = stream.pipe( pngquant({
+                        stream = stream.pipe( plugins.pngquant({
                             speed: 1, // default: `3`
                             quality: parseInt(fileParams[2],10),   // default `undefined` (i.e. 256 colors)
                             floyd: parseInt(fileParams[3],10)/100,
@@ -252,7 +239,7 @@ module.exports = function (gulp, skin) {
                           })() );
                       }
                       else {
-                        stream = stream.pipe( mozjpeg({
+                        stream = stream.pipe( plugins.mozjpeg({
                             quality: fileParams[2],
                           })() );
                       }
@@ -262,7 +249,7 @@ module.exports = function (gulp, skin) {
                     }
                     else {
                       const hasKeepIdsSuffix = /---ids.svg$/i.test(file.path);
-                      stream = stream.pipe( imagemin({
+                      stream = stream.pipe( plugins.imagemin({
                         optimizationLevel: 4, // png
                         progressive: true, // jpg
                         interlaced: true, // gif
@@ -286,6 +273,9 @@ module.exports = function (gulp, skin) {
       var iconfontDependency = module.do_iconfont ? [ns+'iconfont'] : [];
 
       if ( module.do_scripts ) {
+        plugins.browserify = require('browserify');
+        plugins.uglify = require('gulp-uglify');
+
         tasks[ns+'scripts'] = function () {
             var commonjsScripts = filter('**/*-common.js');
             var s1 = gulp.src([ paths.scripts+'*.js'], basePathCfg )
@@ -304,7 +294,7 @@ module.exports = function (gulp, skin) {
             }
             s2 = s2
                 .pipe( replace('process.env.NODE_ENV', '"production"') )
-                .pipe( uglify({ preserveComments:'some', compress:{drop_console:true, global_defs:{ UGL1FY:true }} }) )
+                .pipe( plugins.uglify({ preserveComments:'some', compress:{drop_console:true, global_defs:{ UGL1FY:true }} }) )
                 .pipe( header('// '+copyrightBanner) );
 
             return es.merge(s1, s2)
@@ -318,27 +308,34 @@ module.exports = function (gulp, skin) {
 
 
       if ( module.do_css ) {
+        plugins.less = isLESS && require('gulp-less');
+        plugins.scss = isSCSS && require('gulp-ruby-sass');
+        plugins.stylus = isStylus && require('gulp-stylus');
+        plugins.autoprefixer = require('gulp-autoprefixer');
+        plugins.datauri = require('gulp-base64');
+        plugins.cleancss = require('gulp-clean-css');
+
         tasks[ns+'css'] = function () {
             return gulp.src( paths.css+cssGlob, basePathCfg )
                 .pipe( plumber(function (err) { notifyError(err); }) )
                 .pipe(
                     isSCSS ?
-                        scss({
+                        plugins.scss({
                             precision:7,
                             'sourcemap=none':true, // dodgy temporary workaround
                             // sourcemap:'none',
                             container:'gulp-ruby-sass-'+folderIndex, // Workaround for https://github.com/sindresorhus/gulp-ruby-sass/issues/124#issuecomment-54682317
                           }):
                     isLESS ?
-                        less(/*{ strictMath: true }*/):
+                        plugins.less(/*{ strictMath: true }*/):
                     // Default:
-                        stylus({
+                        plugins.stylus({
                             // linenos: true,
                             // use: [require(nib)],
                           })
                  )
-                .pipe( autoprefixer({ browsers:skin.cssBrowserSupport||['> 0.5%', 'last 2 versions', 'Firefox ESR', 'not dead'] }) )
-                .pipe( cleancss({
+                .pipe( plugins.autoprefixer({ browsers:skin.cssBrowserSupport||['> 0.5%', 'last 2 versions', 'Firefox ESR', 'not dead'] }) )
+                .pipe( plugins.cleancss({
                     // roundingPrecision: 2, // precision for px values
                     format: 'keep-breaks',
                   }) )
@@ -348,7 +345,7 @@ module.exports = function (gulp, skin) {
                 //   * https://github.com/jakubpawlowicz/clean-css/issues/686
                 //   * https://github.com/stylus/stylus/issues/2024
                 .pipe( replace( new RegExp('(\\.\\d{'+(skin.cssFloatPrecision||6)+'})\\d+((?:e[xm]|rem|%|pt|v(?:w|h|min|max))[;}\\),\\s])','g') ,'$1$2') )
-                .pipe( datauri({
+                .pipe( plugins.datauri({
                     baseDir: paths.dist,
                     extensions: [ (/#datauri$/) ],
                     // maxImageSize: bytes,
@@ -363,7 +360,9 @@ module.exports = function (gulp, skin) {
 
 
       if ( module.do_htmltests ) {
-        nunjucksWorkingDirs.push( paths.htmltests );
+        plugins.nunjucksRender = require('gulp-nunjucks-render');
+        plugins.nunjucksRender.nunjucks.configure([paths.htmltests]);
+
         tasks[ns+'htmltests-html'] = function () {
             var nonHTMLFiles = filter('**/*.*.html'); // <-- because nunjucksRender renames all files to .html
             var testsFolder = paths.htmltests.substr(paths.src.length);
@@ -379,7 +378,7 @@ module.exports = function (gulp, skin) {
                 '!'+paths.htmltests+'{incl,media}/**',
               ], basePathCfg )
                 .pipe( plumber(function (err) { notifyError(err); }) )
-                .pipe( nunjucksRender( module.do_iconfont?{ icons:icons }:{} ) )
+                .pipe( plugins.nunjucksRender( module.do_iconfont?{ icons:icons }:{} ) )
                 .pipe( replace(/^[\s*\n]+/, '') ) // remove macro/config induced whitespace at start of file.
                 .pipe( nonHTMLFiles )
                     .pipe( rename(function (path) {
@@ -393,6 +392,7 @@ module.exports = function (gulp, skin) {
         gulp.task(ns+'htmltests-html--initial', iconfontDependency, tasks[ns+'htmltests-html']);
         htmltestTasks.push( ns+'htmltests-html--initial' );
 
+        var imagemin = require('gulp-imagemin');
         tasks[ns+'htmltests-images'] = function () {
             return gulp.src( paths.htmltests+'media/**/*.*', basePathCfg )
                 .pipe( plumber(function (err) { notifyError(err); }) )
@@ -405,6 +405,8 @@ module.exports = function (gulp, skin) {
 
 
         if ( module.do_htmltestsscripts ) {
+          plugins.browserify = require('browserify');
+
           tasks[ns+'htmltests-scripts'] = function () {
               var commonjsScripts = filter('**/*-common.js');
               return gulp.src([
@@ -483,8 +485,6 @@ module.exports = function (gulp, skin) {
     });
 
 
-  nunjucksRender.nunjucks.configure(nunjucksWorkingDirs);
-
 
   gulp.task('htmltests', htmltestTasks);
   buildTasks.unshift('htmltests');
@@ -499,7 +499,7 @@ module.exports = function (gulp, skin) {
         //     'build-html', // finally run this one
         //     callback // signal end!
         //   );
-        runSequence('watch', callback);
+        plugins.runSequence('watch', callback);
       });
 
 };
