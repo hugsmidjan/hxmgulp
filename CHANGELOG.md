@@ -16,6 +16,12 @@ _2018-12-05_
   [`stylutils`](https://github.com/hugsmidjan/stylutils)
 - docs: Add CHANGELOG.md
 
+## 1.7.1
+
+_2018-12-05_
+
+- fix: Revert breakage in Nunjucks paths for nested skins
+
 ## 1.7.0
 
 _2018-11-29_
