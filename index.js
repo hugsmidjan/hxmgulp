@@ -98,6 +98,7 @@ module.exports = function (gulp, skin) {
   var buildTasks =    [];
   var watchTasks =    [];
   var htmltestTasks = [];
+  var nunjucksWorkingDirs = [];
 
   var cssGlob = '*.'+skin.cssProc;
   var skinModules = skin.modules || ['/'];
@@ -361,7 +362,7 @@ module.exports = function (gulp, skin) {
 
       if ( module.do_htmltests ) {
         plugins.nunjucksRender = require('gulp-nunjucks-render');
-        plugins.nunjucksRender.nunjucks.configure([paths.htmltests]);
+        nunjucksWorkingDirs.push( paths.htmltests );
 
         tasks[ns+'htmltests-html'] = function () {
             var nonHTMLFiles = filter('**/*.*.html'); // <-- because nunjucksRender renames all files to .html
@@ -484,6 +485,10 @@ module.exports = function (gulp, skin) {
 
     });
 
+
+  if (plugins.nunjucksRender) {
+    plugins.nunjucksRender.nunjucks.configure(nunjucksWorkingDirs);
+  }
 
 
   gulp.task('htmltests', htmltestTasks);
