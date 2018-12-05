@@ -1,6 +1,6 @@
 {
   "name": "hxmgulp",
-  "version": "1.7.0",
+  "version": "2.0.0-canary",
   "description": "Default gulp tasks for Hugsmiðjan's projects.",
   "main": "index.js",
   "scripts": {
@@ -36,7 +36,7 @@
     "gulp-imagemin": "^2.2",
     "gulp-less": "^3.0",
     "gulp-clean-css": "^4.0",
-    "gulp-nunjucks-render": "^0.2",
+    "gulp-nunjucks-render": "^2.2.2",
     "gulp-plumber": "^1.0",
     "gulp-rename": "^1.2",
     "gulp-replace": "^0.5",

@@ -361,14 +361,13 @@ module.exports = function (gulp, skin) {
 
       if ( module.do_htmltests ) {
         plugins.nunjucksRender = require('gulp-nunjucks-render');
-        plugins.nunjucksRender.nunjucks.configure([paths.htmltests]);
 
         tasks[ns+'htmltests-html'] = function () {
             var nonHTMLFiles = filter('**/*.*.html'); // <-- because nunjucksRender renames all files to .html
             var testsFolder = paths.htmltests.substr(paths.src.length);
-            var file;
             var icons;
             if ( module.do_iconfont ) {
+              var file;
               try { file = fs.readFileSync( paths.dist + imgFolder + 'icons.json' ); }
               catch (e) {}
               icons = JSON.parse( file || '{}' );
@@ -378,7 +377,10 @@ module.exports = function (gulp, skin) {
                 '!'+paths.htmltests+'{incl,media}/**',
               ], basePathCfg )
                 .pipe( plumber(function (err) { notifyError(err); }) )
-                .pipe( plugins.nunjucksRender( module.do_iconfont?{ icons:icons }:{} ) )
+                .pipe( plugins.nunjucksRender({
+                  path: paths.htmltests,
+                  data: module.do_iconfont ?{ icons } : {},
+                }) )
                 .pipe( replace(/^[\s*\n]+/, '') ) // remove macro/config induced whitespace at start of file.
                 .pipe( nonHTMLFiles )
                     .pipe( rename(function (path) {
