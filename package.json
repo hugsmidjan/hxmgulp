@@ -49,9 +49,5 @@
     "node-notifier": "^4.3.1",
     "run-sequence": "^1.1.1",
     "through2": "^0.6"
-  },
-  "devDependencies": {
-    "stylutils": "github:hugsmidjan/stylutils#semver:^1.0.0"
-  },
-  "vendurcss": "utils/styl/_you_should_be_using_/"
+  }
 }
