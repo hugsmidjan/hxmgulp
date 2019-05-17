@@ -186,14 +186,3 @@ PNG and JPEG images can be forced through a lossy compression via a `---q{N}` fi
 
 NOTE: Any images placed in the folder `i/_raw/` are ignored as raw-materials.
 
-
-
-### Unit Testing
-
-The built-in unit testing tasks were removed in version 1.5.0
-To use them pin your project to version the version-range `~1.4` or earlier.
-
-### Functional/Browser Testing
-
-The built-in functional/browser testing tasks were removed in version 1.5.0
-To use them pin your project to version the version-range `~1.4` or earlier.
