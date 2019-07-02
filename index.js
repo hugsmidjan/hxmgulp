@@ -319,6 +319,7 @@ module.exports = function (gulp, skin) {
         var autoprefixerOpts = {};
         if (skin.cssBrowserSupport) {
           autoprefixerOpts.overrideBrowserslist = skin.cssBrowserSupport;
+          window.console.warn('skin.cssBrowserSupport is deprecated. Use browserlist in package.json instead.\nLearn more at: https://github.com/browserslist/browserslist#readme');
         }
 
         tasks[ns+'css'] = function () {
