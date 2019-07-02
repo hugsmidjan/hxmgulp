@@ -334,7 +334,7 @@ module.exports = function (gulp, skin) {
                             // use: [require(nib)],
                           })
                  )
-                .pipe( plugins.autoprefixer({ browsers:skin.cssBrowserSupport||['> 0.5%', 'last 2 versions', 'Firefox ESR', 'not dead'] }) )
+                .pipe( plugins.autoprefixer() )
                 .pipe( plugins.cleancss({
                     // roundingPrecision: 2, // precision for px values
                     format: 'keep-breaks',
