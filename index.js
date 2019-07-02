@@ -316,6 +316,11 @@ module.exports = function (gulp, skin) {
         plugins.datauri = require('gulp-base64');
         plugins.cleancss = require('gulp-clean-css');
 
+        var autoprefixerOpts = {};
+        if (skin.cssBrowserSupport) {
+          autoprefixerOpts.overrideBrowserslist = skin.cssBrowserSupport;
+        }
+
         tasks[ns+'css'] = function () {
             return gulp.src( paths.css+cssGlob, basePathCfg )
                 .pipe( plumber(function (err) { notifyError(err); }) )
@@ -335,7 +340,7 @@ module.exports = function (gulp, skin) {
                             // use: [require(nib)],
                           })
                  )
-                .pipe( plugins.autoprefixer({ browsers:skin.cssBrowserSupport||['> 0.5%', 'last 2 versions', 'Firefox ESR', 'not dead'] }) )
+                .pipe( plugins.autoprefixer(autoprefixerOpts) )
                 .pipe( plugins.cleancss({
                     // roundingPrecision: 2, // precision for px values
                     format: 'keep-breaks',

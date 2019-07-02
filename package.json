@@ -25,7 +25,7 @@
     "browserify": "^9.0",
     "es6-browserify": "^0.0.7",
     "event-stream": "3.3.4",
-    "gulp-autoprefixer": "^6.0",
+    "gulp-autoprefixer": "^6.1",
     "gulp-base64": "^0.1",
     "gulp-changed": "^1.2",
     "gulp-clone": "^1.0",
