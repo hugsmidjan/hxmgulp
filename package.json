@@ -1,6 +1,6 @@
 {
   "name": "hxmgulp",
-  "version": "1.7.1",
+  "version": "1.8.0",
   "description": "Default gulp tasks for Hugsmiðjan's projects.",
   "main": "index.js",
   "scripts": {
