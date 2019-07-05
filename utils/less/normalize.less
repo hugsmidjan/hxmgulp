@@ -437,11 +437,16 @@
     //  */
 
     // /*
-    //  * Enforce vertical scrollbar.
+    //  * 1. Cursors only change to hint non-obvious interfaces
+    //  * 2. Enforce vertical scrollbar.
+    //  * 3. Words break to prevent overflow - ("word-break: break-word;" is deprecated)
+    //   *   - https://developer.mozilla.org/en-US/docs/Web/CSS/word-break#Values
     //  */
     html {
-        cursor: default;
-        overflow-y: scroll;
+        cursor: default; /* 1 */
+        overflow-y: scroll; /* 2 */
+        word-break: break-word; /* 3 */
+        overflow-wrap: break-word; /* 3 */
     }
 
     // /*
