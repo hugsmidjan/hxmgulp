@@ -436,11 +436,17 @@
     //  * ==========================================================================
     //  */
 
-    // /*
-    //  * Enforce vertical scrollbar.
-    //  */
+    /*
+     * 1. Cursors only change to hint non-obvious interfaces
+     * 2. Enforce vertical scrollbar.
+     * 3. Words break to prevent overflow - ("word-break: break-word;" is deprecated)
+      *   - https://developer.mozilla.org/en-US/docs/Web/CSS/word-break#Values
+     */
     html {
-        overflow-y: scroll;
+        cursor: default; /* 1 */
+        overflow-y: scroll; /* 2 */
+        word-break: break-word; /* 3 */
+        overflow-wrap: break-word; /* 3 */
     }
 
     // /*
@@ -449,6 +455,13 @@
     //  */
     [tabindex] {
         outline: none;
+    }
+
+    // /*
+    //  * Single taps are dispatched immediately on clickable elements
+    //  */
+    a, area, button, input, label, select, summary, textarea, [tabindex] {
+      touch-action: manipulation;
     }
 
     // /*
@@ -469,8 +482,15 @@
     }
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /*
+     * Textareas only resize vertically by default
+     */
+    textarea {
+        resize: vertical;
     }
 
     // /*
