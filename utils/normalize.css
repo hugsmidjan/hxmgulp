@@ -435,11 +435,17 @@ th {
  */
 
 /*
- * Enforce vertical scrollbar.
+ * 1. Cursors only change to hint non-obvious interfaces
+ * 2. Enforce vertical scrollbar.
+ * 3. Words break to prevent overflow - ("word-break: break-word;" is deprecated)
+  *   - https://developer.mozilla.org/en-US/docs/Web/CSS/word-break#Values
  */
 html {
-    overflow-y: scroll;
-  }
+  cursor: default; /* 1 */
+  overflow-y: scroll; /* 2 */
+  word-break: break-word; /* 3 */
+  overflow-wrap: break-word; /* 3 */
+}
 
 /*
  * Remove default outline from [tabindex="-1"] elements
@@ -447,6 +453,13 @@ html {
  */
 [tabindex] {
   outline: none;
+}
+
+/*
+ * Single taps are dispatched immediately on clickable elements
+ */
+a, area, button, input, label, select, summary, textarea, [tabindex] {
+  touch-action: manipulation;
 }
 
 /*
@@ -464,6 +477,13 @@ input[type="password"],
 input[type="text"] {
   /* border-radius: 0; // <-- should we enable this? */
   -webkit-appearance: none;
+}
+
+/*
+ * Textareas only resize vertically by default
+ */
+textarea {
+  resize: vertical;
 }
 
 /*

@@ -440,6 +440,7 @@
     //  * Enforce vertical scrollbar.
     //  */
     html {
+        cursor: default;
         overflow-y: scroll;
     }
 
@@ -449,6 +450,13 @@
     //  */
     [tabindex] {
         outline: none;
+    }
+
+    // /*
+    //  * Single taps are dispatched immediately on clickable elements
+    //  */
+    a, area, button, input, label, select, summary, textarea, [tabindex] {
+      touch-action: manipulation;
     }
 
     // /*
@@ -469,8 +477,15 @@
     }
     input[type=number]::-webkit-inner-spin-button,
     input[type=number]::-webkit-outer-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    /*
+     * Textareas only resize vertically by default
+     */
+    textarea {
+        resize: vertical;
     }
 
     // /*
