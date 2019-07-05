@@ -5,6 +5,13 @@
 <!-- Add new lines here. Version number will be decided later -->
 
 - ...
+- feat: (SASS/LESS) add some nice defaults from the sanitize.css project
+
+## 2.1.0
+
+_2019-07-02_
+
+- feat: Drop `browsers` option in favour of `browserslist` in package.json
 
 ## 2.0.0
 
