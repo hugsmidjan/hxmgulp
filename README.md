@@ -4,11 +4,10 @@ Default gulp tasks for Hugsmiðjan's projects.
 
 ## Install:
 
-    npm install gulp
-    npm install git+https://stash.hugsmidjan.is/scm/misc/hxmgulp.git
-
-You can do this with the `--save-dev` option in your project's root folder - or in your home folder, or wherever you store your shared node modules.
-
+```sh
+npm install --save-dev gulp
+npm install --save-dev github:hugsmidjan/hxmgulp#semver:^2
+```
 
 --------------------------------------
 
@@ -16,12 +15,16 @@ You can do this with the `--save-dev` option in your project's root folder - or 
 
 In your project's skin folder create a `gulpfile.js` containing this command:
 
-    var gulp = require('gulp');
-    require('hxmgulp')(gulp, options);
+```sh
+var gulp = require('gulp');
+require('hxmgulp')(gulp, options);
+```
 
 then isolate all your HTML-demo, JavaScript and LESS/SCSS and image/icon source files inside the `_src/` subfolder, and start gulp.
 
-    gulp
+```sh
+gulp
+```
 
 That's it!
 

@@ -6,6 +6,7 @@
 
 - ...
 - feat: (SASS/LESS) add some nice defaults from the sanitize.css project
+- docs: Update installation guidelines
 
 ## 2.1.0
 
