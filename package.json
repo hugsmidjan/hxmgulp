@@ -15,6 +15,9 @@
     "Már Örlygsson <mar@hugsmidjan.is>"
   ],
   "license": "ISC",
+  "engines": {
+    "node": "^6"
+  },
   "peerDependencies": {
     "gulp": "^3.9"
   },
@@ -41,7 +44,7 @@
     "gulp-rename": "^1.2",
     "gulp-replace": "^0.5",
     "gulp-ruby-sass": "^0.7",
-    "gulp-stylus": "^2.7",
+    "gulp-stylus": "github:hugsmidjan/gulp-stylus-legacy-version-pinning",
     "gulp-uglify": "^2.0",
     "imagemin-mozjpeg": "5.0.0",
     "imagemin-pngquant": "^4.0",
@@ -53,5 +56,5 @@
   "devDependencies": {
     "stylutils": "github:hugsmidjan/stylutils#semver:^1.0.0"
   },
-  "vendurcss": "utils/styl/_you_should_be_using_/"
+  "vendorcss": "utils/styl/_you_should_be_using_/"
 }
