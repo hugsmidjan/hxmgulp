@@ -6,6 +6,8 @@
 
 - ...
 - feat: (SASS/LESS) add some nice defaults from the sanitize.css project
+- chore: Update `run-sequence` to get sane (non-"\*") dependencies – ...long
+  story
 - docs: Update installation guidelines
 
 ## 2.1.0
@@ -44,8 +46,8 @@ _2018-11-27_
 
 - feat: upgrade autoprefixer and change minify-css to clean-css to support
   node ^10
-- fix: make sure we don't load unsecure event-stream v3.3.6
-  (see github security alerts)
+- fix: make sure we don't load unsecure event-stream v3.3.6 (see github
+  security alerts)
 
 ## 1.5.3
 
@@ -106,7 +108,8 @@ _2018-09-27_
 _2018-07-31_
 
 - feat: Make `_triangleShape()` mixin more useful standalone _(utils/styl)_
-- feat: add `_encodeURIComponent` and `_decodeURIComponent` functions _(utils/styl)_
+- feat: add `_encodeURIComponent` and `_decodeURIComponent` functions
+  _(utils/styl)_
 - fix: Update scripts task to correctly handle non-mutating streams
 - fix: Chrome is now giving all buttons border-radius _(utils/styl)_
 
