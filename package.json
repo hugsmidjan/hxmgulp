@@ -1,6 +1,6 @@
 {
   "name": "hxmgulp",
-  "version": "1.8.3",
+  "version": "1.8.4",
   "description": "Default gulp tasks for Hugsmiðjan's projects.",
   "main": "index.js",
   "scripts": {
@@ -28,6 +28,8 @@
     "browserify": "^9.0",
     "es6-browserify": "^0.0.7",
     "event-stream": "3.3.4",
+    "browserslist": "4.9.1",
+    "autoprefixer": "9.7.4",
     "gulp-autoprefixer": "^6.1",
     "gulp-base64": "^0.1",
     "gulp-changed": "^1.2",
