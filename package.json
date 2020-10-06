@@ -3,6 +3,9 @@
   "version": "2.1.0",
   "description": "Default gulp tasks for Hugsmiðjan's projects.",
   "main": "hxmgulp.js",
+  "engines": {
+    "node": ">=8 <11"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
