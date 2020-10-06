@@ -3,6 +3,11 @@
 ## Upcoming...
 
 - ... <!-- Add new lines here. Version number will be decided later -->
+
+## 2.1.1
+
+_2020-10-06_
+
 - chore: Limit `pkg.engines.node` to just versions 8–10
 - feat: (SASS/LESS) add some nice defaults from the sanitize.css project
 - chore: Update `run-sequence` to get sane (non-"\*") dependencies – ...long
