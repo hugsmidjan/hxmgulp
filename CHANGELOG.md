@@ -25,7 +25,7 @@ _2019-07-02_
 _2018-12-05_
 
 - [BREAKING] feat: Upgrade `gulp-nunjucks-render` to work with Node 10  
-  (See the [Nujucks 3 upgrade guide](docs/nujucks-3-upgrade.md))
+  (See the [Nujucks 3 upgrade guide](docs/nunjucks-3-upgrade.md))
 - [BREAKING] feat: Remove `utils/styl` in favour of projects using
   [`stylutils`](https://github.com/hugsmidjan/stylutils)
 - docs: Add CHANGELOG.md
