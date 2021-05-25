@@ -8,4 +8,4 @@
    - `m_comments` → `commentsUi`
 3) Macros don't have access to **ANY** global variables set by the calling/importing templates. This means macros such as `m_sitelogo`, `m_skiplink`, `m_article`, etc. need to receive values such as `siteName`, `siteSlogan`, `skipLink` and `loggedin` via named parameters passed in by the calling template.
 
-(See example of Nunjucks template upgrade in commit `a290a2` in the `template` repo.)
+(See example of Nunjucks template upgrade in commit [`a290a2` in the `template` repo](https://stash.hugsmidjan.is/projects/E2PROJECTS/repos/template/commits/a290a2).)
